@@ -58,4 +58,7 @@ gem 'thin'
 group :test do
   gem 'selenium-webdriver', '2.34.0'
   gem 'capybara', '2.1.0'
+  # Guard runs changed specs once it notices changes
+  gem 'guard-rspec', '3.0.2'
+  gem 'libnotify', '0.8.1'
 end
