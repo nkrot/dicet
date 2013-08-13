@@ -9,4 +9,22 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Dicet::Application.config.secret_key_base = '1bcfda0529413f4407ec7a14b1735f49230a0eb9084bdc6f0afdd12618fad08ed071e664d294940930d13bb05779f5acb127dd3a7c95ef41749ab0430b7f09af'
+
+require 'securerandom'
+
+def secure_token
+  token_file = Rails.root.join('.secret')
+  if File.exist?(token_file)
+    # Use the existing token.
+    File.read(token_file).chomp
+  else
+    # Generate a new token and store it in token_file.
+    token = SecureRandom.hex(64)
+    File.write(token_file, token)
+    token
+  end
+end
+
+Dicet::Application.config.secret_key_base = secure_token
+
+#Dicet::Application.config.secret_key_base = '1bcfda0529413f4407ec7a14b1735f49230a0eb9084bdc6f0afdd12618fad08ed071e664d294940930d13bb05779f5acb127dd3a7c95ef41749ab0430b7f09af'

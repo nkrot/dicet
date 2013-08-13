@@ -17,3 +17,6 @@
 
 # ignore tmp files
 *~
+
+# secret token stuff, for secure sessions
+.secret

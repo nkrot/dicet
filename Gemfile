@@ -6,10 +6,14 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'sqlite3', '1.3.7'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
+
+# Use HAML instead of ERB temlates
+gem 'haml', '4.0.3'
+gem 'haml-rails', '0.4'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -30,6 +34,8 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'rspec-rails', '2.14.0'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -48,3 +54,8 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'thin'
+
+group :test do
+  gem 'selenium-webdriver', '2.34.0'
+  gem 'capybara', '2.1.0'
+end
