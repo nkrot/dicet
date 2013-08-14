@@ -61,4 +61,5 @@ group :test do
   # Guard runs changed specs once it notices changes
   gem 'guard-rspec', '3.0.2'
   gem 'libnotify', '0.8.1'
+  gem 'factory_girl_rails', '4.2.1'
 end

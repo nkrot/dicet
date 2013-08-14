@@ -1,0 +1,18 @@
+
+- @title = "Add a new word"
+
+%h2= @title
+
+= form_for(@word) do |f|
+  = render 'shared/error_messages'
+  %br/
+  = f.label :text, "Word"
+  = f.text_field :text
+  %br/
+  = f.label :typo
+  = f.text_field :typo
+  %br/
+  = f.label :comment
+  = f.text_field :comment
+  %br/
+  = f.submit "Add"

@@ -1,0 +1,10 @@
+
+- if @word.errors.any?
+  %div#error_explanation
+    %div.alert.alert-error
+      The form contains #{pluralize(@word.errors.count, "error")}.
+    %ul
+      - @word.errors.full_messages.each do |msg|
+        %li
+          *
+          = msg
