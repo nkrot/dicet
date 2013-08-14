@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130813150453) do
+ActiveRecord::Schema.define(version: 20130814124609) do
+
+  create_table "paradigms", force: true do |t|
+    t.string   "status"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "words", force: true do |t|
     t.string   "text"
@@ -19,6 +26,10 @@ ActiveRecord::Schema.define(version: 20130813150453) do
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "tag"
+    t.integer  "paradigm_id"
   end
+
+  add_index "words", ["paradigm_id"], name: "index_words_on_paradigm_id"
 
 end

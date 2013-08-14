@@ -19,6 +19,9 @@ Dicet::Application.routes.draw do
   #   resources :products
 
   resources :words
+  resources :paradigms
+#  resources :tasks
+#  resources :users
 
   # Example resource route with options:
   #   resources :products do
