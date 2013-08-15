@@ -2,6 +2,7 @@ class WordsController < ApplicationController
 
   def index
     # show all
+    @words = Word.all
   end
 
   def show

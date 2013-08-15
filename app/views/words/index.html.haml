@@ -1,0 +1,23 @@
+
+- @title = "Show all words"
+
+%p
+  %table{:border=>1, :width=>"70%"}
+    %thead
+      %tr
+        %td ID
+        %td Word
+        %td Tag
+        %td Paradigm
+        %td Typo
+        %td Comment
+    %tbody
+      - @words.each do |word|
+        %tr
+          %td= word.id
+          %td= word.text
+          %td= word.tag
+          %td= word.paradigm_id
+          %td= word.typo
+          %td= word.comment
+    

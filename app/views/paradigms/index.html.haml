@@ -1,0 +1,29 @@
+
+- @title = "Listing all paradigms"
+
+%table{:border=>1}
+  %thead
+    %tr
+      %th ID
+      %th Type
+      %th Status
+      %th Comment
+      %th Words
+  %tbody
+    - @paradigms.each do |pdg|
+      %tr
+        %td= pdg.id
+        %td= pdg.paradigm_type
+        %td= pdg.status
+        %td= pdg.comment
+        %td
+          %table
+            - pdg.words.each do |word|
+              %tr
+                %td= word.id
+                %td= word.text
+                %td= word.tag
+                %td= word.typo
+                %td= word.comment
+
+  
