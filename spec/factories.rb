@@ -14,6 +14,7 @@ FactoryGirl.define do
   factory :user do
     login      "luser"
     email      "luser@ihs.com"
+    password   "111"
     created_at "2013-08-15 18:40:42"
     updated_at "2013-08-15 18:40:42"
   end

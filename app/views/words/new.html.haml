@@ -4,7 +4,7 @@
 %h2= @title
 
 = form_for(@word) do |f|
-  = render 'shared/error_messages'
+  = render partial: 'shared/error_messages', locals: { item: @word }
   %br/
   = f.label :text, "Word"
   = f.text_field :text

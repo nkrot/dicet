@@ -1,0 +1,20 @@
+
+%h3 Showing dossier on all registered users
+
+%p Number of users: #{@users.count}
+
+%table{border:1}
+  %thead
+    %tr
+      %th ID
+      %th Login
+      %th Email
+      %th Password (haha)
+  %tbody
+    - @users.each do |user|
+      %tr
+        %th= user.id
+        %th= user.login
+        %th= user.email
+        %th= user.password
+

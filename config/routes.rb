@@ -19,6 +19,8 @@ Dicet::Application.routes.draw do
   #   resources :products
 
   resources :users
+  match '/signup', to: 'users#new', via: 'get'
+
   resources :words
   resources :paradigms
 #  resources :tasks

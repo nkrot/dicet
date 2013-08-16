@@ -1,0 +1,19 @@
+
+- @title = @user.login
+
+%h3 Showing dossier on user #{@user.login}
+
+%table{border:1}
+  %thead
+    %tr
+      %th ID
+      %th Login
+      %th Email
+      %th Password (haha)
+  %tbody
+    %tr
+      %th= @user.id
+      %th= @user.login
+      %th= @user.email
+      %th= @user.password
+

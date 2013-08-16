@@ -1,0 +1,22 @@
+
+- @title = "Sign up"
+
+%h3 Welcome, our potential customer!
+
+%p Please, fill in the following form to create an account with us
+
+%div.user_signup
+  = form_for(@user) do |f|
+    = render partial: 'shared/error_messages', locals: { item: @user }
+    = f.label :login, "Login:"
+    = f.text_field :login
+
+    = f.label :email, "Email:"
+    = f.text_field :email
+
+    = f.label :password, "Password"
+    = f.text_field :password
+    %br/
+    = f.submit "Add me", class: "btn btn-primary"
+
+
