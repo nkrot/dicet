@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130815123518) do
+ActiveRecord::Schema.define(version: 20130816115824) do
 
   create_table "paradigms", force: true do |t|
     t.string   "status"
@@ -19,6 +19,14 @@ ActiveRecord::Schema.define(version: 20130815123518) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "paradigm_type"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "login"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "password"
   end
 
   create_table "words", force: true do |t|

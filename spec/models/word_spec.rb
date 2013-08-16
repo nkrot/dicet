@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Word do
-#  pending "add some examples to (or delete) #{__FILE__}"
 
   before { @word = Word.new(text: "book", typo: false)}
   subject { @word }
@@ -31,8 +30,9 @@ describe Word do
     it { should_not be_valid }
   end
 
-  describe "when text already exists" do
-    before { @word.dup.save }
-    it { should_not be_valid }
-  end
+  # uniqueness no longer possible
+#  describe "when text already exists" do
+#    before { @word.dup.save }
+#    it { should_not be_valid }
+#  end
 end
