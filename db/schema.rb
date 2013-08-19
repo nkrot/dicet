@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130819145747) do
+ActiveRecord::Schema.define(version: 20130819171659) do
 
   create_table "paradigms", force: true do |t|
     t.string   "status"
@@ -53,8 +53,10 @@ ActiveRecord::Schema.define(version: 20130819145747) do
     t.datetime "updated_at"
     t.string   "tag"
     t.integer  "paradigm_id"
+    t.integer  "task_id"
   end
 
   add_index "words", ["paradigm_id"], name: "index_words_on_paradigm_id"
+  add_index "words", ["task_id"], name: "index_words_on_task_id"
 
 end

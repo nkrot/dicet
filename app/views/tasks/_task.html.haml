@@ -1,0 +1,9 @@
+
+%tr
+  %td= task.id
+  %td= task.priority
+  %td= task.status
+  %td
+    %ul
+      = render partial: "words/word_in_task", collection: task.words, as: :word
+     

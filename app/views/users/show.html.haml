@@ -17,3 +17,14 @@
       %th= @user.email
       %th= @user.password
 
+%div.tasks
+  %h4 Dictionary tasks
+  %table{border:1}
+    %thead
+      %tr
+        %th TaskID
+        %th Priority
+        %th Status
+        %th Words
+      %tbody
+        = render @user.tasks

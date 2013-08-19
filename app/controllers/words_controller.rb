@@ -43,7 +43,7 @@ class WordsController < ApplicationController
   # strong parameters
   # extract from params only required and permitted attributes
   def word_params
-    params.require(:word).permit(:text, :typo, :comment)
+    params.require(:word).permit(:text, :typo, :comment, :task_id)
   end
 
 end

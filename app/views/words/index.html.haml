@@ -11,6 +11,7 @@
         %td Paradigm
         %td Typo
         %td Comment
+        %td Task
     %tbody
       - @words.each do |word|
         %tr
@@ -20,4 +21,5 @@
           %td= word.paradigm_id
           %td= word.typo
           %td= word.comment
+          %td= word.task_id
     

@@ -8,6 +8,8 @@ describe Word do
   it { should respond_to :text }
   it { should respond_to :typo }
   it { should respond_to :comment }
+  it { should respond_to :paradigm_id } # belongs_to :paradigm
+  it { should respond_to :task_id }     # belongs_to :task
 
   describe "when text is empty" do
 #    it "should be not valid" do
