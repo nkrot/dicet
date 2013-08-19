@@ -27,8 +27,22 @@ describe "User pages" do
       it "should create a user" do
         expect { click_button  submit }.should change(User, :count).by(1)
       end
-    end
 
+      describe "after saving the user" do
+        # auto signing in on sign up
+        before { click_button submit }
+        let(:user) { User.find_by(login: "luser") }
+
+        it { should have_link 'Sign out' }
+        it { should have_title user.login }
+        it { should have_selector 'div.alert.alert-success', text: 'Welcome' }
+      end
+
+      describe "followed by signout" do
+        before { click_link 'Sign out' }
+        it { should have_link 'Sign in' }
+      end
+    end
   end
 
   describe "profile page" do

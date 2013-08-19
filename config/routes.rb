@@ -25,6 +25,10 @@ Dicet::Application.routes.draw do
   resources :paradigms
 #  resources :tasks
 
+  resources :sessions, only: [:new, :create, :destroy]
+  match '/signin',  to: 'sessions#new',     via: 'get'
+  match '/signout', to: 'sessions#destroy', via: 'delete'
+
   # Example resource route with options:
   #   resources :products do
   #     member do

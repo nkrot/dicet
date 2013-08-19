@@ -1,0 +1,14 @@
+
+- @title = "Sign in"
+
+%h2 Please, sign in or #{link_to "Sign up", signup_path}
+
+%div.user_login
+  = form_for(:session, url: sessions_path) do |f|
+    = f.label :login, "Login:"
+    = f.text_field :login
+
+    = f.label :password, "Password:"
+    = f.text_field :password
+
+    = f.submit 'Sign in', class: "btn btn-primary"

@@ -1,3 +1,10 @@
 
 %div.header
-  The header is still to come
+  = link_to "Home", root_path
+  |
+  - if signed_in?
+    = link_to "Sign out", signout_path, method: "delete"
+  - else
+    = link_to "Sign in", signin_path
+
+  
