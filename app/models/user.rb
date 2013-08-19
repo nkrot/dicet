@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  #has_many: tasks
+  has_many :tasks
 
   validates :login, presence: true, length: { maximum: 50 },
                     uniqueness: { case_sensitive: false }
