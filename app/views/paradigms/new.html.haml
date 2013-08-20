@@ -2,8 +2,14 @@
 
 %h2= @title
 
+
 = form_for(@paradigm) do |f|
   / = render 'shared/error_messages'
+  - if @word
+    New word: 
+    = @word.text
+    = hidden_field_tag :word_id, @word.id
+
   %table.paradigm{border:1, width:'50%'}
     %thead
       %tr

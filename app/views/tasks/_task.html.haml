@@ -4,6 +4,5 @@
   %td= task.priority
   %td= task.status
   %td
-    %ul
-      = render partial: "words/word_in_task", collection: task.words, as: :word
+    = render partial: "words/word_in_task", collection: task.words, as: :word
      

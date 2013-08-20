@@ -1,3 +1,9 @@
+== BUGS
+
+words#new
+	should not add that is already in DB
+	what to in case the user wants to add a new tag (read, paradigm) to such a word?
+
 == README
 
 This README would normally document whatever steps are necessary to get the

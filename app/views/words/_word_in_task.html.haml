@@ -1,2 +1,8 @@
-%li
-  = word.text
+%div
+  - if word.paradigm_id
+    = word.text
+    [in
+    != links_to_paradigm_edit(word.homonyms)
+    ]
+  - else
+    = link_to word.text, new_paradigm_path(:word_id => word)

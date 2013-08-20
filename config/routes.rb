@@ -1,7 +1,7 @@
 Dicet::Application.routes.draw do
-  get "welcome/help"
-  get "welcome/index"
-  get "welcome/about"
+#  get "welcome/help"
+#  get "welcome/index"
+#  get "welcome/about"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -17,6 +17,10 @@ Dicet::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+
+  # static pages
+  match '/about', to: 'welcome#about', via: 'get'
+  match '/help',  to: 'welcome#help',  via: 'get'
 
   resources :users
   match '/signup', to: 'users#new', via: 'get'
