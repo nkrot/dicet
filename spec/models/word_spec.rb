@@ -10,7 +10,8 @@ describe Word do
   it { should respond_to :comment }
   it { should respond_to :paradigm_id } # belongs_to :paradigm
   it { should respond_to :task_id }     # belongs_to :task
-  it { should respond_to :all_paradigm_ids }
+  it { should respond_to :homonyms }
+#  it { should respond_to :all_paradigm_ids }
 
   describe "when text is empty" do
 #    it "should be not valid" do

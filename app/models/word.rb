@@ -6,9 +6,9 @@ class Word < ActiveRecord::Base
   # uniqueness: true -- word can legally repeat several times if
   #  it has different tags and/or belongs to several paradigms
 
-  def all_paradigm_ids
-    Word.where(text: self.text).map(&:paradigm_id)
-  end
+#  def all_paradigm_ids
+#    Word.where(text: self.text).map(&:paradigm_id)
+#  end
 
   def homonyms
     Word.where(text: self.text).sort_by(&:paradigm_id)
