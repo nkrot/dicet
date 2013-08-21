@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130819171659) do
+ActiveRecord::Schema.define(version: 20130821093307) do
 
   create_table "paradigms", force: true do |t|
     t.string   "status"
@@ -20,6 +20,15 @@ ActiveRecord::Schema.define(version: 20130819171659) do
     t.datetime "updated_at"
     t.string   "paradigm_type"
   end
+
+  create_table "tags", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "description"
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name"
 
   create_table "tasks", force: true do |t|
     t.integer  "priority"

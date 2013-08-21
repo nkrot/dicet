@@ -26,6 +26,7 @@ class ParadigmsController < ApplicationController
   end
 
   def edit
+    @paradigm = Paradigm.find(params[:id])
   end
 
   def update

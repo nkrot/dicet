@@ -1,0 +1,15 @@
+%h2 Tagset
+
+%table.tagset{border:1}
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Description
+  %tbody
+    - @tags.each do |tag|
+      %tr
+        %td= tag.id
+        %td= tag.name
+        %td= tag.description
+
