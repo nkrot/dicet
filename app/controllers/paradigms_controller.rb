@@ -22,7 +22,7 @@ class ParadigmsController < ApplicationController
     save_paradigms params
 
     @paradigm = Paradigm.new
-    render 'new'
+    redirect_to new_paradigm_url
   end
 
   def edit
