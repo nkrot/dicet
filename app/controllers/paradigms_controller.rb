@@ -3,10 +3,6 @@ class ParadigmsController < ApplicationController
   def index
     # show all
     @paradigms = Paradigm.all
-    pdg = @paradigms.first
-    puts pdg.methods.sort
-    puts pdg.inspect
-#    puts pdg.paradigm_type
   end
 
   def show
@@ -71,8 +67,7 @@ class ParadigmsController < ApplicationController
       end
 
       unless words.empty?
-        pdg_type_id = ParadigmType.where(name: pdg_type).first
-        puts "pdg_type -> pdg_type_id: #{pdg_type} -> #{pdg_type_id}"
+        pdg_type_id = ParadigmType.where(name: pdg_type).first.id
         yield pdg_type_id, data[:status], data[:comment], words
       end
     end

@@ -6,8 +6,8 @@ class Paradigm < ActiveRecord::Base
      "dumped"     # was already taken from DB. means that changing it will not affect anything 
     ]
 
-  has_many :words
-  has_one  :paradigm_type
+  has_many   :words
+  belongs_to :paradigm_type
 #  validates_associated :words # TODO: what does it mean?
 
   validates :status, inclusion: { in: STATUSES, 
