@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130821093307) do
+ActiveRecord::Schema.define(version: 20130821115015) do
+
+  create_table "paradigm_types", force: true do |t|
+    t.string   "name"
+    t.integer  "order"
+    t.integer  "tag_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "paradigm_types", ["name"], name: "index_paradigm_types_on_name"
 
   create_table "paradigms", force: true do |t|
     t.string   "status"

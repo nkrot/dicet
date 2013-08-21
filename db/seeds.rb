@@ -15,3 +15,24 @@ tagset.each do |tag|
     Tag.create(name: tag)
   end
 end
+
+pdg_types = {
+  "nn"  => ["NN", "NNS"],
+  "np"  => ["NP", "NPS"],
+  "npt" => ["NPT", "NPTS"],
+  "npl" => ["NPL", "NPLS"],
+  "vb"  => ["VB", "VBZ", "VBG", "VBD", "VBN", "JJing", "JJed"],
+  "jj"  => ["JJ", "JJR", "JJT"]
+}
+
+pdg_types.each do |name, tags|
+  tags.each_with_index do |tag, order|
+    t = Tag.where(name: tag).first
+    pdg_type = ParadigmType.new do |obj|
+      obj.name = name
+      obj.order = order
+      obj.tag_id = t.id
+    end
+    pdg_type.save
+  end
+end
