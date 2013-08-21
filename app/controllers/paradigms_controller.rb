@@ -61,7 +61,7 @@ class ParadigmsController < ApplicationController
 
           w = find_suitable_word(hash, params[:word_id])
 
-          w.update_attributes(tag: hash[:tag])
+          w.update_attributes(tag_id: Tag.tag_name2tag_id(hash[:tag]))
           words << w
         end
       end
@@ -79,7 +79,7 @@ class ParadigmsController < ApplicationController
       # Q: what if the word somehow has already been taken to a paradigm
       # A: this should not happen, because such words go through paradigms#edit action
       #    not through paradigms#create
-      attrs = {id: current_word_id, text: hash[:word], tag: nil, paradigm_id: nil}
+      attrs = {id: current_word_id, text: hash[:word], tag_id: nil, paradigm_id: nil}
       w = Word.find_by(attrs)
 #      puts "Reusing the word #{w.text} with ID=#{w.id} /end" if w
     end
@@ -87,7 +87,7 @@ class ParadigmsController < ApplicationController
     # if nothing suitable was found by the id, find by word.text
     unless w
       # attributes that identify a Word that was not taken to a paradigm
-      attrs = {text: hash[:word], tag: nil, paradigm_id: nil}
+      attrs = {text: hash[:word], tag_id: nil, paradigm_id: nil}
 #      _word = Word.find_by(attrs)
 #      puts "Found? #{_word.text} with ID=#{_word.id} /End"  if _word
       # TODO: the user can change word.text as well

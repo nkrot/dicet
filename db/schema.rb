@@ -76,11 +76,11 @@ ActiveRecord::Schema.define(version: 20130821140406) do
     t.string   "text"
     t.boolean  "typo"
     t.text     "comment"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "tag"
+    t.integer  "tag_id"
     t.integer  "paradigm_id"
     t.integer  "task_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "words", ["paradigm_id"], name: "index_words_on_paradigm_id"

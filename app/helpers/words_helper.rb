@@ -2,7 +2,7 @@ module WordsHelper
 
   def links_to_paradigm_edit words
     words.map do |w|
-      link_to "#{w.tag}:#{w.paradigm_id}", edit_paradigm_path(:id => w.paradigm_id)
+      link_to "#{w.tag.name}:#{w.paradigm_id}", edit_paradigm_path(:id => w.paradigm_id)
     end.join(", ")
   end
 end
