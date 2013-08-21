@@ -1,0 +1,16 @@
+%h2 Known Types of Paradigms
+
+%table.tagset{border:1}
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Tags
+  %tbody
+    - @paradigm_types.each do |pdgt|
+      %tr
+        %td= pdgt.id
+        %td= pdgt.name
+        %td= pdgt.tags.map {|t| t.name}.join(', ')
+
+

@@ -7,6 +7,7 @@ class Paradigm < ActiveRecord::Base
     ]
 
   has_many :words
+  has_one  :paradigm_type
 #  validates_associated :words # TODO: what does it mean?
 
   validates :status, inclusion: { in: STATUSES, 

@@ -3,6 +3,10 @@ class ParadigmsController < ApplicationController
   def index
     # show all
     @paradigms = Paradigm.all
+    pdg = @paradigms.first
+    puts pdg.methods.sort
+    puts pdg.inspect
+#    puts pdg.paradigm_type
   end
 
   def show
@@ -40,8 +44,8 @@ class ParadigmsController < ApplicationController
   def save_paradigms params
 #    puts params
     # extract individual paradigms from the form
-    each_paradigm(params) do |pdg_type, status, comment, words|
-      pdg = Paradigm.new(paradigm_type: pdg_type, status: status, comment: comment)
+    each_paradigm(params) do |pdg_type_id, status, comment, words|
+      pdg = Paradigm.new(paradigm_type_id: pdg_type_id, status: status, comment: comment)
       pdg.words.concat words
 #      puts "WORDS:\n #{words.inspect}"
       pdg.save
@@ -67,7 +71,9 @@ class ParadigmsController < ApplicationController
       end
 
       unless words.empty?
-        yield pdg_type, data[:status], data[:comment], words
+        pdg_type_id = ParadigmType.where(name: pdg_type).first
+        puts "pdg_type -> pdg_type_id: #{pdg_type} -> #{pdg_type_id}"
+        yield pdg_type_id, data[:status], data[:comment], words
       end
     end
   end

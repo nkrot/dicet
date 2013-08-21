@@ -6,6 +6,17 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+users = [["alpha", "alpha@example.com", 111],
+         ["beta",  "beta@example.com",  222],
+         ["gamma", "gamma@example.com", 333],
+         ["delta", "delta@example.com", 444]]
+
+users.each do |user|
+  User.create(login: user[0], email: user[1], password: user[2])
+end
+
+######################################################################
+
 tagset = ["!", ["FO", "Formula"], ["FW", "Foreign word"], "(", ")", "LQ", "RQ", "DA", ",", ".", "...", ":", ";", "?", "ABL", "ABN", "ABX", "AP", "APS", "AT", "ATI", "BE", "BED", "BEDZ", "BEG", "BEM", "BEN", "BER", "BEZ", "CC", "CD", "CD-CD", "CD1", "CD1S", "CDS", "CS", "DO", "DOD", "DOZ", "DT", "DTI", "DTS", "DTX", "EX", "HV", "HVD", "HVG", "HVN", "HVZ", "IN", "JJ", "JJR", "JJT", "JNP", "MD", ["NN", "Noun common singular"], ["NNS", "Noun common plural"], "NNP", "NNPS",  ["NNU", "Unit of measurement, singular"], ["NNUS", "Unit of measurement, plural"], "NP", "NPS", "NPL", "NPLS", "NPT", "NPTS", "NR", "NRS", "OD", "PN", "PP$", "PP$$", "PP1A", "PP1AS", "PP1O", "PP1OS", "PP2", "PP3", "PP3A", "PP3AS", "PP3O", "PP3OS", "PPL", "PPLS", "QL", "QLP", "RB", "RBR", "RBT", "RI", "RN", "RP", "TO", "UH", "VB", "VBZ", "VBG", "VBD", "VBN", "WDT", "WP", "WRB", ["XNOT", "Negation particle"], "ZZ", "POS", "JJing", "JJed", "NOTAG"]
 
 tagset.each do |tag| 
@@ -15,6 +26,8 @@ tagset.each do |tag|
     Tag.create(name: tag)
   end
 end
+
+######################################################################
 
 pdg_types = {
   "nn"  => ["NN", "NNS"],
@@ -26,13 +39,16 @@ pdg_types = {
 }
 
 pdg_types.each do |name, tags|
-  tags.each_with_index do |tag, order|
-    t = Tag.where(name: tag).first
-    pdg_type = ParadigmType.new do |obj|
-      obj.name = name
-      obj.order = order
-      obj.tag_id = t.id
+  ts = tags.map {|tag| Tag.where(name: tag).first}
+  pdg_type = ParadigmType.create(name: name)
+  # set the proxytable ParadigmTag, more specifically, this hack sets order field
+  # TODO: how to accomplish it in a nicer way?
+  ts.each_with_index do |t, idx|
+    pdg_type.paradigm_tags << ParadigmTag.create do |pt|
+      pt.paradigm_type_id = pdg_type.id
+      pt.tag_id           = t.id
+      pt.order            = idx
     end
-    pdg_type.save
   end
+  pdg_type.save
 end

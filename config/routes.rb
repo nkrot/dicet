@@ -1,4 +1,5 @@
 Dicet::Application.routes.draw do
+  get "paradigm_types/index"
   get "tags/index"
 #  get "welcome/help"
 #  get "welcome/index"
@@ -34,7 +35,8 @@ Dicet::Application.routes.draw do
   match '/signin',  to: 'sessions#new',     via: 'get'
   match '/signout', to: 'sessions#destroy', via: 'delete'
 
-  resources :tags, only: [:index]
+  resources :tags,           only: [:index]
+  resources :paradigm_types, only: [:index]
 
   # Example resource route with options:
   #   resources :products do
