@@ -14,4 +14,8 @@ class Word < ActiveRecord::Base
   def homonyms
     Word.where(text: self.text).sort_by(&:paradigm_id)
   end
+
+  def tagname
+    self.tag ? self.tag.name : ""
+  end
 end

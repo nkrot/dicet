@@ -3,8 +3,8 @@ class WordsController < ApplicationController
   def index
     # show all
     @words = Word.all
-    puts @words.first.methods.sort
-    puts @words.first.inspect
+#    puts @words.first.methods.sort
+#    puts @words.first.inspect
   end
 
   def show

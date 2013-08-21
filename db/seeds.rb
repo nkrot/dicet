@@ -52,3 +52,29 @@ pdg_types.each do |name, tags|
   end
   pdg_type.save
 end
+
+######################################################################
+
+tasks = \
+[
+ ["word", "lamps", "running"],
+ ["lamp", "run", "computer", "computers"],
+ ["runs", "rain"],
+ ["apple", "Apple"],
+ ["wand", "wander", "wandering"],
+ ["task", "assignee", "doer"]
+]
+
+tasks.each_with_index do |words, idx|
+  task = Task.new(priority: 10)
+  task.words = words.map {|w| Word.new(text: w)}
+  # assign a user
+  i = idx - (idx/users.length) * users.length
+  user_name = users[i].first
+  user = User.find_by(login: user_name)
+  task.user = user
+
+  unless task.save
+    puts task.errors.full_messages
+  end
+end
