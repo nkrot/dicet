@@ -1,0 +1,17 @@
+
+%h2= @title
+
+- pdgid = @paradigm.paradigm_type_id
+
+= form_for(@paradigm) do |f|
+  %table.paradigm{border:1, width:'50%'}
+    %thead
+      %tr
+        %th.tag{width:80} Tag
+        %th.word Word
+    %tbody
+      - @paradigm.each_word_with_tag do |word, tag|
+        %tr
+          %td= label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
+          %td= text_field_tag "pdg[#{pdgid}][#{tag.id}][word]", word.text
+

@@ -5,11 +5,14 @@ class ParadigmsController < ApplicationController
     @paradigms = Paradigm.all
   end
 
+  # TODO: unnecessary?
   def show
-    # show one paradigm
+    @paradigm = Paradigm.find(params[:id])
+    @title = "Paradigm"
   end
 
   def new
+    @title = "Add a new paradigm"
     # empty form for creating a new paradigm
     if params[:word_id]
       @word = Word.find(params[:word_id])
@@ -27,6 +30,7 @@ class ParadigmsController < ApplicationController
 
   def edit
     @paradigm = Paradigm.find(params[:id])
+    @title = "Edit paradigm"
   end
 
   def update

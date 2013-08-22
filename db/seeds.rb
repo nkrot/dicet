@@ -62,7 +62,8 @@ tasks = \
  ["runs", "rain"],
  ["apple", "Apple"],
  ["wand", "wander", "wandering"],
- ["task", "assignee", "doer"]
+ ["task", "assignee", "doer"],
+ ["apples", "raining", "rains"]
 ]
 
 tasks.each_with_index do |words, idx|

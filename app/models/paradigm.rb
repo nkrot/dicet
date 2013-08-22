@@ -7,10 +7,42 @@ class Paradigm < ActiveRecord::Base
     ]
 
   has_many   :words
+#  has_many   :tags, :through => :paradigm_type # TODO: try this
   belongs_to :paradigm_type
 #  validates_associated :words # TODO: what does it mean?
 
   validates :status, inclusion: { in: STATUSES, 
     message: "%{value} is not a valid status, should be one of #{STATUSES.join(" ")}"}
 
+  # TODO: ensure tags are returned in the order in which they are arranged
+  # in the paradigm
+  def tags
+    self.paradigm_type.tags
+  end
+
+  # NOTE: this may return less words than a paradigm requires
+  # if not all slots of the paradigm were filled.
+  # -> inappropriate method
+  def words
+    words = Word.where(paradigm_id: self.id).to_a
+    # sort items in words by the order of tags in the paradigm
+    words.sort_by do |w|
+      ParadigmTag.find_by(paradigm_type_id: self.paradigm_type_id, tag_id: w.tag_id).order
+    end
+  end
+
+  # iterates over word/tag pairs in the paradigm
+  # if a tag in the paradigm was not assigned a word, returns nil
+  def each_word_with_tag
+    puts "All current tags: "
+    puts self.tags
+    tags.each do |tag|
+      attrs = { paradigm_id: self.id, tag_id: tag.id }
+      words = Word.where(attrs).to_a
+      words << Word.new(attrs)  if words.empty?
+      words.each do |word|
+        yield word, tag
+      end
+    end
+  end
 end
