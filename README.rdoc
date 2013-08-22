@@ -1,8 +1,15 @@
 == BUGS
 
+paradigms#update
+
+1) should not add word/tag pair if it already exists and belongs to the same paradigm id
+
 words#new
-	should not add that is already in DB
-	what to in case the user wants to add a new tag (read, paradigm) to such a word?
+
+1)	should not add that is already in DB
+
+2)	what to do in case the user wants to add a new tag (read, paradigm) to such a word?
+
 
 == README
 

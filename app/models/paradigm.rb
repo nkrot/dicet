@@ -20,17 +20,6 @@ class Paradigm < ActiveRecord::Base
     self.paradigm_type.tags
   end
 
-  # NOTE: this may return less words than a paradigm requires
-  # if not all slots of the paradigm were filled.
-  # -> inappropriate method
-  def words
-    words = Word.where(paradigm_id: self.id).to_a
-    # sort items in words by the order of tags in the paradigm
-    words.sort_by do |w|
-      ParadigmTag.find_by(paradigm_type_id: self.paradigm_type_id, tag_id: w.tag_id).order
-    end
-  end
-
   # iterates over word/tag pairs in the paradigm
   # if a tag in the paradigm was not assigned a word, returns nil
   def each_word_with_tag

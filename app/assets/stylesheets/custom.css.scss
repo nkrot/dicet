@@ -39,6 +39,25 @@ input {
   height: auto !important;
 }
 
+.radioset {
+  .labels {
+    font-weight: bold;
+  }
+  .buttons {
+    text-align: center;
+  }
+}
+
+.comment {
+  background-color: #ddd
+}
+
+.save {
+  margin-top: 1em;
+  margin-left: 0.5em;  
+  display: block;
+}
+
 #error_explanation {
   color: #f00;
   ul {

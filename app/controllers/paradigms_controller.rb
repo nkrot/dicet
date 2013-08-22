@@ -34,6 +34,12 @@ class ParadigmsController < ApplicationController
   end
 
   def update
+    if update_paradigm(params)
+      flash[:success] = "Paradigm saved successfully"
+    else
+      flash[:error] = "Shit happened when saving paradigm"
+    end
+    redirect_to user_url(@current_user)
   end
 
   def destroy
@@ -41,6 +47,59 @@ class ParadigmsController < ApplicationController
 
   private
 
+#  "pdg"=>{
+#    "5"=>{
+#      "96"=>{"word"=>"wander"},
+#      "97"=>{"word"=>"wanders"},
+#      "98"=>{"word"=>"wandering"},
+#      "99"=>{"word"=>"wandered"},
+#      "100"=>{"word"=>""},
+#      "107"=>{"word"=>""},
+#      "108"=>{"word"=>""},
+#      "extras"=>{"comment"=>"", "status"=>"ready"}
+#    }
+#  }
+
+  def update_paradigm params
+    saved = true
+    pdg = Paradigm.find(params[:id])
+    params[:paradigm_id] = params[:id] # for find_suitable_word
+    each_paradigm_2(params) do |pdg_type_id, words, extras|
+      pdg.paradigm_type_id = pdg_type_id
+      pdg.comment = extras["comment"]  if extras["comment"]
+      pdg.status  = extras["status"]   if extras["status"]
+      pdg.words.concat words
+      saved = saved && pdg.save
+      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
+    end
+    saved
+  end
+
+  def each_paradigm_2 params
+    params[:pdg].each do |pdg_type_id, data|
+      words = []
+      extras = {}
+      data.each do |tag_id, word_data|
+        if tag_id == "extras"
+          ["comment", "status"].each do |field|
+            val = word_data[field].strip
+            extras[field] = val  unless val.nil? || val.empty?
+          end
+        elsif ! word_data["word"].strip.empty?
+          w = find_suitable_word(word_data, params)
+          w.update_attributes(tag_id: tag_id)
+          words << w
+        end
+      end
+
+      unless words.empty?
+        yield pdg_type_id, words, extras
+      end
+    end
+
+  end
+
+  # TODO: get rid of it
   def save_paradigms params
 #    puts params
     # extract individual paradigms from the form
@@ -55,6 +114,7 @@ class ParadigmsController < ApplicationController
     end
   end
 
+  # TODO: get rid of it
   def each_paradigm params
     params[:pdg].each do |pdg_type, data|
       words = []
@@ -63,7 +123,7 @@ class ParadigmsController < ApplicationController
           hash[:word].strip!
           hash[:tag].strip!
 
-          w = find_suitable_word(hash, params[:word_id])
+          w = find_suitable_word(hash, params)
 
           w.update_attributes(tag_id: Tag.tag_name2tag_id(hash[:tag]))
           words << w
@@ -77,19 +137,23 @@ class ParadigmsController < ApplicationController
     end
   end
 
-  def find_suitable_word(hash, current_word_id=nil)
+  def find_suitable_word(hash, params)
+    current_word_id = params[:word_id] || nil
+    current_pdg_id = params[:paradigm_id] || nil
+
     # find the word by the given ID
-    if current_word_id
+    if current_word_id || current_pdg_id
       # Q: what if the word somehow has already been taken to a paradigm
       # A: this should not happen, because such words go through paradigms#edit action
       #    not through paradigms#create
-      attrs = {id: current_word_id, text: hash[:word], tag_id: nil, paradigm_id: nil}
+      attrs = {id: current_word_id, text: hash[:word], tag_id: nil, paradigm_id: current_pdg_id}
       w = Word.find_by(attrs)
 #      puts "Reusing the word #{w.text} with ID=#{w.id} /end" if w
     end
 
     # if nothing suitable was found by the id, find by word.text
     unless w
+      hash[:word].strip!
       # attributes that identify a Word that was not taken to a paradigm
       attrs = {text: hash[:word], tag_id: nil, paradigm_id: nil}
 #      _word = Word.find_by(attrs)

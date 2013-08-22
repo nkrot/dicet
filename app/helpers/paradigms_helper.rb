@@ -14,11 +14,11 @@ module ParadigmsHelper
   def radio_button_for_status pdg_type
     code = ""
 
-    code << label_tag(:ready, "Ready")
-    code << radio_button_tag("pdg[#{pdg_type}][status]", "ready", checked=1)
+    code << label_tag(:ready, "Ready", :class => "beside")
+    code << radio_button_tag("pdg[#{pdg_type}][status]", "ready", checked=1, :class => "beside")
 
-    code << label_tag(:review, "Review later")
-    code << radio_button_tag("pdg[#{pdg_type}][status]", "review")
+    code << label_tag(:review, "Review later", :class => "beside")
+    code << radio_button_tag("pdg[#{pdg_type}][status]", "review", :class => "beside")
 
     code
   end
