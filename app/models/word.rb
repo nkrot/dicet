@@ -18,4 +18,12 @@ class Word < ActiveRecord::Base
   def tagname
     self.tag ? self.tag.name : ""
   end
+
+  def Word.label
+    "word"
+  end
+
+  def id_or_label
+    self.id || Word.label
+  end
 end

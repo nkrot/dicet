@@ -1,0 +1,21 @@
+- pdgid = @paradigm.paradigm_type_id
+
+= hidden_field_tag :paradigm_id, pdgid
+
+%table.paradigm{border:1, width:'50%'}
+  %thead
+    %tr
+      %th.tag{width:80} Tag
+      %th.word Word
+  %tbody
+    - @paradigm.each_word_with_tag do |word, tag|
+      %tr
+        %td= label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
+        %td= text_field_tag "pdg[#{pdgid}][#{tag.id}][#{word.id_or_label}]", word.text
+    / comment area
+    %tr.comment
+      %td= label_tag      "pdg[#{pdgid}][extras][comment]", "Comment"
+      %td= text_field_tag "pdg[#{pdgid}][extras][comment]"
+    %tr
+      %td{colspan:2}
+        = render partial: 'radioset_status', locals: { pdgid: pdgid }

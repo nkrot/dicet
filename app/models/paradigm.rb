@@ -23,8 +23,8 @@ class Paradigm < ActiveRecord::Base
   # iterates over word/tag pairs in the paradigm
   # if a tag in the paradigm was not assigned a word, returns nil
   def each_word_with_tag
-    puts "All current tags: "
-    puts self.tags
+#    puts "All current tags: "
+#    puts self.tags
     tags.each do |tag|
       attrs = { paradigm_id: self.id, tag_id: tag.id }
       words = Word.where(attrs).to_a
