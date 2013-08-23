@@ -13,11 +13,21 @@ class ParadigmsController < ApplicationController
 
   def new
     @title = "Add a new paradigm"
-    # empty form for creating a new paradigm
+
+    @paradigms = ParadigmType.all.map do |pdgt|
+      Paradigm.new(paradigm_type_id: pdgt.id)
+    end
+
     if params[:word_id]
       @word = Word.find(params[:word_id])
+      # if a word is already in paradigms, retrieve them
+      word_paradigms = Word.where(text: @word.text).map(&:paradigm) #=> Relation
+      @paradigms.unshift *word_paradigms.to_a
     end
-    @paradigm = Paradigm.new
+
+#    puts @paradigms.class
+#    puts @paradigms.methods.sort
+#    puts @paradigms.first.class
   end
 
   def create
@@ -50,8 +60,7 @@ class ParadigmsController < ApplicationController
   def update_paradigm params
     saved = true
     pdg = Paradigm.find(params[:id])
-#    params[:paradigm_id] = params[:id] # for find_suitable_word
-    each_paradigm_2(params) do |pdg_type_id, words, extras|
+    each_paradigm(params) do |pdg_type_id, words, extras|
       pdg.paradigm_type_id = pdg_type_id
       pdg.comment = extras["comment"]  if extras["comment"]
       pdg.status  = extras["status"]   if extras["status"]
@@ -75,7 +84,7 @@ class ParadigmsController < ApplicationController
 #    }
 #  }
 
-  def each_paradigm_2 params
+  def each_paradigm params
     params[:pdg].each do |pdg_type_id, data|
       words = []
       extras = {}
@@ -103,42 +112,23 @@ class ParadigmsController < ApplicationController
 
   end
 
-  # TODO: get rid of it
+  # TODO: cf with update_paradigm and refactor
   def save_paradigms params
+    saved = true
 #    puts params
-    # extract individual paradigms from the form
-    each_paradigm(params) do |pdg_type_id, status, comment, words|
-      pdg = Paradigm.new(paradigm_type_id: pdg_type_id, status: status, comment: comment)
+    each_paradigm(params) do |pdg_type_id, words, extras|
+#      puts "pdg_type_id=#{pdg_type_id}"
+#      puts "words: #{words.inspect}"
+#      puts "extras: #{extras.inspect}"
+      pdg = Paradigm.new
+      pdg.paradigm_type_id = pdg_type_id
+      pdg.comment = extras["comment"]  if extras["comment"]
+      pdg.status  = extras["status"]   if extras["status"]
       pdg.words.concat words
-#      puts "WORDS:\n #{words.inspect}"
-      pdg.save
-      words.map {|w| w.update_attributes(paradigm_id: pdg.id) } 
-      # TODO: how to manage task_id? should it be updated for words originally
-      # not in task but that were appended to the task through a paradigm
+      saved = saved && pdg.save
+      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
     end
-  end
-
-  # TODO: get rid of it
-  def each_paradigm params
-    params[:pdg].each do |pdg_type, data|
-      words = []
-      data.each do |tag, hash|
-        if tag !~ /^(status|comment)$/ && !hash[:word].empty?
-          hash[:word].strip!
-          hash[:tag].strip!
-
-          w = find_suitable_word(hash, params)
-
-          w.update_attributes(tag_id: Tag.tag_name2tag_id(hash[:tag]))
-          words << w
-        end
-      end
-
-      unless words.empty?
-        pdg_type_id = ParadigmType.where(name: pdg_type).first.id
-        yield pdg_type_id, data[:status], data[:comment], words
-      end
-    end
+    saved
   end
 
   # FIND_SUITABLE_WORD: {"word"=>"wander"}

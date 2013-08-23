@@ -1,50 +1,17 @@
 
 %h2= @title
 
-= form_for(@paradigm) do |f|
+= form_for(@paradigms.first) do |f|
   / = render 'shared/error_messages'
   - if @word
     New word: 
     = @word.text
     = hidden_field_tag :word_id, @word.id
 
-  %table.paradigm{border:1, width:'50%'}
-    %thead
-      %tr
-        %th Word
-        %th Tag
-    %tbody
-      / paradigm of type vb
-      %tr
-        %td= text_field_tag 'pdg[vb][VB][word]'
-        %td= text_field_tag 'pdg[vb][VB][tag]', "VB"
-      %tr
-        %td= text_field_tag 'pdg[vb][VBG][word]'
-        %td= text_field_tag 'pdg[vb][VBG][tag]', "VBG"
-      %tr
-        %td{colspan:2}
-          = label_tag      "pdg[vb][comment]", "Comment"
-          = text_field_tag "pdg[vb][comment]"
-      %tr
-        %td{colspan:2}
-          != radio_button_for_status "vb"
+  - @paradigms.each do |pdg|
+    = render partial: 'paradigm_for_form', locals: { paradigm: pdg }
+    %p
 
-      / paradigm of type nn
-      %tr
-        %td= text_field_tag 'pdg[nn][NN][word]'
-        %td= text_field_tag 'pdg[nn][NN][tag]', "NN"
-      %tr
-        %td= text_field_tag 'pdg[nn][NNS][word]'
-        %td= text_field_tag 'pdg[nn][NNS][tag]', "NNS"
-      %tr      
-        %td{colspan:2}
-          = label_tag      "pdg[nn][comment]", "Comment"
-          = text_field_tag "pdg[nn][comment]"
-      %tr
-        %td{colspan:2}
-          != radio_button_for_status "nn"
-      %tr
-        %td{colspan:2}
-          = f.submit "Save", accesskey:"s"
+  %div.save= f.submit "Save", accesskey:"s"
 
           

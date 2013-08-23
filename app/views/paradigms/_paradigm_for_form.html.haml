@@ -1,6 +1,6 @@
-- pdgid = @paradigm.paradigm_type_id
+- pdgid = paradigm.paradigm_type_id
 
-= hidden_field_tag :paradigm_id, pdgid
+//= hidden_field_tag :paradigm_id, pdgid
 
 %table.paradigm{border:1, width:'50%'}
   %thead
@@ -8,7 +8,7 @@
       %th.tag{width:80} Tag
       %th.word Word
   %tbody
-    - @paradigm.each_word_with_tag do |word, tag|
+    - paradigm.each_word_with_tag do |word, tag|
       %tr
         %td= label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
         %td= text_field_tag "pdg[#{pdgid}][#{tag.id}][#{word.id_or_label}]", word.text

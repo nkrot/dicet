@@ -59,7 +59,7 @@ tasks = \
 [
  ["word", "lamps", "running"],
  ["lamp", "run", "computer", "computers"],
- ["runs", "rain"],
+ ["runs", "rain", "wording"],
  ["apple", "Apple"],
  ["wand", "wander", "wandering"],
  ["task", "assignee", "doer"],

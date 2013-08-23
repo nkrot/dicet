@@ -2,6 +2,6 @@
 %h2= @title
 
 = form_for(@paradigm) do |f|
-  = render partial: 'paradigm_for_form'
+  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm }
 
   %div.save= f.submit "Save", accesskey:"s"

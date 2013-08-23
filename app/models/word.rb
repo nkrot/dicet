@@ -8,7 +8,7 @@ class Word < ActiveRecord::Base
   #  it has different tags and/or belongs to several paradigms
 
 #  def all_paradigm_ids
-#    Word.where(text: self.text).map(&:paradigm_id)
+#    Word.where(text: self.text).map(&:paradigm_id) #=> Relation
 #  end
 
   def homonyms
