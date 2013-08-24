@@ -1,5 +1,4 @@
 Dicet::Application.routes.draw do
-  get "tasks/index"
   get "paradigm_types/index"
   get "tags/index"
 #  get "welcome/help"

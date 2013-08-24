@@ -4,7 +4,8 @@
 
 = will_paginate
 
-= form_for "tasks[]", url: tasks_path, method:"patch" do |f|
+/ TODO: this is ugly. have to pass an id to reach to tasks#update
+= form_for "tasks[]", url: "tasks/1", method: "patch" do |f|
   %table.tasks{border:1}
     %thead
       %tr

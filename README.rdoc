@@ -9,9 +9,13 @@ words#new
     1) should not add that is already in DB
     2) what to do in case the user wants to add a new tag (read, paradigm) to such a word?
 
-== Features
+== TODO
 
-Add tooltips that explain tags (use Tag.description) when the mouse hovers over
+1. Paginate tasks and sort them by priority in user tasks page.
+
+2. Add tooltips that explain tags (use Tag.description) when the mouse hovers over
+
+
 
 == README
 

@@ -65,7 +65,7 @@ class ParadigmsController < ApplicationController
       pdg.comment = extras["comment"]  if extras["comment"]
       pdg.status  = extras["status"]   if extras["status"]
       pdg.words.concat words
-      saved = saved && pdg.save
+      saved = pdg.save && saved
       words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
     end
     saved
