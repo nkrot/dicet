@@ -1,8 +1,12 @@
 == BUGS
 
+paradigms#new
+
+	1) broken! oops
+
 paradigms#update
 
-   1) should not add word/tag pair if it already exists and belongs to the same paradigm id
+	1) should not add word/tag pair if it already exists and belongs to the same paradigm id
 
 words#new
 
@@ -11,11 +15,11 @@ words#new
 
 == TODO
 
-1. Paginate tasks and sort them by priority in user tasks page.
+1. [+] Paginate tasks and sort them by priority in user tasks page.
 
 2. Add tooltips that explain tags (use Tag.description) when the mouse hovers over
 
-
+3. Should the users be able to drop tasks (the tasks are added back to the task pull)?
 
 == README
 

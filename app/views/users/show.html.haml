@@ -18,7 +18,12 @@
       %th= @user.password
 
 %div.tasks
-  %h4 Dictionary tasks
+  %h4 Your dictionary tasks
+
+  %p You currently have #{@tasks.count} tasks assigned to you
+
+  = will_paginate @tasks
+
   %table{border:1}
     %thead
       %tr
@@ -27,4 +32,6 @@
         %th Status
         %th Words
       %tbody
-        = render @user.tasks
+        = render @tasks
+
+  = will_paginate @tasks

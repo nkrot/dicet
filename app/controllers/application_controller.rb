@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :require_login
 
+  TASKS_PER_PAGE = 5
+
   private
 
   def require_login

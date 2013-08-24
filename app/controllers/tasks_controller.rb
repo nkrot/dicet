@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 class TasksController < ApplicationController
-  TASKS_PER_PAGE = 4
 
   def index
     @title = "All dictionary tasks"

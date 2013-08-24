@@ -6,6 +6,9 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @tasks = @user.tasks.paginate(page:     params[:page],
+                                  per_page: TASKS_PER_PAGE,
+                                  order:    'priority DESC')
   end
 
   def new
