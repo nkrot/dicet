@@ -75,7 +75,12 @@ tasks = \
  [0, "dwarf", "dwell", "dweller", "double"],
  [0, "enhance", "enhancement", "envisage", "enormous", "enormously", "eloquent"],
  [0, "five", "fake", "fool", "foment", "foster", "fluffy"],
- [0, "giant", "grotesque", "gothic", "goblin"]
+ [0, "giant", "grotesque", "gothic", "goblin"],
+ [0, "kernel", "kompressor", "Kirk", "key", "keyboard"],
+ [0, "lousy", "looser", "loose", "lorry"],
+ [0, "masterpiece", "moisture", "mosquito"],
+ [0, "noise", "niece", "noisy", "nicely"],
+ [0, "ordered", "orange", "Orinoco", "onomatopeya"],
 ]
 
 tasks.each_with_index do |words, idx|
