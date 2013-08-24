@@ -20,6 +20,8 @@
 9. Ensure that the tag that can be both in a paradigm or per se is handled correctly
    * RB
 
+10. Once newly filled pdg was submitted, switch to the next word in the current task.
+
 == README
 
 This README would normally document whatever steps are necessary to get the
