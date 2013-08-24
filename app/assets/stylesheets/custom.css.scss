@@ -74,3 +74,23 @@ input {
 .tasks .center {
   text-align: center;
 }
+
+.balloon {
+  span {
+    display: none;
+  }
+
+  label:hover + span {
+    display: block;
+    position: absolute;
+    margin:5px 0px 0px 20px;
+    background-color: beige;
+    max-width:400px;
+    padding: 2px 10px 2px 10px;
+    border: 1px solid #C0C0C0;
+    /*  font: normal 10px/12px verdana; */
+    text-decoration:none;
+    color: #000;
+    text-align:left;
+  }    
+ }

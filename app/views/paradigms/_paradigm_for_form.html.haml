@@ -10,7 +10,9 @@
   %tbody
     - paradigm.each_word_with_tag do |word, tag|
       %tr
-        %td= label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
+        %td.balloon
+          = label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
+          %span= tag.description
         %td= text_field_tag "pdg[#{pdgid}][#{tag.id}][#{word.id_or_label}]", word.text
     / comment area
     %tr.comment
