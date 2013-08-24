@@ -1,0 +1,25 @@
+%h2 Showing all dictionary tasks
+
+%p There are currently #{@tasks.count} unassigned task.
+
+= will_paginate
+
+= form_for "tasks[]", url: tasks_path, method:"patch" do |f|
+  %table.tasks{border:1}
+    %thead
+      %tr
+        %th Take
+        %th Priority
+        %th Status
+        %th Words
+      %tbody
+        - @tasks.each do |task|
+          %tr
+            %td.center= check_box_tag "tasks[#{task.id}]"
+            %td.center= task.priority
+            %td= task.status
+            %td= render partial: "words/word_in_task", collection: task.words, as: :word
+
+  %div.save= f.submit "I take them over!", accesskey: "s"
+
+= will_paginate

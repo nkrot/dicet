@@ -1,4 +1,5 @@
 Dicet::Application.routes.draw do
+  get "tasks/index"
   get "paradigm_types/index"
   get "tags/index"
 #  get "welcome/help"
@@ -29,7 +30,7 @@ Dicet::Application.routes.draw do
 
   resources :words
   resources :paradigms
-#  resources :tasks
+  resources :tasks, only: [:index, :update]
 
   resources :sessions, only: [:new, :create, :destroy]
   match '/signin',  to: 'sessions#new',     via: 'get'

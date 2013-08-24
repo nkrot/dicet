@@ -70,7 +70,12 @@ tasks = \
  [0, "windy", "winds", "wall", "notes"],
  [0, "chair", "cherry", "advancedly", "advantageously", "omg"],
  [0, "success", "successful", "successfully"],
- [0, "net", "networks", "netto"]
+ [0, "net", "networks", "netto"],
+ [0, "coin", "coins", "koen"],
+ [0, "dwarf", "dwell", "dweller", "double"],
+ [0, "enhance", "enhancement", "envisage", "enormous", "enormously", "eloquent"],
+ [0, "five", "fake", "fool", "foment", "foster", "fluffy"],
+ [0, "giant", "grotesque", "gothic", "goblin"]
 ]
 
 tasks.each_with_index do |words, idx|
@@ -79,7 +84,8 @@ tasks.each_with_index do |words, idx|
     user_id = words.shift
   end
 
-  task = Task.new(priority: 10)
+  priority = [10,9,8].sample
+  task = Task.new(priority: priority)
   task.words = words.map {|w| Word.new(text: w)}
 
   unless user_id

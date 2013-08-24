@@ -2,6 +2,10 @@
 %div.header
   = link_to "Home", root_path
   |
+  = link_to "My page", user_path(current_user)
+  |
+  = link_to "All Tasks", tasks_path
+  |
   - if signed_in?
     = link_to "Sign out", signout_path, method: "delete"
   - else

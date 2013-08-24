@@ -22,7 +22,7 @@ $grayMediumLight: #eaeaea;
 }
 
 .footer, .header {
-	background: grey;
+	background: lightgreen;
 }
 
 /* forms */
@@ -69,4 +69,8 @@ input {
 .field_with_errors {
   @extend .control-group;
   @extend .error;
+}
+
+.tasks .center {
+  text-align: center;
 }
