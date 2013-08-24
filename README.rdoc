@@ -1,17 +1,24 @@
-== BUGS
-
-words#new
-
-    1) should not add that is already in DB
-    2) what to do in case the user wants to add a new tag (read, paradigm) to such a word?
-
 == TODO
 
 1. DONE: Paginate tasks and sort them by priority in user tasks page.
 
-2. Add tooltips that explain tags (use Tag.description) when the mouse hovers over
+2. DONE: Add tooltips that explain tags (use tag.description) when the mouse hovers over
 
 3. Should the users be able to drop tasks (the tasks are added back to the task pull)?
+
+4. On paradigms#new, do not show all empty paradigms. Instead, add buttons such that pressing a button opens an empty paradigm
+
+5. How to add multiple forms with the same tag to the paradigm (mosquitos and mosquitoes)
+
+6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)?
+
+7. Free form for inputting word/tag pairs that do not come in paradigms
+
+8. Possibility to extend a paradigm with other tags
+   * JJing can have an RB
+
+9. Ensure that the tag that can be both in a paradigm or per se is handled correctly
+   * RB
 
 == README
 
