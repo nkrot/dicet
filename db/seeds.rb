@@ -55,25 +55,40 @@ end
 
 ######################################################################
 
+# 0 at the beginning means this task will not be assigned to a user
+# initially.
+
 tasks = \
 [
  ["word", "lamps", "running"],
  ["lamp", "run", "computer", "computers"],
  ["runs", "rain", "wording"],
- ["apple", "Apple"],
- ["wand", "wander", "wandering"],
+ ["apple", "Apple", "brutto"],
+ [0, "wind", "wander", "wandering", "worded"],
  ["task", "assignee", "doer"],
- ["apples", "raining", "rains"]
+ ["apples", "raining", "rains"],
+ [0, "windy", "winds", "wall", "notes"],
+ [0, "chair", "cherry", "advancedly", "advantageously", "omg"],
+ [0, "success", "successful", "successfully"],
+ [0, "net", "networks", "netto"]
 ]
 
 tasks.each_with_index do |words, idx|
+  user_id = nil
+  if words.first == 0
+    user_id = words.shift
+  end
+
   task = Task.new(priority: 10)
   task.words = words.map {|w| Word.new(text: w)}
-  # assign a user
-  i = idx - (idx/users.length) * users.length
-  user_name = users[i].first
-  user = User.find_by(login: user_name)
-  task.user = user
+
+  unless user_id
+    # assign a user
+    i = idx - (idx/users.length) * users.length
+    user_name = users[i].first
+    user = User.find_by(login: user_name)
+    task.user = user
+  end
 
   unless task.save
     puts task.errors.full_messages
