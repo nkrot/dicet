@@ -22,12 +22,17 @@ class ParadigmsController < ApplicationController
       @word = Word.find(params[:word_id])
       # if a word is already in paradigms, retrieve them
       word_paradigms = Word.where(text: @word.text).map(&:paradigm) #=> Relation
-      @paradigms.unshift *word_paradigms.to_a
+#      puts "WORD_PARADIGMS:"
+#      puts word_paradigms.inspect
+      word_paradigms = word_paradigms.to_a.compact
+      unless word_paradigms.empty?
+        @paradigms.unshift *word_paradigms
+      end
     end
 
-#    puts @paradigms.class
-#    puts @paradigms.methods.sort
-#    puts @paradigms.first.class
+    puts @paradigms.class
+    puts @paradigms.methods.sort
+    puts @paradigms.first.class
   end
 
   def create
