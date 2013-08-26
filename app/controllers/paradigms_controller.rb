@@ -14,6 +14,10 @@ class ParadigmsController < ApplicationController
   def new
     @title = "Add a new paradigm"
 
+    @paradigm_types = ParadigmType.all.map do |pdgt|
+      Paradigm.new(paradigm_type_id: pdgt.id)
+    end
+
     @paradigms = ParadigmType.all.map do |pdgt|
       Paradigm.new(paradigm_type_id: pdgt.id)
     end

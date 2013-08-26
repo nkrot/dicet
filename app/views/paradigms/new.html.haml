@@ -16,21 +16,30 @@
   %div.pdg_creation_buttons
     Add paradigm of type:
     %button{type:  'button',
-            class: 'btn primary',
-            id:    'btn_create_other_pdg',
-            title: ' Free tag/word input' } Other
+            class: 'btn primary btn_pdg_creator',
+            id:    'pdg_of_type_other',
+            title: 'Free tag/word input' } Other
 
+    - @paradigm_types.each do |pdg|
+      %button{type:  'button',
+              class: 'btn primary btn_pdg_creator',
+              id:    "pdg_of_type_#{pdg.paradigm_type_id}",
+              title: "Create empty type #{pdg.paradigm_type.name} paradigm"}= pdg.paradigm_type.name
     %p
 
   %div.pdg_stubs
-    %div#pdg_stub_for_other
+    %div#stub_for_pdg_of_type_other
       = text_field_tag "pdg[#{idx}][other][notag][tag]",  "", placeholder: "TAG",              class: "tag"
       = text_field_tag "pdg[#{idx}][other][notag][word]", "", placeholder: "word or word_TAG", class: "word"
+    - @paradigm_types.each do |pdg|
+      %div{id:"stub_for_pdg_of_type_#{pdg.paradigm_type_id}"}
+        = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
+        %p
 
   %div.paradigms
     - @paradigms.each do |pdg|
       - idx += 1
-      = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
+      - render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
       %p
 
   %div.save= f.submit "Save", accesskey:"s"

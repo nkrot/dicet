@@ -6,13 +6,13 @@
 
 3. Should the users be able to drop tasks (the tasks are added back to the task pull)?
 
-4. On paradigms#new, do not show all empty paradigms. Instead, add buttons such that pressing a button opens an empty paradigm
+4. [...] On paradigms#new, do not show all empty paradigms. Instead, add buttons such that pressing a button opens an empty paradigm. However, non-empty paradigms should be shown from the beginning.
 
 5. How to add multiple forms with the same tag to the paradigm (mosquitos and mosquitoes)
 
-6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)?
+6. [...] How to create more that one paradigm with the same noun (Band: Bänder/Bande)?
 
-7. Free form for inputting word/tag pairs that do not come in paradigms
+7. [...] Free form for inputting word/tag pairs that do not come in paradigms. Ensure it is saved with tag!
 
 8. Possibility to extend a paradigm with other tags
    * JJing can have an RB
@@ -21,6 +21,10 @@
    * RB
 
 10. Once newly filled pdg was submitted, switch to the next word in the current task.
+
+11. Pass word_id to paradigms#edit, so that click_to_copy works
+
+12. BUG: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded.
 
 == README
 
