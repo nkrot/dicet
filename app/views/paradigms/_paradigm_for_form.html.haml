@@ -1,4 +1,5 @@
 - pdgid = paradigm.paradigm_type_id
+- idx ||= 0
 
 //= hidden_field_tag :paradigm_id, pdgid
 
@@ -6,18 +7,19 @@
   %thead
     %tr
       %th.tag{width:80} Tag
-      %th.word Word
+      %th.word
+        %a.click_to_copy Word
   %tbody
     - paradigm.each_word_with_tag do |word, tag|
       %tr
         %td.balloon
-          = label_tag      "pdg[#{pdgid}][#{tag.id}][word]", "#{tag.name}"
+          = label_tag      "pdg[#{idx}][#{pdgid}][#{tag.id}][word]", "#{tag.name}"
           %span= tag.description
-        %td= text_field_tag "pdg[#{pdgid}][#{tag.id}][#{word.id_or_label}]", word.text
+        %td= text_field_tag "pdg[#{idx}][#{pdgid}][#{tag.id}][#{word.id_or_label}]", word.text, class: "word"
     / comment area
     %tr.comment
-      %td= label_tag      "pdg[#{pdgid}][extras][comment]", "Comment"
-      %td= text_field_tag "pdg[#{pdgid}][extras][comment]"
+      %td= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
+      %td= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]"
     %tr
       %td{colspan:2}
-        = render partial: 'radioset_status', locals: { pdgid: pdgid }
+        = render partial: 'radioset_status', locals: { pdgid: pdgid, idx: idx }

@@ -93,4 +93,16 @@ input {
     color: #000;
     text-align:left;
   }    
- }
+}
+
+.pdg_stubs {
+  display: none;
+}
+
+.paradigm {
+  thead {
+    .click_to_copy:hover {
+      cursor: pointer;
+    }
+  }
+}

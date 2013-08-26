@@ -4,5 +4,5 @@
     %td= label_tag(:ready,  "Ready")
     %td= label_tag(:review, "Review later")
   %tr.buttons
-    %td= radio_button_tag("pdg[#{pdgid}][extras][status]", "ready", checked=1)
-    %td= radio_button_tag("pdg[#{pdgid}][extras][status]", "review")
+    %td= radio_button_tag("pdg[#{idx}][#{pdgid}][extras][status]", "ready", checked=1)
+    %td= radio_button_tag("pdg[#{idx}][#{pdgid}][extras][status]", "review")

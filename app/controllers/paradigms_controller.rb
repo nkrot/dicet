@@ -77,44 +77,56 @@ class ParadigmsController < ApplicationController
   end
 
 #  "pdg"=>{
-#    "5"=>{
-#      "96"=>{"10"=>"wander"},
-#      "97"=>{"word"=>"wanders"},
-#      "98"=>{"word"=>"wandering"},
-#      "99"=>{"word"=>"wandered"},
-#      "100"=>{"word"=>""},
-#      "107"=>{"word"=>""},
-#      "108"=>{"word"=>""},
-#      "extras"=>{"comment"=>"", "status"=>"ready"}
-#    }
-#  }
+#   "idx"=> {
+#     "5"=>{
+#       "96"=>{"10"=>"wander"},
+#       "97"=>{"word"=>"wanders"},
+#       "98"=>{"word"=>"wandering"},
+#       "99"=>{"word"=>"wandered"},
+#       "100"=>{"word"=>""},
+#       "107"=>{"word"=>""},
+#       "108"=>{"word"=>""},
+#       "extras"=>{"comment"=>"", "status"=>"ready"}
+#     }
+#   }
+# }
+
+# {"other"=>{"notag"=>{"tag"=>"", "word"=>""}}}
+# {"1"=>{"56"=>{"word"=>""},
+#        "57"=>{"word"=>""},
+#         "extras"=>{"comment"=>""}},
+# "extras"=>{"status"=>"ready"}}
 
   def each_paradigm params
-    params[:pdg].each do |pdg_type_id, data|
-      words = []
-      extras = {}
-      data.each do |tag_id, word_data|
-        if tag_id == "extras"
-          ["comment", "status"].each do |field|
-            val = word_data[field].strip
-            extras[field] = val  unless val.nil? || val.empty?
+    params[:pdg].each_value do |hash|
+      puts hash.inspect
+      hash.each do |pdg_type_id, data|
+        words = []
+        extras = {}
+        data.each do |tag_id, word_data|
+          if tag_id == "extras"
+            ["comment", "status"].each do |field|
+              next  unless word_data[field]
+              val = word_data[field].strip
+              extras[field] = val  unless val.nil? || val.empty?
+            end
+
+          elsif word_data.key?(Word.label) && word_data[Word.label].empty?
+            # skip. we dont want to store empty words
+
+          else
+            puts "tag_id: #{tag_id}"
+            w = find_suitable_word(word_data, params)
+            w.update_attributes(tag_id: tag_id)
+            words << w
           end
-
-        elsif word_data.key?(Word.label) && word_data[Word.label].empty?
-          # skip. we dont want to store empty words
-
-        else
-          w = find_suitable_word(word_data, params)
-          w.update_attributes(tag_id: tag_id)
-          words << w
+        end
+        
+        unless words.empty?
+          yield pdg_type_id, words, extras
         end
       end
-
-      unless words.empty?
-        yield pdg_type_id, words, extras
-      end
     end
-
   end
 
   # TODO: cf with update_paradigm and refactor
@@ -147,6 +159,9 @@ class ParadigmsController < ApplicationController
   #                 "108"=>{"word"=>""},
   #         "extras"=>{"comment"=>"", "status"=>"ready"}}},
   #     "commit"=>"Save", "action"=>"update", "controller"=>"paradigms", "id"=>"1"}
+  #
+  # special case: free tag/word input
+  # hash = {"tag"=>"CS", "word"=>"giant"}
 
   def find_suitable_word(hash, params)
     puts "FIND_SUITABLE_WORD: #{hash.inspect}"
@@ -154,7 +169,7 @@ class ParadigmsController < ApplicationController
 
     current_word_id = params[:word_id] || nil
 
-    label = hash.keys.first
+    label = hash.keys.reject{|k| k == "tag"}.first
 
     if label != Word.label
       # the key is word.id if the word was already in DB.

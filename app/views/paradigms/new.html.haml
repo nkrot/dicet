@@ -1,16 +1,37 @@
 
 %h2= @title
 
+/ count of all pdgs (section) displayed
+- idx = 0
+
 = form_for(@paradigms.first) do |f|
   / = render 'shared/error_messages'
   - if @word
     New word: 
-    = @word.text
-    = hidden_field_tag :word_id, @word.id
+    %span#current_word= @word.text
+    = hidden_field_tag :word_id, @word.id, id: 'current_word_id'
 
-  - @paradigms.each do |pdg|
-    = render partial: 'paradigm_for_form', locals: { paradigm: pdg }
     %p
+
+  %div.pdg_creation_buttons
+    Add paradigm of type:
+    %button{type:  'button',
+            class: 'btn primary',
+            id:    'btn_create_other_pdg',
+            title: ' Free tag/word input' } Other
+
+    %p
+
+  %div.pdg_stubs
+    %div#pdg_stub_for_other
+      = text_field_tag "pdg[#{idx}][other][notag][tag]",  "", placeholder: "TAG",              class: "tag"
+      = text_field_tag "pdg[#{idx}][other][notag][word]", "", placeholder: "word or word_TAG", class: "word"
+
+  %div.paradigms
+    - @paradigms.each do |pdg|
+      - idx += 1
+      = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
+      %p
 
   %div.save= f.submit "Save", accesskey:"s"
 
