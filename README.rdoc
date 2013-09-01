@@ -33,7 +33,7 @@
 9. Is there any sense if using word.id in view? It make retrieving word in paradigms_controller more cumbersome
     and seems of no use (words are often searched by word.text)
 
-11. when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
+11. [+] when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
 
 12. paradigms#edit edits only one (selected) paradigm. 
    * allow deleting

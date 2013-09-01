@@ -19,6 +19,10 @@ function set_click_to_copy(obj) {
 	});
 };
 
+function set_focus_to_editable_input(obj) {
+	obj.find("input").filter(':visible').not("[disabled]").not("[readonly]").first().focus();
+};
+
 $(document).ready(function() {
 //	alert('hello');
 
@@ -58,18 +62,21 @@ $(document).ready(function() {
 		pdg.attr('id', '') // otherwise it would be like: stub_for_pdg_of_type_3
 //		console.log(pdg.attr(id)) // after
 
-		if ( $(this).attr('id') == "pdg_of_type_other" ) {
-			// insert the current word into the text box for word
-			pdg.find("input.word[type='text']").each(function () {
-				$(this).attr('value', $("#current_word").text());
-			});
-		};
+		//
+//		if ( $(this).attr('id') == "pdg_of_type_other" ) {
+//			// insert the current word into the text box for word
+//			pdg.find("input.word[type='text']").each(function () {
+//				$(this).attr('value', $("#current_word").text());
+//			});
+//		};
 
 		// attach handlers of clicks to a.click_to_copy
 		set_click_to_copy(pdg);
 
 		// insert as the first item in the container for paradigms
 		$(".paradigms").prepend(pdg);
+
+		set_focus_to_editable_input(pdg);
 	});
 
 	// TODO: rewrite using set_click_to_copy.
