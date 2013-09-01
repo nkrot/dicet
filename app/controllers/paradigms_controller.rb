@@ -34,9 +34,9 @@ class ParadigmsController < ApplicationController
       end
     end
 
-    puts @paradigms.class
-    puts @paradigms.methods.sort
-    puts @paradigms.first.class
+#    puts @paradigms.class
+#    puts @paradigms.methods.sort
+#    puts @paradigms.first.class
   end
 
   def create
@@ -95,12 +95,6 @@ class ParadigmsController < ApplicationController
 #   }
 # }
 
-# {"other"=>{"notag"=>{"tag"=>"", "word"=>""}}}
-# {"1"=>{"56"=>{"word"=>""},
-#        "57"=>{"word"=>""},
-#         "extras"=>{"comment"=>""}},
-# "extras"=>{"status"=>"ready"}}
-
   def each_paradigm params
     params[:pdg].each_value do |hash|
       puts hash.inspect
@@ -119,9 +113,13 @@ class ParadigmsController < ApplicationController
             # skip. we dont want to store empty words
 
           else
-            puts "tag_id: #{tag_id}"
+#            puts "tag_id: #{tag_id}"
+#            if Tag.notag?(tag_id) && word_data.key?("tag")
+#              tag_id = Tag.tag_name2tag_id word_data["tag"]
+#              puts "found tag_id: #{tag_id}"
+#            end
             w = find_suitable_word(word_data, params)
-            w.update_attributes(tag_id: tag_id)
+#            w.update_attributes(tag_id: tag_id)
             words << w
           end
         end
@@ -138,9 +136,9 @@ class ParadigmsController < ApplicationController
     saved = true
 #    puts params
     each_paradigm(params) do |pdg_type_id, words, extras|
-#      puts "pdg_type_id=#{pdg_type_id}"
-#      puts "words: #{words.inspect}"
-#      puts "extras: #{extras.inspect}"
+      puts "pdg_type_id=#{pdg_type_id}"
+      puts "words: #{words.inspect}"
+      puts "extras: #{extras.inspect}"
       pdg = Paradigm.new
       pdg.paradigm_type_id = pdg_type_id
       pdg.comment = extras["comment"]  if extras["comment"]
@@ -152,55 +150,44 @@ class ParadigmsController < ApplicationController
     saved
   end
 
-  # FIND_SUITABLE_WORD: {"word"=>"wander"}
-  # PARAMS: {"paradigm_id"=>"5",
-  #   "pdg"=>{"5"=>{"96"=>{"word"=>"wander"},
-  #                 "97"=>{"word"=>"wanders"}, 
-  #                 "98"=>{"word"=>"wandering"},
-  #                 "99"=>{"word"=>"wandered"},
-  #                 "100"=>{"word"=>""},
-  #                 "107"=>{"word"=>""},
-  #                 "108"=>{"word"=>""},
-  #         "extras"=>{"comment"=>"", "status"=>"ready"}}},
-  #     "commit"=>"Save", "action"=>"update", "controller"=>"paradigms", "id"=>"1"}
-  #
-  # special case: free tag/word input
-  # hash = {"tag"=>"CS", "word"=>"giant"}
-
   def find_suitable_word(hash, params)
     puts "FIND_SUITABLE_WORD: #{hash.inspect}"
     puts "PARAMS: #{params.inspect}"
 
     current_word_id = params[:word_id] || nil
 
-    label = hash.keys.reject{|k| k == "tag"}.first
+    # either "word" or word.id
+    key_for_word = hash.keys.reject{|k| k == "tag"}.first
 
-    if label != Word.label
-      # the key is word.id if the word was already in DB.
-      # In this case just retrieve it.
-      w = Word.find(label)
+    if key_for_word != Word.label
+      # the hash has no key "word" but a numeric word.id
+      #   {"tag"=>"TAG", "10"=>"WORD"}
+      # if the word was already in DB. In this case just retrieve it.
+      attrs = {id: key_for_word, text: hash[key_for_word], tag_id: nil, paradigm_id: nil}
+      w = Word.find_by(attrs)
 
     elsif current_word_id
-      # find the word by the given ID
-
-      # Q: what if the word somehow has already been taken to a paradigm
-      # A: this should not happen, because such words go through paradigms#edit action
-      #    not through paradigms#create
-      attrs = {id: current_word_id, text: hash[:word], tag_id: nil, paradigm_id: nil}
+      # find the word by the given ID and word.text
+      attrs = {id: current_word_id, text: hash[key_for_word], tag_id: nil, paradigm_id: nil}
       w = Word.find_by(attrs)
 #      puts "Reusing the word #{w.text} with ID=#{w.id} /end" if w
     end
 
-    # if nothing suitable was found by the id, find by word.text
     unless w
-      hash[:word].strip!
+      # if nothing suitable was found by the id, find by word.text or create a new word
+      word_text = hash[key_for_word].strip
       # attributes that identify a Word that was not taken to a paradigm
-      attrs = {text: hash[:word], tag_id: nil, paradigm_id: nil}
+      attrs = {text: word_text, tag_id: nil, paradigm_id: nil}
 #      _word = Word.find_by(attrs)
 #      puts "Found? #{_word.text} with ID=#{_word.id} /End"  if _word
       # TODO: the user can change word.text as well
-      w = Word.where(attrs).first_or_create(text: hash[:word])
+      w = Word.where(attrs).first_or_create(text: word_text)
     end
+
+    # update the word tag
+    tag_id = Tag.tag_name2tag_id(hash[:tag])
+    w.update_attributes(tag_id: tag_id)
+    w.save
 
     w
   end
@@ -209,3 +196,4 @@ class ParadigmsController < ApplicationController
 #    params.require(:paradigm).permit(:status, :comment)
 #  end
 end
+

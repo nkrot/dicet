@@ -17,9 +17,9 @@ end
 
 ######################################################################
 
-tagset = ["!", ["FO", "Formula"], ["FW", "Foreign word"], "(", ")", "LQ", "RQ", "DA", ",", ".", "...", ":", ";", "?", "ABL", "ABN", "ABX", "AP", "APS", "AT", "ATI", "BE", "BED", "BEDZ", "BEG", "BEM", "BEN", "BER", "BEZ", "CC", "CD", "CD-CD", "CD1", "CD1S", "CDS", "CS", "DO", "DOD", "DOZ", "DT", "DTI", "DTS", "DTX", "EX", "HV", "HVD", "HVG", "HVN", "HVZ", "IN", "JJ", "JJR", "JJT", "JNP", "MD", ["NN", "Noun common singular"], ["NNS", "Noun common plural"], "NNP", "NNPS",  ["NNU", "Unit of measurement, singular"], ["NNUS", "Unit of measurement, plural"], "NP", "NPS", "NPL", ["NPLS", "Noun proper locative (or may be not) plural"], "NPT", "NPTS", "NR", "NRS", "OD", "PN", "PP$", "PP$$", "PP1A", "PP1AS", "PP1O", "PP1OS", "PP2", "PP3", "PP3A", "PP3AS", "PP3O", "PP3OS", "PPL", "PPLS", "QL", "QLP", "RB", "RBR", "RBT", "RI", "RN", "RP", "TO", "UH", "VB", "VBZ", "VBG", "VBD", "VBN", "WDT", "WP", "WRB", ["XNOT", "Negation particle"], "ZZ", "POS", "JJing", "JJed", "NOTAG"]
+tagset = ["!", ["FO", "Formula"], ["FW", "Foreign word"], "(", ")", "LQ", "RQ", "DA", ",", ".", "...", ":", ";", "?", "ABL", "ABN", "ABX", "AP", "APS", "AT", "ATI", "BE", "BED", "BEDZ", "BEG", "BEM", "BEN", "BER", "BEZ", "CC", "CD", "CD-CD", "CD1", "CD1S", "CDS", "CS", "DO", "DOD", "DOZ", "DT", "DTI", "DTS", "DTX", "EX", "HV", "HVD", "HVG", "HVN", "HVZ", "IN", "JJ", "JJR", "JJT", "JNP", "MD", ["NN", "Noun common singular"], ["NNS", "Noun common plural"], "NNP", "NNPS",  ["NNU", "Unit of measurement, singular"], ["NNUS", "Unit of measurement, plural"], "NP", "NPS", "NPL", ["NPLS", "Noun proper locative (or may be not) plural"], "NPT", "NPTS", "NR", "NRS", "OD", "PN", "PP$", "PP$$", "PP1A", "PP1AS", "PP1O", "PP1OS", "PP2", "PP3", "PP3A", "PP3AS", "PP3O", "PP3OS", "PPL", "PPLS", "QL", "QLP", "RB", "RBR", "RBT", "RI", "RN", "RP", "TO", "UH", "VB", "VBZ", "VBG", "VBD", "VBN", "WDT", "WP", "WRB", ["XNOT", "Negation particle"], "ZZ", "POS", "JJing", "JJed", ["NOTAG", "Tag unknown. Add something meaningful instead"]]
 
-tagset.each do |tag| 
+tagset.each do |tag|
   if tag.instance_of? Array
     Tag.create(name: tag.first, description: tag.last)
   else
@@ -36,7 +36,8 @@ pdg_types = {
   "npl" => ["NPL", "NPLS"],
   "vb"  => ["VB", "VBZ", "VBG", "VBD", "VBN", "JJing", "JJed"],
   "jj"  => ["JJ", "JJR", "JJT", "RB"],
-  "rb"  => ["RB", "RBR", "RBT"]
+  "rb"  => ["RB", "RBR", "RBT"],
+  "other" => ["NOTAG"]
 }
 
 pdg_types.each do |name, tags|

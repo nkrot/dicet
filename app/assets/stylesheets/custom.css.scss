@@ -80,6 +80,7 @@ input {
     display: none;
   }
 
+  input:hover + span,  
   label:hover + span {
     display: block;
     position: absolute;

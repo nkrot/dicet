@@ -26,4 +26,5 @@ class Word < ActiveRecord::Base
   def id_or_label
     self.id || Word.label
   end
+
 end
