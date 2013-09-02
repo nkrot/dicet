@@ -37,8 +37,18 @@
 
 12. paradigms#edit edits only one (selected) paradigm. 
    * allow deleting
+   * allow renaming?
    * when saved, where does it redirect?
-   * pass word_id to paradigms#edit, so that click_to_copy works
+   * allow changing word (delete old one)
+   * BUG: do not add duplicates!!!
+
+13. DONE: pass word_id to paradigms#edit, so that click_to_copy works
+
+== TODO for user input validation
+
+1. do not allow sending if the form contains NOTAG or empty tag???
+
+2. check that all tags are valid
 
 == README
 

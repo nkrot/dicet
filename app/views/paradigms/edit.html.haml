@@ -1,7 +1,15 @@
 
+- idx ||= 1 -# any will do
+
 %h2= @title
 
 = form_for(@paradigm) do |f|
-  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm }
+  - if @current_word
+    Current word:
+    %span#current_word= @current_word.text
+    = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
+    %p
+
+  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: idx, current_word: @current_word }
 
   %div.save= f.submit "Save", accesskey:"s"

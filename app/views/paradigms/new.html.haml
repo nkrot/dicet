@@ -5,6 +5,12 @@
 - idx = 0
 - @word ||= nil
 
+-#:javascript
+  function validate_form() {
+  alert('Checking the form');
+  return false;
+  };
+
 %div.pdg_stubs
   -#%div#stub_for_pdg_of_type_other
   -#  = text_field_tag "pdg[#{idx}][other][notag][tag]",  "", placeholder: "TAG",              class: "tag"
@@ -15,6 +21,7 @@
       = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx, current_word: @word }
       %p
 
+/TODO: , html: {onsubmit:'return validate_form();'}
 = form_for(@paradigms.first) do |f|
   / = render 'shared/error_messages'
   - if @word

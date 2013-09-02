@@ -44,10 +44,11 @@ class ParadigmsController < ApplicationController
     save_paradigms params
 
     @paradigm = Paradigm.new
-    redirect_to new_paradigm_url
+    redirect_to new_paradigm_url # TODO: for a new word from this task
   end
 
   def edit
+    @current_word = Word.find_by(id: params[:word_id])
     @paradigm = Paradigm.find(params[:id])
     @title = "Edit paradigm"
   end

@@ -59,16 +59,8 @@ $(document).ready(function() {
 			$(this).attr('for', newval);
 		});
 
-		pdg.attr('id', '') // otherwise it would be like: stub_for_pdg_of_type_3
+		pdg.attr('id', ''); // otherwise it would be like: stub_for_pdg_of_type_3
 //		console.log(pdg.attr(id)) // after
-
-		//
-//		if ( $(this).attr('id') == "pdg_of_type_other" ) {
-//			// insert the current word into the text box for word
-//			pdg.find("input.word[type='text']").each(function () {
-//				$(this).attr('value', $("#current_word").text());
-//			});
-//		};
 
 		// attach handlers of clicks to a.click_to_copy
 		set_click_to_copy(pdg);
@@ -88,32 +80,3 @@ $(document).ready(function() {
 	});
 });
 
-
-/*
-	$("#btn_create_other_pdg").click(function () {
-		var pdg = $("#pdg_stub_for_other").clone();
-		// compute unique idx for pdg[idx][pdgid]... 
-		var idx = $(".paradigms").children().length;
-		// update the name attribute to reflect the above computed unique idx
-		// pdg[0][other][notag][tag] -> pdg[idx][other][notag][tag]
-		pdg.find("input").each(function () {
-			// update NAME attribute
-//			console.log($(this).attr('name')) // before
-			newval = $(this).attr('name').replace(/pdg\[0\]/, "pdg["+idx+"]");
-			$(this).attr('name', newval)
-//			console.log($(this).attr('name')) // after
-
-			// update ID attribute
-//			console.log($(this).attr('id')) // before
-			newval = $(this).attr('id').replace(/pdg\[0\]/, "pdg["+idx+"]");
-			$(this).attr('id', newval)
-//			console.log($(this).attr('id')) // after
-		});
-		// insert the current word into the text box for word
-		pdg.find("input.word[type='text']").each(function () {
-			$(this).attr('value', $("#current_word").text());
-		})
-		// insert as the first item in the container for paradigms
-		$(".paradigms").prepend(pdg);
-	});
-*/
