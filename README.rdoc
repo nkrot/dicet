@@ -50,13 +50,9 @@
 
 == TODO for tasks
 
-1. DONE: Users should be able of dropping the tasks. Dropped tasks are returned to the common task pull.
+1. DONE: Users should be able of dropping the tasks. Dropped tasks are returned to the common task pull. Implement using ajax.
 
-Dropping the task via ajax:
- experiment with link_to and button_to
- once a task has been dropped:
-    show feedback on this fact
-	hide the task from the users task list w/o reloading the page 
+2. Taking over tasks: reimplement using ajax.
 
 == README
 
