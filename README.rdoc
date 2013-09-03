@@ -52,7 +52,9 @@
 
 1. DONE: Users should be able of dropping the tasks. Dropped tasks are returned to the common task pull. Implement using ajax.
 
-2. Taking over tasks: reimplement using ajax.
+2. DONE: Taking over tasks: reimplement using ajax.
+
+3. BUG: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
 
 == README
 

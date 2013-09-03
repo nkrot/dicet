@@ -1,12 +1,15 @@
 
+- btn_label ||= "Unknown"
+- btn_action ||= "undefined"
+
 %tr{id: "task_#{task.id}"}
-  %td= task.id
-  %td= task.priority
-  %td= task.status
+  %td.center= task.id
+  %td.center= task.priority
+  %td.center= task.status
   %td= render partial: "words/word_in_task", collection: task.words, as: :word
   / can use link_to instead of button_to, all other arguments are the same
-  %td= link_to "Drop task", |
-       url_for(controller: 'tasks', action: 'drop', id: task), |
+  %td.center= link_to btn_label, |
+       url_for(controller: 'tasks', action: btn_action, id: task), |
        remote: true, method: :put, |
-       class: "btn_drop_task" |
+       class: "btn_#{btn_action}_task" |
  

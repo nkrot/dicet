@@ -27,15 +27,7 @@
 
   = will_paginate @tasks
 
-  %table{border:1}
-    %thead
-      %tr
-        %th TaskID
-        %th Priority
-        %th Status
-        %th Words
-        %th Drop the task
-      %tbody
-        = render @tasks
+  = render partial: "tasks/tasks_in_table", |
+           locals: {tasks: @tasks, btn_action: 'drop', btn_label: 'Drop task'}
 
   = will_paginate @tasks

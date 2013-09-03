@@ -1,28 +1,17 @@
-%h2 Showing all dictionary tasks
+%h2 List of all unassigned dictionary tasks
 
-%p
-  There are currently
-  %span.count_of_tasks #{pluralize(@tasks.count, "unassigned task")}.
+%div.tasks
 
-= will_paginate
+  %p
+    There are currently
+    %span.count_of_tasks= pluralize(@tasks.count, "unassigned task")
+    , and you have
+    %span.count_of_user_tasks= pluralize(@user_tasks.count, "task")
+    assigned to you.
 
-/ TODO: this is ugly. have to pass an id to reach to tasks#update
-= form_for "tasks[]", url: "tasks/1", method: "patch" do |f|
-  %table.tasks{border:1}
-    %thead
-      %tr
-        %th Take
-        %th Priority
-        %th Status
-        %th Words
-      %tbody
-        - @tasks.each do |task|
-          %tr
-            %td.center= check_box_tag "tasks[#{task.id}]"
-            %td.center= task.priority
-            %td= task.status
-            %td= render partial: "words/word_in_task", collection: task.words, as: :word
+    = will_paginate @tasks
 
-  %div.save= f.submit "I take them over!", accesskey: "s"
+    = render partial: "tasks/tasks_in_table", |
+             locals: {tasks: @tasks, btn_action: 'take', btn_label: 'Take task'}
 
-= will_paginate
+    = will_paginate @tasks
