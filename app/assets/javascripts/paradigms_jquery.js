@@ -78,5 +78,8 @@ $(document).ready(function() {
 			$(this).attr('value', $("#current_word").text());
 		});
 	});
+
+	// this works incorrectly for tables with dinamically disappearing rows
+//	$(".table_of_tasks tbody tr:odd").css('background-color', 'beige');
 });
 

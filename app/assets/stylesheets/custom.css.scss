@@ -107,3 +107,79 @@ input {
     }
   }
 }
+
+/********************************************************************\
+ *
+ * tasks displayed in a table
+ *
+\********************************************************************/
+
+.table_of_tasks {
+
+  td {
+    padding: 5px 10px;
+  }
+
+  thead {
+    background-color: #a1a1a1;
+    
+    th {
+      padding: 10px;
+      color: #A21100;
+      border-top: solid 1px black;      
+      border-right: dotted 1px black;
+    }
+
+    th.last {
+      border-right: 0px;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: dotted 1px black;
+    }
+  }
+
+  th.fixed_width, td.fixed_width {
+    width: 30px;
+  }
+
+  th.words {
+    width: 400px;
+  }  
+}
+
+/* button styles from: http://www.usabilitypost.com/2012/01/10/pressed-button-state-with-css3/ */
+.btn_drop_task, .btn_take_task {
+  padding: 8px 10px;
+  background: #4479BA;
+/*  background: #A21100; */
+  color: #FFF;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: solid 1px #20538D;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.btn_drop_task:hover, .btn_drop_task:focus,
+.btn_take_task:hover, .btn_take_task:focus {
+/*  background: #356094; */
+  background: #1540FF;
+  border: solid 1px #2A4E77;
+  text-decoration: none;
+  color: white;
+}
+
+.btn_drop_task:active, .btn_take_task:active {
+    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    background: #2E5481;
+    border: solid 1px #203E5F;
+}
