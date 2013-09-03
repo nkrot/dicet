@@ -29,7 +29,9 @@ Dicet::Application.routes.draw do
 
   resources :words
   resources :paradigms
+
   resources :tasks, only: [:index, :update]
+  match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
 
   resources :sessions, only: [:new, :create, :destroy]
   match '/signin',  to: 'sessions#new',     via: 'get'

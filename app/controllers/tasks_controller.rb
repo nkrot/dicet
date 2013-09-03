@@ -17,6 +17,13 @@ class TasksController < ApplicationController
   end
 
 
+  def drop
+    @task = Task.find(params[:id])
+    @tasks = @task.user.tasks # all tasks assigned to this user
+    @task.user = nil
+    @task.save
+  end
+
   private
 
   def update_user_tasks(params)

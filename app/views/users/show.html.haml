@@ -20,7 +20,10 @@
 %div.tasks
   %h4 Your dictionary tasks
 
-  %p You currently have #{@tasks.count} tasks assigned to you
+  %p
+    You currently have
+    %span.count_of_tasks= pluralize(@tasks.count, "task")
+    assigned to you
 
   = will_paginate @tasks
 
@@ -31,6 +34,7 @@
         %th Priority
         %th Status
         %th Words
+        %th Drop the task
       %tbody
         = render @tasks
 

@@ -1,8 +1,12 @@
 
-%tr
+%tr{id: "task_#{task.id}"}
   %td= task.id
   %td= task.priority
   %td= task.status
-  %td
-    = render partial: "words/word_in_task", collection: task.words, as: :word
-     
+  %td= render partial: "words/word_in_task", collection: task.words, as: :word
+  / can use link_to instead of button_to, all other arguments are the same
+  %td= link_to "Drop task", |
+       url_for(controller: 'tasks', action: 'drop', id: task), |
+       remote: true, method: :put, |
+       class: "btn_drop_task" |
+ 

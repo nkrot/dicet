@@ -4,8 +4,6 @@
 
 2. DONE: Add tooltips that explain tags (use tag.description) when the mouse hovers over
 
-3. Should the users be able to drop tasks (the tasks are added back to the task pull)?
-
 4. BUG: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R).
 
 == TODO for creating/editing paradigms
@@ -49,6 +47,16 @@
 1. do not allow sending if the form contains NOTAG or empty tag???
 
 2. check that all tags are valid
+
+== TODO for tasks
+
+1. DONE: Users should be able of dropping the tasks. Dropped tasks are returned to the common task pull.
+
+Dropping the task via ajax:
+ experiment with link_to and button_to
+ once a task has been dropped:
+    show feedback on this fact
+	hide the task from the users task list w/o reloading the page 
 
 == README
 

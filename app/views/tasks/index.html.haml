@@ -1,6 +1,8 @@
 %h2 Showing all dictionary tasks
 
-%p There are currently #{@tasks.count} unassigned task.
+%p
+  There are currently
+  %span.count_of_tasks #{pluralize(@tasks.count, "unassigned task")}.
 
 = will_paginate
 
