@@ -34,13 +34,17 @@
 11. [+] when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
 
 12. paradigms#edit edits only one (selected) paradigm. 
-   * allow deleting
+   * allow deleting a single word/tag
    * allow renaming?
    * when saved, where does it redirect?
    * allow changing word (delete old one)
    * BUG: do not add duplicates!!!
+   * allow undeleting? at least just after it was deleted on paradigms#edit
+   * styling: the form that was changed shoould be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
 
 13. DONE: pass word_id to paradigms#edit, so that click_to_copy works
+
+14. INPROGRESS: Deleting the whole paradigm
 
 == TODO for user input validation
 

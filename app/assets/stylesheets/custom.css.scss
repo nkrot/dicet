@@ -52,10 +52,13 @@ input {
   background-color: #ddd
 }
 
-.save {
+table.buttons {
   margin-top: 1em;
-  margin-left: 0.5em;  
-  display: block;
+  width: 410px;
+  
+  td.empty {
+    width: 100%;
+  }  
 }
 
 #error_explanation {
@@ -100,12 +103,66 @@ input {
   display: none;
 }
 
+/********************************************************************\
+ *
+ * a single paradigm displayed in a table
+ *
+\********************************************************************/
+
 .paradigm {
   thead {
     .click_to_copy:hover {
       cursor: pointer;
     }
+
+    tr {
+      border-top: solid 1px black;      
+    }
+
+    th {
+      padding: 5px 5px 0px 10px;
+    }
   }
+
+  th, td {
+    text-align: left;
+  }
+
+/* 
+  tr {
+    border-bottom: dotted 1px black;      
+  }
+*/
+
+  td input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+  }
+
+  tr.last {
+    border-bottom: solid 1px black;      
+  }
+
+  th.tag, td.tag {
+    width: 80px;
+  }
+
+  th.word {
+    width: 300px;
+    border-left: dotted 1px black;    
+  }
+
+  tr.comment label,  
+  tr.comment input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width:100%;
+  }  
+
+  tr.comment label {
+    padding-left: 8px;
+  }  
 }
 
 /********************************************************************\
@@ -151,7 +208,7 @@ input {
 }
 
 /* button styles from: http://www.usabilitypost.com/2012/01/10/pressed-button-state-with-css3/ */
-.btn_drop_task, .btn_take_task {
+.btn, .btn_drop_task, .btn_take_task {
   padding: 8px 10px;
   background: #4479BA;
 /*  background: #A21100; */
@@ -167,6 +224,7 @@ input {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
+.btn:hover, .btn:focus,
 .btn_drop_task:hover, .btn_drop_task:focus,
 .btn_take_task:hover, .btn_take_task:focus {
 /*  background: #356094; */
@@ -176,6 +234,7 @@ input {
   color: white;
 }
 
+.btn:active,
 .btn_drop_task:active, .btn_take_task:active {
     -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);

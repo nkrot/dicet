@@ -12,4 +12,11 @@
 
   = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: idx, current_word: @current_word }
 
-  %div.save= f.submit "Save", accesskey:"s"
+  %table.buttons
+    %tr
+      %td= f.submit "Save", accesskey:"s", class:'btn btn_save'
+      %td.empty
+      %td= link_to "Delete", |
+                   url_for(controller: 'paradigms', action:'destroy', id: @paradigm.id), |
+                   remote: true, method: :delete, |
+                   class: 'btn btn_delete'  |

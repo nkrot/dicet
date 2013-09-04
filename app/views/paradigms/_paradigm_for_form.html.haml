@@ -4,10 +4,10 @@
 
 //= hidden_field_tag :paradigm_id, pdgid
 
-%table.paradigm{border:1, width:'50%'}
+%table.paradigm
   %thead
     %tr
-      %th.tag{width:80} Tag
+      %th.tag Tag
       %th.word
         %a.click_to_copy Word
   %tbody
@@ -18,17 +18,17 @@
 
       %tr
         -# TAG input | WORD input
-        %td.balloon
+        %td.tag.balloon
           = text_field_tag  "pdg[#{idx}][#{pdgid}][#{tag.id}][tag]", "#{tag.name}", |
                             class: "tag", readonly: tag.readonly_html?
           %span= tag.description
-        %td= text_field_tag "pdg[#{idx}][#{pdgid}][#{tag.id}][#{word.id_or_label}]", |
+        %td.word= text_field_tag "pdg[#{idx}][#{pdgid}][#{tag.id}][#{word.id_or_label}]", |
                             word.text, class: "word"
     -# extras: comment area
     %tr.comment
       %td= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
       %td= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]"
     -# extras: radio boxes for statuses
-    %tr
+    %tr.last
       %td{colspan:2}
         = render partial: 'radioset_status', locals: { pdgid: pdgid, idx: idx }
