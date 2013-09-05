@@ -27,4 +27,33 @@ class Word < ActiveRecord::Base
     self.id || Word.label
   end
 
+  def suicide
+    if self.task_id
+      # find an added word and make it replace the original word
+      # that we intent to delete.
+      # Scenario that shows the situation:
+      #  1) add paradigm word_NN => original word will be added NN and pdg_id=1
+      #  2) add paradigm word_VB => added will be word_VB and pdg_id=2
+      #  3) delete paradigm pdg_id=1 with word_NN. we now want original word contain word_VB and point to pdg_id=2 
+      homonym = Word.where(text: self.text, task_id: nil).where.not(tag_id: nil, id: self.id, paradigm_id: self.paradigm_id).first
+#      puts "Homonym: #{homonym.inspect}"
+      if homonym
+        # copy added attributes from the homonym
+        attrs = {
+          typo:        homonym.typo,
+          comment:     homonym.comment,
+          tag_id:      homonym.tag_id,
+          paradigm_id: homonym.paradigm_id
+        }
+        self.update_attributes(attrs)
+        homonym.destroy
+      else
+        # reset added attributes
+        attrs = {typo: nil, comment: nil, tag_id: nil, paradigm_id: nil}
+        self.update_attributes(attrs)
+      end
+    else
+      self.destroy
+    end
+  end
 end

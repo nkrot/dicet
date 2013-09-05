@@ -63,13 +63,11 @@ class ParadigmsController < ApplicationController
   end
 
   def destroy
-    # TODO: deleting paradigms implies:
-    #  deleting pdg id from paradigm model
-    #  deleting words that reference this pdg id:
-    #    a) original word must persist in db, pdg_id and tag are removed
-    #    b) newly added word is purged
-    #  implement word.delete that follows the above logic
-    puts "Deleting #{params[:id]}"
+    pdg = Paradigm.find(params[:id])
+#    puts "Deleting #{pdg.inspect}"
+#    puts "WORDS: #{pdg.words.length}"
+    pdg.words.each { |word| word.suicide }
+    pdg.destroy
   end
 
   private

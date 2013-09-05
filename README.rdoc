@@ -40,11 +40,12 @@
    * allow changing word (delete old one)
    * BUG: do not add duplicates!!!
    * allow undeleting? at least just after it was deleted on paradigms#edit
-   * styling: the form that was changed shoould be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
+   * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
+   * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
 
 13. DONE: pass word_id to paradigms#edit, so that click_to_copy works
 
-14. INPROGRESS: Deleting the whole paradigm
+14. DONE: Deleting the whole paradigm. Ensure that the original word is never deleted, but it is relinked to an added homonym if one is available. (read more in Word#suicide)
 
 == TODO for user input validation
 
