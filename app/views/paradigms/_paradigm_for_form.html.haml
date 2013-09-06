@@ -1,34 +1,41 @@
 - pdgid = paradigm.paradigm_type_id
 - idx ||= 0
 - current_word ||= nil
+- c_slot = -1 # number of slots in paradigm. helps distinguish homotags
 
 //= hidden_field_tag :paradigm_id, pdgid
 
 %table.paradigm
   %thead
     %tr
+      %th &nbsp;
       %th.tag Tag
       %th.word
         %a.click_to_copy Word
   %tbody
     - paradigm.each_word_with_tag do |word, tag|
+      - c_slot += 1
+
       -# For 'other' paradigm type, make the current word appear in the pdg stub
       - if current_word && tag.notag? && ! word.text
         - word = current_word
 
-      %tr
-        -# TAG input | WORD input
+      %tr.pdg_slot
+        -# BTN | TAG input | WORD input
+        %td.has_button
+          = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
         %td.tag.balloon
-          = text_field_tag  "pdg[#{idx}][#{pdgid}][#{tag.id}][tag]", "#{tag.name}", |
-                            class: "tag", readonly: tag.readonly_html?
+          = text_field_tag  "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}][tag]", "#{tag.name}", |
+                            class: "tag" #, readonly: tag.readonly_html?
           %span= tag.description
-        %td.word= text_field_tag "pdg[#{idx}][#{pdgid}][#{tag.id}][#{word.id_or_label}]", |
+        %td.word
+          = text_field_tag "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}][#{word.id_or_label}]", |
                             word.text, class: "word"
     -# extras: comment area
     %tr.comment
-      %td= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
+      %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
       %td= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]"
     -# extras: radio boxes for statuses
     %tr.last
-      %td{colspan:2}
+      %td{colspan:3}
         = render partial: 'radioset_status', locals: { pdgid: pdgid, idx: idx }

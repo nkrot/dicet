@@ -24,7 +24,7 @@ function set_focus_to_editable_input(obj) {
 };
 
 $(document).ready(function() {
-//	alert('hello');
+//	alert('document ready!');
 
 	$(".btn_pdg_creator").click(function () {
 		var pdgid = $(this).attr('id'); // =>pdg_of_type_1
@@ -81,5 +81,36 @@ $(document).ready(function() {
 
 	// this works incorrectly for tables with dinamically disappearing rows
 //	$(".table_of_tasks tbody tr:odd").css('background-color', 'beige');
+
+	$(".btn_add_pdg_slot").click(function () {
+		this_slot = $(this).closest(".pdg_slot"); 
+		new_slot = this_slot.clone();
+
+		c_slot = $(".paradigm .pdg_slot").length;
+
+		// update id and name attributes:
+		// replace stuff inside <NUMBER> with value of c_slot
+		//   id="pdg_1_1_57_<1>_tag" name="pdg[1][1][57][<1>][tag]"
+		//   id="pdg_1_1_57_<1>_100" name="pdg[1][1][57][<1>][100]"
+		new_slot.find("input").each(function () {
+			// name
+//			console.log("NAME before: " + $(this).attr('name'));
+			chunks = $(this).attr('name').split('][');
+			chunks[chunks.length-2] = c_slot;
+			$(this).attr('name', chunks.join(']['));
+//			console.log("NAME after:  " + $(this).attr('name'));
+
+			// id
+//			console.log("ID before: " + $(this).attr('id'));
+			chunks = $(this).attr('id').split('_');
+			chunks[chunks.length-2] = c_slot;
+			$(this).attr('id', chunks.join('_'));
+//			console.log("ID after:  " + $(this).attr('id'));
+		});
+
+		this_slot.after(new_slot);
+
+		return false;
+	});
 });
 

@@ -47,6 +47,10 @@
 
 14. DONE: Deleting the whole paradigm. Ensure that the original word is never deleted, but it is relinked to an added homonym if one is available. (read more in Word#suicide)
 
+15. INPROGRESS: in paradigms#edit allow adding new slots
+  * DONE: add a button
+  * controller: ensure updated pdg is saved correctly, with no duplicates.
+
 == TODO for user input validation
 
 1. do not allow sending if the form contains NOTAG or empty tag???

@@ -54,7 +54,7 @@ input {
 
 table.buttons {
   margin-top: 1em;
-  width: 410px;
+  width: 450px;
   
   td.empty {
     width: 100%;
@@ -162,7 +162,15 @@ table.buttons {
 
   tr.comment label {
     padding-left: 8px;
+  }
+
+  td.has_button {
+    padding: 0 5px 0 5px;
   }  
+}
+
+.red {
+  background-color: red;
 }
 
 /********************************************************************\
@@ -242,3 +250,8 @@ table.buttons {
     background: #2E5481;
     border: solid 1px #203E5F;
 }
+
+.btn_small {
+  border-radius: 12px;
+  padding: 2px 8px;
+} 
