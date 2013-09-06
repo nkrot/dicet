@@ -4,7 +4,7 @@
 
 2. DONE: Add tooltips that explain tags (use tag.description) when the mouse hovers over
 
-4. BUG: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R).
+4. FIXED: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R). -- Answer: this behaviour was due to turbolinks. I have switched it off, however, there are ways to fix it using turbolinks as well.
 
 == TODO for creating/editing paradigms
 
