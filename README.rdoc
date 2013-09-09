@@ -50,7 +50,7 @@
   * add a button
   * controller: ensure updated pdg is saved correctly, with no duplicates.
 
-16. ensure status and comment fields are updated correctly and their value is show correctly in the view. -- Done in #edit/#update
+16. DONE: ensure status and comment fields are updated correctly and their value is show correctly in the view. -- Done in #edit/#update
 
 17. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
 

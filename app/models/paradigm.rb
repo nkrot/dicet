@@ -34,4 +34,22 @@ class Paradigm < ActiveRecord::Base
       end
     end
   end
+
+  def ready_or_new?
+    self.status.to_s.empty? || self.ready?
+  end
+
+  def ready?
+    self.status.to_s.downcase == "ready"
+  end
+
+  def review?
+    self.status.to_s.downcase == "review"
+  end
+
+  # not used yet
+#  def dumped?
+#    self.status.to_s.downcase == "dumped"
+#  end
+
 end

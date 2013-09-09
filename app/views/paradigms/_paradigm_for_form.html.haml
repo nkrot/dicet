@@ -34,8 +34,9 @@
     -# extras: comment area
     %tr.comment
       %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-      %td= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]"
+      %td= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
+
     -# extras: radio boxes for statuses
     %tr.last
       %td{colspan:3}
-        = render partial: 'radioset_status', locals: { pdgid: pdgid, idx: idx }
+        = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
