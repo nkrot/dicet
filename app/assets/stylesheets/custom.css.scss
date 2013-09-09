@@ -230,7 +230,16 @@ table.buttons {
   }  
 }
 
+/********************************************************************\
+ *
+ * buttons in various contexts
+ *
+\********************************************************************/
+
 /* button styles from: http://www.usabilitypost.com/2012/01/10/pressed-button-state-with-css3/ */
+.btn[disabled],
+.btn[disabled]:hover,
+.btn[disabled]:focus,
 .btn, .btn_drop_task, .btn_take_task {
   padding: 8px 10px;
   background: #4479BA;
@@ -270,3 +279,4 @@ table.buttons {
   border-radius: 12px;
   padding: 2px 8px;
 } 
+

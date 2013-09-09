@@ -52,7 +52,13 @@
 
 16. DONE: ensure status and comment fields are updated correctly and their value is show correctly in the view. -- Done in #edit/#update
 
-17. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
+17. in paradigms#edit allow deleting a single word+tag pair
+  * add buttons
+  * implement the logic
+
+18. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
+
+19. DONE: when deleting the whole paradigm, disable the DELETE abd SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
 
 == TODO for user input validation
 

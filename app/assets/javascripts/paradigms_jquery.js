@@ -26,6 +26,13 @@ function set_focus_to_editable_input(obj) {
 $(document).ready(function() {
 //	alert('document ready!');
 
+	$("a").on('click', function (ev) {
+		if ( $(this).attr('disabled') == 'disabled' ) {
+			ev.preventDefault();
+			return false;
+		}
+	});
+
 	$(".btn_pdg_creator").click(function () {
 		var pdgid = $(this).attr('id'); // =>pdg_of_type_1
 //		console.log(pdgid);
