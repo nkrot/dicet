@@ -167,6 +167,21 @@ table.buttons {
   td.has_button {
     padding: 0 5px 0 5px;
   }  
+
+}
+
+.paradigm.deleted {
+  background: lightgrey;
+
+  .comment input {
+    background: lightgrey;
+  }
+}
+
+.paradigm.deleted .pdg_slot input,
+.pdg_slot.deleted input {
+    background: #777777;
+    color: white;  
 }
 
 .red {
