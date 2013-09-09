@@ -73,17 +73,99 @@ class ParadigmsController < ApplicationController
   private
 
   def update_paradigm params
-    saved = true
+    debug = true
+    puts params.inspect  if debug
     pdg = Paradigm.find(params[:id])
-    each_paradigm(params) do |pdg_type_id, words, extras|
-      pdg.paradigm_type_id = pdg_type_id
-      pdg.comment = extras["comment"]  if extras["comment"]
-      pdg.status  = extras["status"]   if extras["status"]
-      pdg.words.concat words
-      saved = pdg.save && saved
-      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
+    each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
+      # update paradigm fields
+#      pdg.paradigm_type_id = pdg_type_id # no change must happen in #edit/#update
+      attrs = {comment: extras["comment"], status: extras["status"]}
+      pdg.update_attributes(attrs)
+      # now update words linked to the paradigm
+      each_word(tag_word_data) do |tag_id, old_word, new_word|
+        puts "Compare: #{old_word.inspect} vs. #{new_word.inspect}"  if debug
+        old_word.update_from(new_word)
+      end
     end
-    saved
+  end
+
+#  def update_paradigm__old params
+#    saved = true
+#    pdg = Paradigm.find(params[:id])
+#    each_paradigm(params) do |pdg_type_id, words, extras|
+#      pdg.paradigm_type_id = pdg_type_id
+#      pdg.comment = extras["comment"]  if extras["comment"]
+#      pdg.status  = extras["status"]   if extras["status"]
+#      pdg.words.concat words
+#      saved = pdg.save && saved
+#      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
+#    end
+#    saved
+#  end
+
+  # PARAMS
+  #  "word_id"=>"17",
+  #  "pdg"=>{
+  #    "1"=>{      # index of the pdg on the page -> can be ignored
+  #      "5"=>{    # paradigm_type.id
+  #        "96"=>{ # tag.id=96
+  #          # word/tag pair #0, 0 can be ignored
+  #          "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+  #          # word/tag pair #1, 1 can be ignored
+  #          "1"=>{"tag"=>"VB", "106"=>"word"}},  # word.id=106
+  #        "97"=>{
+  #          "2"=>{"tag"=>"VBZ", "102"=>"words"},
+  #          "3"=>{"tag"=>"VBZ", "107"=>"words"}},
+  #        "98"=>{
+  #          "4"=>{"tag"=>"VBG", "10"=>"wording"},
+  #          "5"=>{"tag"=>"VBG", "108"=>"wording"}},
+  #        "99"=>{
+  #          "6"=>{"tag"=>"VBD", "17"=>"worded"},
+  #          "7"=>{"tag"=>"VBD", "109"=>"worded"}},
+  #        "100"=>{
+  #          "8"=>{"tag"=>"VBN", "103"=>"worded"},
+  #          "9"=>{"tag"=>"VBN", "110"=>"worded"}},
+  #        "107"=>{
+  #          "10"=>{"tag"=>"JJing", "104"=>"word"},
+  #          "11"=>{"tag"=>"JJing", "111"=>"wording"}},
+  #        "108"=>{
+  #          "12"=>{"tag"=>"JJed", "105"=>"word"},
+  #          "13"=>{"tag"=>"JJed", "112"=>"worded"}},
+  #        "extras"=>{"comment"=>"", "status"=>"ready"}}}},
+  #  "commit"=>"Save", "id"=>"5"}
+
+  def each_paradigm_2 params
+    params[:pdg].each_value do |pdgtid_data|
+      pdgtid_data.each do |pdg_type_id, tag_word_data|
+        extras = tag_word_data["extras"]
+        tag_word_data.delete_if {|k,v| k == "extras" }
+        # tag_word_data is a hash of the form:
+        #   "96"=>{ # tag.id=96
+        #     # word/tag pair #0, 0 can be ignored
+        #     "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+        #     # word/tag pair #1, 1 can be ignored
+        #     "1"=>{"tag"=>"VB", "106"=>"word"}},  # word.id=106
+        yield pdg_type_id, tag_word_data, extras
+      end
+    end
+  end
+
+
+  def each_word tag_word_data
+    tag_word_data.each do |tag_id, hash|
+      # "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+      hash.each do |num, tw_hash|
+        # old_word is set from word.id
+        # new_word is set from submitted values of "tag" and "word"
+        word_id = tw_hash.keys.detect {|k| k =~ /^\d+$/} #=>101
+        old_word = Word.find(word_id) # TODO: what if it was deleted in the meanwhile?
+        new_word = Word.new do |w|
+          w.text = tw_hash[word_id]
+          w.tag  = Tag.find_by(name: tw_hash["tag"])
+        end
+        yield tag_id, old_word, new_word
+      end
+    end
   end
 
 #  "pdg"=>{

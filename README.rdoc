@@ -18,7 +18,7 @@
 
 4. [+] How to create more that one paradigm with the same noun (Band: Bänder/Bande)?
 
-5. How to add multiple forms with the same tag to the paradigm (mosquitos and mosquitoes)
+5. How to add multiple forms with the same tag to the paradigm (mosquitos and mosquitoes) -- Allow adding new tag+word slots
 
 6. Possibility to extend a paradigm with other tags (like adding Other into a paradigm)
    * JJing can have an RB
@@ -38,7 +38,6 @@
    * allow renaming?
    * when saved, where does it redirect?
    * allow changing word (delete old one)
-   * BUG: do not add duplicates!!!
    * allow undeleting? at least just after it was deleted on paradigms#edit
    * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
    * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
@@ -47,9 +46,13 @@
 
 14. DONE: Deleting the whole paradigm. Ensure that the original word is never deleted, but it is relinked to an added homonym if one is available. (read more in Word#suicide)
 
-15. INPROGRESS: in paradigms#edit allow adding new slots
-  * DONE: add a button
+15. DONE: in paradigms#edit allow adding new slots (tag+word pairs)
+  * add a button
   * controller: ensure updated pdg is saved correctly, with no duplicates.
+
+16. ensure status and comment fields are updated correctly and their value is show correctly in the view. -- Done in #edit/#update
+
+17. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
 
 == TODO for user input validation
 
@@ -64,6 +67,13 @@
 2. DONE: Taking over tasks: reimplement using ajax.
 
 3. BUG: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
+
+== TODO for words
+
+1. Find a word or all words matching given regexp pattern
+   * allow manipulating the word(s) found
+
+Why: suppose the user added a word when creating a paradigm. Now there is no chance to seek/change that word unless by finding it through the paradigm.
 
 == README
 

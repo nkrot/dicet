@@ -56,4 +56,30 @@ class Word < ActiveRecord::Base
       self.destroy
     end
   end
+
+  # update the current word from the other word
+  # TODO: other fields (typo, comment) not handled yet
+  def update_from other
+    debug = true
+    puts "update_from: current is #{self.inspect}; the other is #{other.inspect}" if debug
+    # compare fields
+    eq_text = self.text == other.text
+    eq_tag  = self.tag  == other.tag
+    if eq_text && eq_tag
+      # the word's text and tag have not changed
+      # => just keep the current word and throw away the other word
+      puts " keep the current word"  if debug
+    elsif eq_text
+      # the word's text is the same but the word's tag changed
+      # => update the tag of the current word to the new value
+      puts " change the tag from #{self.tag} to #{other.tag}"  if debug
+      self.tag = other.tag
+    else
+      # prefer the other word
+      puts " dismiss the current word and keep the other word."  if debug
+      other.paradigm = self.paradigm
+      self.suicide
+      other.save
+    end
+  end
 end
