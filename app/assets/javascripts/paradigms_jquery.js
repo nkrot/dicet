@@ -31,7 +31,7 @@ $(document).ready(function() {
 //		console.log(pdgid);
 
 		// retrieve the stub for the current paradigm
-		var pdg = $("#stub_for_"+pdgid).clone();
+		var pdg = $("#stub_for_"+pdgid).clone(true);
 
 		// compute unique idx for pdg[idx][pdgid]... 
 		var idx = $(".paradigms").children().length;
@@ -84,7 +84,7 @@ $(document).ready(function() {
 
 	$(".btn_add_pdg_slot").click(function () {
 		this_slot = $(this).closest(".pdg_slot"); 
-		new_slot = this_slot.clone();
+		new_slot = this_slot.clone(true); // true tells to copy events as well
 
 		c_slot = $(".paradigm .pdg_slot").length;
 
@@ -97,6 +97,9 @@ $(document).ready(function() {
 //			console.log("NAME before: " + $(this).attr('name'));
 			chunks = $(this).attr('name').split('][');
 			chunks[chunks.length-2] = c_slot;
+			if ( $(this).hasClass('word') ) {
+				chunks[chunks.length-1] = 'word]'; // get rid of the old word id
+			}
 			$(this).attr('name', chunks.join(']['));
 //			console.log("NAME after:  " + $(this).attr('name'));
 
@@ -104,6 +107,9 @@ $(document).ready(function() {
 //			console.log("ID before: " + $(this).attr('id'));
 			chunks = $(this).attr('id').split('_');
 			chunks[chunks.length-2] = c_slot;
+			if ( $(this).hasClass('word') ) {
+				chunks[chunks.length-1] = 'word'; // get rid of the old word id
+			}
 			$(this).attr('id', chunks.join('_'));
 //			console.log("ID after:  " + $(this).attr('id'));
 		});

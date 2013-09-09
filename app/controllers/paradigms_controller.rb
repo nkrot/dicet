@@ -84,7 +84,12 @@ class ParadigmsController < ApplicationController
       # now update words linked to the paradigm
       each_word(tag_word_data) do |tag_id, old_word, new_word|
         puts "Compare: #{old_word.inspect} vs. #{new_word.inspect}"  if debug
-        old_word.update_from(new_word)
+        if old_word
+          old_word.update_from(new_word)
+        else
+          new_word.paradigm = pdg
+          new_word.save
+        end
       end
     end
   end
@@ -153,16 +158,26 @@ class ParadigmsController < ApplicationController
 
   def each_word tag_word_data
     tag_word_data.each do |tag_id, hash|
-      # "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+      # "0"=>{"tag"=>"VB", "101"=>"run"},   # word.id=101
+      # or w/o old_word
+      # "0"=>{"tag"=>"VB", "word"=>"run"},  # no word.id
       hash.each do |num, tw_hash|
-        # old_word is set from word.id
-        # new_word is set from submitted values of "tag" and "word"
-        word_id = tw_hash.keys.detect {|k| k =~ /^\d+$/} #=>101
-        old_word = Word.find(word_id) # TODO: what if it was deleted in the meanwhile?
+        old_word = nil
+        if tw_hash.key? Word.label
+          # no old word
+          word_id = Word.label
+        else
+          # old_word is set from word.id
+          word_id = tw_hash.keys.detect {|k| k =~ /^\d+$/} #=>101
+          old_word = Word.find(word_id) # TODO: what if it was deleted in the meanwhile?
+        end
+
+        # new_word is set from submitted values of the keys "tag" and 101/"word"
         new_word = Word.new do |w|
           w.text = tw_hash[word_id]
           w.tag  = Tag.find_by(name: tw_hash["tag"])
         end
+
         yield tag_id, old_word, new_word
       end
     end
