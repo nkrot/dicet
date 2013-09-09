@@ -8,6 +8,7 @@
   - if @current_word
     Current word:
     %span#current_word= @current_word.text
+    %span#notice &nbsp;
     = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
     %p
 
