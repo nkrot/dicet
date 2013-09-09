@@ -33,12 +33,11 @@
 
 11. [+] when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
 
-12. paradigms#edit edits only one (selected) paradigm. 
-   * allow deleting a single word/tag
+12. INPROGRESS: paradigms#edit edits only one (selected) paradigm.
+   * when saved, where does it redirect? -- should probably remain on the same page (similarly as DELETE button). use ajax?
    * allow renaming?
-   * when saved, where does it redirect?
-   * allow changing word (delete old one)
    * allow undeleting? at least just after it was deleted on paradigms#edit
+   * BUG: display tags that are not initially in paradigm of the given type (ex: an NN pdg was exxtended with a JJ tag, the JJ tag should also be displayed in #edit)
    * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
    * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
 
@@ -52,13 +51,17 @@
 
 16. DONE: ensure status and comment fields are updated correctly and their value is show correctly in the view. -- Done in #edit/#update
 
-17. in paradigms#edit allow deleting a single word+tag pair
-  * add buttons
+17. DONE: in paradigms#edit allow deleting a single word+tag pair
+  * add buttons: pressing the button with (-) marks the row (word+tag) for deletion. pressing SAVE afterwards makes the changes persistent.
   * implement the logic
 
-18. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
+18. INPROGRESS:in paradigms#edit, allow changing word text and word tag
+  * DONE: changing word text
+  * changing the word tag -- needs testing
 
 19. DONE: when deleting the whole paradigm, disable the DELETE abd SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
+
+20. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
 
 == TODO for user input validation
 

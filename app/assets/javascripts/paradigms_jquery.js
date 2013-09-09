@@ -125,5 +125,14 @@ $(document).ready(function() {
 
 		return false;
 	});
+
+	$(".btn_delete_pdg_slot").click(function () {
+		// grey out the row
+		this_slot = $(this).closest(".pdg_slot"); 
+		this_slot.toggleClass('deleted');
+		// set appropriate value (true/false) to the hidden field
+		this_slot.find(".hdn_deleted").attr('value', this_slot.hasClass('deleted'));
+		return false;
+	});
 });
 

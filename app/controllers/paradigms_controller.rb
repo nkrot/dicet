@@ -64,8 +64,10 @@ class ParadigmsController < ApplicationController
 
   def destroy
     pdg = Paradigm.find(params[:id])
-#    puts "Deleting #{pdg.inspect}"
-#    puts "WORDS: #{pdg.words.length}"
+    if debug=false
+      puts "Deleting #{pdg.inspect}"
+      puts "WORDS: #{pdg.words.length}"
+    end
     pdg.words.each { |word| word.suicide }
     pdg.destroy
   end
@@ -73,7 +75,7 @@ class ParadigmsController < ApplicationController
   private
 
   def update_paradigm params
-    debug = true
+    debug = !true
     puts params.inspect  if debug
     pdg = Paradigm.find(params[:id])
     each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
@@ -84,9 +86,16 @@ class ParadigmsController < ApplicationController
       # now update words linked to the paradigm
       each_word(tag_word_data) do |tag_id, old_word, new_word|
         puts "Compare: #{old_word.inspect} vs. #{new_word.inspect}"  if debug
-        if old_word
+        if !old_word && !new_word
+          # this happens if the user first added a new word+tag (w/o saving)
+          # and then marked it for deletion
+        elsif old_word && ! new_word
+          # the old word was marked for deletion
+          old_word.suicide
+        elsif old_word
           old_word.update_from(new_word)
         else
+          # newly added word+tag pair
           new_word.paradigm = pdg
           new_word.save
         end
@@ -115,27 +124,27 @@ class ParadigmsController < ApplicationController
   #      "5"=>{    # paradigm_type.id
   #        "96"=>{ # tag.id=96
   #          # word/tag pair #0, 0 can be ignored
-  #          "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+  #          "0"=>{"tag"=>"VB", "101"=>"word" ...},   # word.id=101
   #          # word/tag pair #1, 1 can be ignored
-  #          "1"=>{"tag"=>"VB", "106"=>"word"}},  # word.id=106
+  #          "1"=>{"tag"=>"VB", "106"=>"word" ...}},  # word.id=106
   #        "97"=>{
-  #          "2"=>{"tag"=>"VBZ", "102"=>"words"},
-  #          "3"=>{"tag"=>"VBZ", "107"=>"words"}},
+  #          "2"=>{"tag"=>"VBZ", "102"=>"words" ...},
+  #          "3"=>{"tag"=>"VBZ", "107"=>"words" ...}},
   #        "98"=>{
-  #          "4"=>{"tag"=>"VBG", "10"=>"wording"},
-  #          "5"=>{"tag"=>"VBG", "108"=>"wording"}},
+  #          "4"=>{"tag"=>"VBG", "10"=>"wording" ...},
+  #          "5"=>{"tag"=>"VBG", "108"=>"wording" ...}},
   #        "99"=>{
-  #          "6"=>{"tag"=>"VBD", "17"=>"worded"},
-  #          "7"=>{"tag"=>"VBD", "109"=>"worded"}},
+  #          "6"=>{"tag"=>"VBD", "17"=>"worded" ...},
+  #          "7"=>{"tag"=>"VBD", "109"=>"worded" ...}},
   #        "100"=>{
-  #          "8"=>{"tag"=>"VBN", "103"=>"worded"},
-  #          "9"=>{"tag"=>"VBN", "110"=>"worded"}},
+  #          "8"=>{"tag"=>"VBN", "103"=>"worded" ...},
+  #          "9"=>{"tag"=>"VBN", "110"=>"worded" ...}},
   #        "107"=>{
-  #          "10"=>{"tag"=>"JJing", "104"=>"word"},
-  #          "11"=>{"tag"=>"JJing", "111"=>"wording"}},
+  #          "10"=>{"tag"=>"JJing", "104"=>"word",    "deleted"=>"true" },
+  #          "11"=>{"tag"=>"JJing", "111"=>"wording", "deleted"=>""     }},
   #        "108"=>{
-  #          "12"=>{"tag"=>"JJed", "105"=>"word"},
-  #          "13"=>{"tag"=>"JJed", "112"=>"worded"}},
+  #          "12"=>{"tag"=>"JJed", "105"=>"word" ...},
+  #          "13"=>{"tag"=>"JJed", "112"=>"worded" ...}},
   #        "extras"=>{"comment"=>"", "status"=>"ready"}}}},
   #  "commit"=>"Save", "id"=>"5"}
 
@@ -147,20 +156,21 @@ class ParadigmsController < ApplicationController
         # tag_word_data is a hash of the form:
         #   "96"=>{ # tag.id=96
         #     # word/tag pair #0, 0 can be ignored
-        #     "0"=>{"tag"=>"VB", "101"=>"word"},   # word.id=101
+        #     "0"=>{"tag"=>"VB", "101"=>"word", "deleted"=>""},   # word.id=101
         #     # word/tag pair #1, 1 can be ignored
-        #     "1"=>{"tag"=>"VB", "106"=>"word"}},  # word.id=106
+        #     "1"=>{"tag"=>"VB", "106"=>"word", "deleted"=>""}},  # word.id=106
         yield pdg_type_id, tag_word_data, extras
       end
     end
   end
 
-
   def each_word tag_word_data
     tag_word_data.each do |tag_id, hash|
-      # "0"=>{"tag"=>"VB", "101"=>"run"},   # word.id=101
-      # or w/o old_word
-      # "0"=>{"tag"=>"VB", "word"=>"run"},  # no word.id
+      # "0"=>{"tag"=>"VB", "101"=>"run", "deleted=>""},   # word.id=101
+      #   or w/o old_word
+      # "0"=>{"tag"=>"VB", "word"=>"run", "deleted"=>""},  # no word.id
+      #   or with deleted set to true
+      # "4"=>{"tag"=>"NNS", "128"=>"palabras", "deleted"=>"true"}
       hash.each do |num, tw_hash|
         old_word = nil
         if tw_hash.key? Word.label
@@ -172,10 +182,17 @@ class ParadigmsController < ApplicationController
           old_word = Word.find(word_id) # TODO: what if it was deleted in the meanwhile?
         end
 
-        # new_word is set from submitted values of the keys "tag" and 101/"word"
-        new_word = Word.new do |w|
-          w.text = tw_hash[word_id]
-          w.tag  = Tag.find_by(name: tw_hash["tag"])
+        if tw_hash["deleted"].to_s.downcase =~ /^(1|true)/
+          # if the word+tag is marked for deletion, we do not need the new word
+          # the new word being equal to nil will signal the old word needs to be deleted
+          new_word = nil
+        else
+          # new_word is set from submitted values of the keys "tag" and 101/"word"
+          # or is retrieved from db if it is already there and has not yet been taken to a pdg
+          word_text = tw_hash[word_id].strip
+          attrs = {text: word_text, tag_id: nil, paradigm_id: nil}
+          new_word = Word.where(attrs).first_or_initialize
+          new_word.tag = Tag.find_by(name: tw_hash["tag"])
         end
 
         yield tag_id, old_word, new_word
