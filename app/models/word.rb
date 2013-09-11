@@ -60,7 +60,7 @@ class Word < ActiveRecord::Base
   # update the current word from the other word
   # TODO: other fields (typo, comment) not handled yet
   def update_from other
-    debug = true
+    debug = false
     puts "update_from: current is #{self.inspect}; the other is #{other.inspect}" if debug
     # compare fields
     eq_text = self.text == other.text
