@@ -75,9 +75,11 @@ class ParadigmsController < ApplicationController
   private
 
   def update_paradigm params
-    debug = !true
+    debug = false
     puts params.inspect  if debug
+
     pdg = Paradigm.find(params[:id])
+
     each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
       # update paradigm fields
 #      pdg.paradigm_type_id = pdg_type_id # no change must happen in #edit/#update
@@ -102,20 +104,6 @@ class ParadigmsController < ApplicationController
       end
     end
   end
-
-#  def update_paradigm__old params
-#    saved = true
-#    pdg = Paradigm.find(params[:id])
-#    each_paradigm(params) do |pdg_type_id, words, extras|
-#      pdg.paradigm_type_id = pdg_type_id
-#      pdg.comment = extras["comment"]  if extras["comment"]
-#      pdg.status  = extras["status"]   if extras["status"]
-#      pdg.words.concat words
-#      saved = pdg.save && saved
-#      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
-#    end
-#    saved
-#  end
 
   # PARAMS
   #  "word_id"=>"17",
@@ -200,116 +188,41 @@ class ParadigmsController < ApplicationController
     end
   end
 
-#  "pdg"=>{
-#   "idx"=> {
-#     "5"=>{
-#       "96"=>{"10"=>"wander"},
-#       "97"=>{"word"=>"wanders"},
-#       "98"=>{"word"=>"wandering"},
-#       "99"=>{"word"=>"wandered"},
-#       "100"=>{"word"=>""},
-#       "107"=>{"word"=>""},
-#       "108"=>{"word"=>""},
-#       "extras"=>{"comment"=>"", "status"=>"ready"}
-#     }
-#   }
-# }
+  def save_paradigms params
+    debug = false
+    puts params  if debug
 
-  def each_paradigm params
-    params[:pdg].each_value do |hash|
-      puts hash.inspect
-      hash.each do |pdg_type_id, data|
-        words = []
-        extras = {}
-        data.each do |tag_id, word_data|
-          if tag_id == "extras"
-            ["comment", "status"].each do |field|
-              next  unless word_data[field]
-              val = word_data[field].strip
-              extras[field] = val  unless val.nil? || val.empty?
-            end
+    saved = true
+    each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
+      if debug
+        puts "pdg_type_id=#{pdg_type_id}"
+        puts "tag_word_data: #{tag_word_data.inspect}"
+        puts "extras: #{extras.inspect}"
+      end
+      pdg = Paradigm.new
+      attrs = {
+        paradigm_type_id: pdg_type_id, 
+        comment: extras["comment"],
+        status:  extras["status"]
+      }
+      pdg.update_attributes(attrs)
+      saved = pdg.save && saved
 
-          elsif word_data.key?(Word.label) && word_data[Word.label].empty?
-            # skip. we dont want to store empty words
-
-          else
-#            puts "tag_id: #{tag_id}"
-#            if Tag.notag?(tag_id) && word_data.key?("tag")
-#              tag_id = Tag.tag_name2tag_id word_data["tag"]
-#              puts "found tag_id: #{tag_id}"
-#            end
-            w = find_suitable_word(word_data, params)
-#            w.update_attributes(tag_id: tag_id)
-            words << w
-          end
+      # retrieve individual words
+      each_word(tag_word_data) do |tag_id, old_word, new_word|
+        # tag_id can be ignored (the user may have edited the tag)
+        # old_word is not supposed to exist
+        # new_word TODO: it can be nil (if deleted=true)
+        if debug
+          puts "tag_id: #{tag_id}"
+          puts "old_word: #{old_word.inspect}"
+          puts "new_word: #{new_word.inspect}"
         end
-        
-        unless words.empty?
-          yield pdg_type_id, words, extras
-        end
+        new_word.paradigm = pdg
+        saved = new_word.save && saved
       end
     end
-  end
-
-  # TODO: cf with update_paradigm and refactor
-  def save_paradigms params
-    saved = true
-#    puts params
-    each_paradigm(params) do |pdg_type_id, words, extras|
-      puts "pdg_type_id=#{pdg_type_id}"
-      puts "words: #{words.inspect}"
-      puts "extras: #{extras.inspect}"
-      pdg = Paradigm.new
-      pdg.paradigm_type_id = pdg_type_id
-      pdg.comment = extras["comment"]  if extras["comment"]
-      pdg.status  = extras["status"]   if extras["status"]
-      pdg.words.concat words
-      saved = saved && pdg.save
-      words.map {|w| w.update_attributes(paradigm_id: pdg.id) }
-    end
     saved
-  end
-
-  def find_suitable_word(hash, params)
-    puts "FIND_SUITABLE_WORD: #{hash.inspect}"
-    puts "PARAMS: #{params.inspect}"
-
-    current_word_id = params[:word_id] || nil
-
-    # either "word" or word.id
-    key_for_word = hash.keys.reject{|k| k == "tag"}.first
-
-    if key_for_word != Word.label
-      # the hash has no key "word" but a numeric word.id
-      #   {"tag"=>"TAG", "10"=>"WORD"}
-      # if the word was already in DB. In this case just retrieve it.
-      attrs = {id: key_for_word, text: hash[key_for_word], tag_id: nil, paradigm_id: nil}
-      w = Word.find_by(attrs)
-
-    elsif current_word_id
-      # find the word by the given ID and word.text
-      attrs = {id: current_word_id, text: hash[key_for_word], tag_id: nil, paradigm_id: nil}
-      w = Word.find_by(attrs)
-#      puts "Reusing the word #{w.text} with ID=#{w.id} /end" if w
-    end
-
-    unless w
-      # if nothing suitable was found by the id, find by word.text or create a new word
-      word_text = hash[key_for_word].strip
-      # attributes that identify a Word that was not taken to a paradigm
-      attrs = {text: word_text, tag_id: nil, paradigm_id: nil}
-#      _word = Word.find_by(attrs)
-#      puts "Found? #{_word.text} with ID=#{_word.id} /End"  if _word
-      # TODO: the user can change word.text as well
-      w = Word.where(attrs).first_or_create(text: word_text)
-    end
-
-    # update the word tag
-    tag_id = Tag.tag_name2tag_id(hash[:tag])
-    w.update_attributes(tag_id: tag_id)
-    w.save
-
-    w
   end
 
 #  def paradigm_params
