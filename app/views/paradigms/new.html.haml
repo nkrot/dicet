@@ -12,10 +12,6 @@
   };
 
 %div.pdg_stubs
-  -#%div#stub_for_pdg_of_type_other
-  -#  = text_field_tag "pdg[#{idx}][other][notag][tag]",  "", placeholder: "TAG",              class: "tag"
-  -#  = text_field_tag "pdg[#{idx}][other][notag][word]", "", placeholder: "word or word_TAG", class: "word"
-
   - @paradigm_types.each do |pdg|
     %div{id:"stub_for_pdg_of_type_#{pdg.paradigm_type_id}"}
       = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx, current_word: @word }
@@ -27,6 +23,7 @@
   - if @word
     New word: 
     %span#current_word= @word.text
+    %span#notice &nbsp;
     = hidden_field_tag :word_id, @word.id, id: 'current_word_id'
     %p
 
@@ -50,6 +47,6 @@
       -# render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
       %p
 
-  %div.save= f.submit "Save", accesskey:"s"
+  %div.save= f.submit "Save", accesskey:"s", class:'btn btn_save'
 
           
