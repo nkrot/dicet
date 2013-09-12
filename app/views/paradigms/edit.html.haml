@@ -18,7 +18,9 @@
     %tr
       %td= f.submit "Save", accesskey:"s", class:'btn btn_save'
       %td.empty
-      %td= link_to "Delete", |
-                   url_for(controller: 'paradigms', action:'destroy', id: @paradigm.id), |
-                   remote: true, method: :delete, confirm: "Are you sure?", |
-                   class: 'btn btn_delete'  |
+      %td.has_balloon
+        = link_to "Delete", |
+                  url_for(controller: 'paradigms', action:'destroy', id: @paradigm.id), |
+                  remote: true, method: :delete, confirm: "Are you sure?", |
+                  class: 'btn btn_delete'
+        %span.balloon Delete the whole paradigm                

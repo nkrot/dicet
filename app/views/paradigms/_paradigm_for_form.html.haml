@@ -26,10 +26,10 @@
         - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
         %td.has_button
           = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
-        %td.tag.balloon
+        %td.tag.has_balloon
           = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
                             class: "tag" #, readonly: tag.readonly_html?
-          %span= tag.description
+          %span.balloon= tag.description
         %td.word
           = text_field_tag "#{basename}[#{word.id_or_label}]", |
                             word.text, class: "word"

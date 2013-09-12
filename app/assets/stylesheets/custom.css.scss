@@ -78,13 +78,15 @@ table.buttons {
   text-align: center;
 }
 
-.balloon {
-  span {
+.has_balloon {
+  .balloon {
     display: none;
   }
 
-  input:hover + span,  
-  label:hover + span {
+  /* *:hover does not work */
+  a:hover     + .balloon,
+  input:hover + .balloon,  
+  label:hover + .balloon {
     display: block;
     position: absolute;
     margin:5px 0px 0px 20px;
