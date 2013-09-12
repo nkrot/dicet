@@ -74,6 +74,7 @@ class Word < ActiveRecord::Base
       # => update the tag of the current word to the new value
       puts " change the tag from #{self.tag} to #{other.tag}"  if debug
       self.tag = other.tag
+      self.save
     else
       # prefer the other word
       puts " dismiss the current word and keep the other word."  if debug

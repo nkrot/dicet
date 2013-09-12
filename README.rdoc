@@ -22,6 +22,7 @@
 
 6. Possibility to extend a paradigm with other tags (like adding Other into a paradigm)
    * JJing can have an RB
+   * ensure these extra tags are shown in #edit
 
 7. Ensure that the tag that can be both in a paradigm or per se is handled correctly. Does it lead to word+tag duplicates in DB that differ in paradigm_id? 
    * RB
@@ -34,7 +35,7 @@
 11. [+] when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
 
 12. INPROGRESS: paradigms#edit edits only one (selected) paradigm.
-   * when saved, where does it redirect? -- should probably remain on the same page (similarly as DELETE button). use ajax?
+   * when saved, where does it redirect? -- should probably remain on the same page (similarly as DELETE button). use ajax? disable the button until a change is made to the paradigm.
    * allow renaming?
    * allow undeleting? at least just after it was deleted on paradigms#edit
    * BUG: display tags that are not initially in paradigm of the given type (ex: an NN pdg was exxtended with a JJ tag, the JJ tag should also be displayed in #edit)
@@ -55,13 +56,17 @@
   * add buttons: pressing the button with (-) marks the row (word+tag) for deletion. pressing SAVE afterwards makes the changes persistent.
   * implement the logic
 
-18. INPROGRESS:in paradigms#edit, allow changing word text and word tag
-  * DONE: changing word text
+18. DONE: in paradigms#edit, allow changing word text and word tag
+  * changing word text
   * changing the word tag -- needs testing
 
 19. DONE: when deleting the whole paradigm, disable the DELETE abd SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
 
 20. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
+
+21. Investigate when model.save return false and reconsider correctness of paradigms_controller#save_paradigms
+
+22. INPROGRESS: in pardigms#edit, use ajax for SAVE button.
 
 == TODO for user input validation
 
