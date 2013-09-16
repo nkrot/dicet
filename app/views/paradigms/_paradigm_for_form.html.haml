@@ -5,44 +5,45 @@
 
 //= hidden_field_tag :paradigm_id, pdgid
 
-%table.paradigm
-  %thead
-    %tr
-      %th &nbsp;
-      %th.tag Tag
-      %th.word
-        %a.click_to_copy Word
-      %th &nbsp;
-  %tbody
-    - paradigm.each_word_with_tag do |word, tag|
-      - c_slot += 1
+%div#paradigm_data
+  %table.paradigm
+    %thead
+      %tr
+        %th &nbsp;
+        %th.tag Tag
+        %th.word
+          %a.click_to_copy Word
+        %th &nbsp;
+    %tbody
+      - paradigm.each_word_with_tag do |word, tag|
+        - c_slot += 1
 
-      -# For 'other' paradigm type, make the current word appear in the pdg stub
-      - if current_word && tag.notag? && ! word.text
-        - word = current_word
+        -# For 'other' paradigm type, make the current word appear in the pdg stub
+        - if current_word && tag.notag? && ! word.text
+          - word = current_word
 
-      %tr.pdg_slot
-        -# BTN | TAG input | WORD input
-        - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
-        %td.has_button
-          = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
-        %td.tag.has_balloon
-          = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
-                            class: "tag" #, readonly: tag.readonly_html?
-          %span.balloon= tag.description
-        %td.word
-          = text_field_tag "#{basename}[#{word.id_or_label}]", |
-                            word.text, class: "word"
-        %td.has_button
-          = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
-          = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
+        %tr.pdg_slot
+          -# BTN | TAG input | WORD input
+          - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
+          %td.has_button
+            = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
+          %td.tag.has_balloon
+            = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
+                              class: "tag" #, readonly: tag.readonly_html?
+            %span.balloon= tag.description
+          %td.word
+            = text_field_tag "#{basename}[#{word.id_or_label}]", |
+                              word.text, class: "word"
+          %td.has_button
+            = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
+            = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
 
-    -# extras: comment area
-    %tr.comment
-      %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-      %td{colspan:2}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
+      -# extras: comment area
+      %tr.comment
+        %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
+        %td{colspan:2}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
 
-    -# extras: radio boxes for statuses
-    %tr.last
-      %td{colspan:4}
-        = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
+      -# extras: radio boxes for statuses
+      %tr.last
+        %td{colspan:4}
+          = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }

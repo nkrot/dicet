@@ -1,5 +1,7 @@
 class ParadigmsController < ApplicationController
 
+#  before_filter :set_no_cache # no effect, maybe the issue is not in caching
+
   def index
     # show all
     @paradigms = Paradigm.all
@@ -48,18 +50,21 @@ class ParadigmsController < ApplicationController
   end
 
   def edit
+    @title = "Edit paradigm"
+
     @current_word = Word.find_by(id: params[:word_id])
     @paradigm = Paradigm.find(params[:id])
-    @title = "Edit paradigm"
+    @idx = 1
   end
 
   def update
-    if update_paradigm(params)
-      flash[:success] = "Paradigm saved successfully"
-    else
-      flash[:error] = "Shit happened when saving paradigm"
-    end
-    redirect_to user_url(@current_user)
+    update_paradigm(params)
+
+    # TODO: same as in #edit
+    @title = "Edit paradigm (redirect from #update)"
+    @current_word = Word.find_by(id: params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
+    @paradigm = Paradigm.find(params[:id])
+    @idx = 1
   end
 
   def destroy
@@ -73,6 +78,12 @@ class ParadigmsController < ApplicationController
   end
 
   private
+
+  def set_no_cache
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 
   def update_paradigm params
     debug = false

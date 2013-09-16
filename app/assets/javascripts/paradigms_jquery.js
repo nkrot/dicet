@@ -23,7 +23,8 @@ function set_focus_to_editable_input(obj) {
 	obj.find("input").filter(':visible').not("[disabled]").not("[readonly]").first().focus();
 };
 
-$(document).ready(function() {
+function do_on_document_ready() {
+
 //	alert('document ready!');
 
 	$("a").on('click', function (ev) {
@@ -33,7 +34,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$(".btn_pdg_creator").click(function () {
+	$(".btn_pdg_creator").on("click", function () {
 		var pdgid = $(this).attr('id'); // =>pdg_of_type_1
 //		console.log(pdgid);
 
@@ -79,7 +80,7 @@ $(document).ready(function() {
 	});
 
 	// TODO: rewrite using set_click_to_copy.
-	$(".click_to_copy").click(function () {
+	$(".click_to_copy").on("click", function () {
 		parent = $(this).closest(".paradigm");
 		parent.find("input.word[type='text']").each(function () {
 			$(this).attr('value', $("#current_word").text());
@@ -89,7 +90,7 @@ $(document).ready(function() {
 	// this works incorrectly for tables with dinamically disappearing rows
 //	$(".table_of_tasks tbody tr:odd").css('background-color', 'beige');
 
-	$(".btn_add_pdg_slot").click(function () {
+	$(".btn_add_pdg_slot").on("click", function () {
 		this_slot = $(this).closest(".pdg_slot"); 
 		new_slot = this_slot.clone(true); // true tells to copy events as well
 
@@ -126,7 +127,7 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$(".btn_delete_pdg_slot").click(function () {
+	$(".btn_delete_pdg_slot").on("click", function () {
 		// grey out the row
 		this_slot = $(this).closest(".pdg_slot"); 
 		this_slot.toggleClass('deleted');
@@ -134,5 +135,16 @@ $(document).ready(function() {
 		this_slot.find(".hdn_deleted").attr('value', this_slot.hasClass('deleted'));
 		return false;
 	});
+};
+
+$(document).on('ready', function() {
+	do_on_document_ready();
 });
 
+/*
+$.ajax({
+	success: function() {
+		do_on_document_ready();
+	}
+});
+*/

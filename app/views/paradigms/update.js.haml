@@ -1,0 +1,7 @@
+$("#notice").html('<div class="alert alert-success">Paradigm may have been successfully updated at ' + "#{DateTime.now}" + '</div>')
+
+- options = {:partial => 'paradigm_for_form', :locals => { paradigm: @paradigm, idx: @idx, current_word: @current_word}}
+
+$("#paradigm_data").empty().html("#{escape_javascript(render options)}")
+
+do_on_document_ready()

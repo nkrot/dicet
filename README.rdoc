@@ -60,13 +60,15 @@
   * changing word text
   * changing the word tag -- needs testing
 
-19. DONE: when deleting the whole paradigm, disable the DELETE abd SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
+19. DONE: when deleting the whole paradigm, disable the DELETE and SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
 
 20. BUG? Why paradigm_type_id is used in the forms if it should be rather paradigm_id?
 
 21. Investigate when model.save return false and reconsider correctness of paradigms_controller#save_paradigms
 
-22. INPROGRESS: in pardigms#edit, use ajax for SAVE button.
+22. DONE: in pardigms#edit, use ajax for SAVE button. Stay on the #edit page and replace paradigm with the newer (updated) version
+
+23. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
 
 == TODO for user input validation
 
@@ -81,6 +83,7 @@
 2. DONE: Taking over tasks: reimplement using ajax.
 
 3. BUG: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
+  * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
 
 == TODO for words
 
