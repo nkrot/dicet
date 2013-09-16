@@ -51,7 +51,6 @@ class ParadigmsController < ApplicationController
 
   def edit
     @title = "Edit paradigm"
-
     @current_word = Word.find_by(id: params[:word_id])
     @paradigm = Paradigm.find(params[:id])
     @idx = 1
@@ -61,7 +60,7 @@ class ParadigmsController < ApplicationController
     update_paradigm(params)
 
     # TODO: same as in #edit
-    @title = "Edit paradigm (redirect from #update)"
+    @title = "Edit paradigm"
     @current_word = Word.find_by(id: params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
     @paradigm = Paradigm.find(params[:id])
     @idx = 1

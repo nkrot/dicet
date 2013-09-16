@@ -68,7 +68,11 @@
 
 22. DONE: in pardigms#edit, use ajax for SAVE button. Stay on the #edit page and replace paradigm with the newer (updated) version
 
-23. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+23. DONE: allow adding to a paradigm tags that are originally not in the paradigm. Show such tags in #edit
+  * TODO: Paradigm#tags now returns an array, but should (?) rather return a Relation
+
+24. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+
 
 == TODO for user input validation
 

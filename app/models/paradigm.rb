@@ -14,17 +14,25 @@ class Paradigm < ActiveRecord::Base
   validates :status, inclusion: { in: STATUSES, 
     message: "%{value} is not a valid status, should be one of #{STATUSES.join(" ")}"}
 
+  # Here we return union of:
+  #  a) tags associated with the paradigm type to which the paradigm belongs
+  #  b) and extra tags that were added by the user
+  #
   # TODO: ensure tags are returned in the order in which they are arranged
-  # in the paradigm
+  #       in the paradigm
+  # TODO: return a Relation rather than an array. To archieve it, use find_by_sql
+  #       http://stackoverflow.com/questions/6686920/activerecord-query-union
   def tags
-    self.paradigm_type.tags
+    tags_from_words = []
+    if self.id
+      tags_from_words = Word.where({paradigm_id: self.id}).map {|w| w.tag}
+    end
+    (self.paradigm_type.tags + tags_from_words).uniq
   end
 
   # iterates over word/tag pairs in the paradigm
   # if a tag in the paradigm was not assigned a word, returns nil
   def each_word_with_tag
-#    puts "All current tags: "
-#    puts self.tags
     tags.each do |tag|
       attrs = { paradigm_id: self.id, tag_id: tag.id }
       words = Word.where(attrs).to_a
