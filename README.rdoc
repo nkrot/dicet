@@ -100,8 +100,11 @@
 
 3. DONE: in tasks#index, once a task has been taken, the table of tasks should be updated to contain the correct number of items. -- fixed by rerendering the whole page via take.js.haml
 
-4. BUG: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
+4. FIXED: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
   * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
+  * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
+
+5. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
 
 == TODO for words
 

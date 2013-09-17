@@ -1,0 +1,15 @@
+%p
+  You currently have
+  %span.count_of_tasks= pluralize(@tasks.count, "task")
+  assigned to you
+
+-# additional params are necessary to ensure that the button links are generated
+-# correctly both in users_controller#show and tasks_controller#drop
+- will_paginate_params = { params: {controller: 'users', action: 'show', id: @user.id} }
+
+= will_paginate @tasks, will_paginate_params
+
+= render partial: "tasks/tasks_in_table", |
+         locals: {btn_action: 'drop', btn_label: 'Drop task'}
+
+= will_paginate @tasks, will_paginate_params

@@ -8,5 +8,5 @@
       %th.words Words
       %th.center.fixed_width.last= btn_label
     %tbody
-      = render partial: "tasks/task", collection: tasks,
+      = render partial: "tasks/task", collection: @tasks,
               locals: { btn_action: btn_action, btn_label: btn_label }

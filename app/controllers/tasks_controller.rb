@@ -37,9 +37,18 @@ class TasksController < ApplicationController
 
   def drop
     @task = Task.find(params[:id])
-    @tasks = @task.user.tasks # all tasks assigned to this user
+
+    # TODO: as in users_controller#show
+    @user = @task.user
+
     @task.user = nil
     @task.save
+
+    # TODO: as in users_controller#show
+    @tasks = @user.tasks.paginate(page: params[:page],
+                                        per_page: TASKS_PER_PAGE,
+                                        order:    'priority DESC')
+
   end
 
   private

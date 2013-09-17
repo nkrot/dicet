@@ -1,5 +1,9 @@
+
+- options = { partial: 'user_tasks' }
+$("#tasks").html("#{escape_javascript(render options)}")
+
 /* hide the task that has been dropped */
-$("#task_#{@task.id}").fadeOut(200);
+-#$("#task_#{@task.id}").fadeOut(200);
 
 /* update the task count with the number of remaining tasks */
-$(".count_of_tasks").html("#{pluralize(@tasks.count, "task")}");
+-#$(".count_of_tasks").html("#{pluralize(@tasks.count, "task")}");

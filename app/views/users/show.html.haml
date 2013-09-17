@@ -17,17 +17,8 @@
       %th= @user.email
       %th= @user.password
 
-%div.tasks
-  %h4 Your dictionary tasks
+%h4 Your dictionary tasks
 
-  %p
-    You currently have
-    %span.count_of_tasks= pluralize(@tasks.count, "task")
-    assigned to you
+%div#tasks
 
-  = will_paginate @tasks
-
-  = render partial: "tasks/tasks_in_table", |
-           locals: {tasks: @tasks, btn_action: 'drop', btn_label: 'Drop task'}
-
-  = will_paginate @tasks
+  =render partial: 'tasks/user_tasks'
