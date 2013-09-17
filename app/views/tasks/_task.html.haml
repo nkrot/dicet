@@ -7,9 +7,13 @@
   %td.center= task.priority
   %td.center= task.status
   %td= render partial: "words/word_in_task", collection: task.words, as: :word
-  / can use link_to instead of button_to, all other arguments are the same
+  - url_params = { controller: 'tasks', action: btn_action, id: task }
+  -# necessary to ensure will_paginate works
+  - if params[:page]
+    - url_params[:page] = params[:page]
+
   %td.center= link_to btn_label, |
-       url_for(controller: 'tasks', action: btn_action, id: task), |
+       url_for(url_params), |
        remote: true, method: :put, |
        class: "btn_#{btn_action}_task" |
  

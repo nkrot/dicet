@@ -1,17 +1,6 @@
 %h2 List of all unassigned dictionary tasks
 
-%div.tasks
+%div#tasks
 
-  %p
-    There are currently
-    %span.count_of_tasks= pluralize(@tasks.count, "unassigned task")
-    , and you have
-    %span.count_of_user_tasks= pluralize(@user_tasks.count, "task")
-    assigned to you.
+  = render partial: 'tasks'
 
-    = will_paginate @tasks
-
-    = render partial: "tasks/tasks_in_table", |
-             locals: {tasks: @tasks, btn_action: 'take', btn_label: 'Take task'}
-
-    = will_paginate @tasks

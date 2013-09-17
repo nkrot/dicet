@@ -19,12 +19,20 @@ class TasksController < ApplicationController
   end
 
   def take
+#    puts "PARAMS: #{params.inspect}"
+
     @task = Task.find(params[:id])
     @task.user = current_user
     @task.save
 
-    @tasks = Task.where(user_id: nil) # all unassigned tasks
-    @user_tasks = @task.user.tasks
+#    @tasks = Task.where(user_id: nil) # all unassigned tasks
+#    @user_tasks = @task.user.tasks
+
+    # TODO: same as in #index
+    @tasks = Task.where(user_id: nil).paginate(page:     params[:page],
+                                               per_page: TASKS_PER_PAGE,
+                                               order:    'priority DESC')
+    @user_tasks = Task.where(user_id: current_user)
   end
 
   def drop

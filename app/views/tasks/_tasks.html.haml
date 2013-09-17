@@ -1,0 +1,17 @@
+%p
+  There are currently
+  %span.count_of_tasks= pluralize(@tasks.count, "unassigned task")
+  , and you have
+  %span.count_of_user_tasks= pluralize(@user_tasks.count, "task")
+  assigned to you.
+
+  -# additional params are necessary to ensure the correct links are
+  -# generated both when #index and #take controllers work  
+  - will_paginate_params = { params: {controller: 'tasks', action: 'index'} }
+
+  = will_paginate @tasks, will_paginate_params
+
+  = render partial: "tasks/tasks_in_table", |
+           locals: {tasks: @tasks, btn_action: 'take', btn_label: 'Take task'}
+
+  = will_paginate @tasks, will_paginate_params
