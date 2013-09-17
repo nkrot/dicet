@@ -170,6 +170,10 @@ table.buttons {
     padding: 0 5px 0 5px;
   }  
 
+  input[type='text'].changed {
+    background: #F7E570; /* kind of gold color */
+  }
+
 }
 
 .paradigm.deleted {
@@ -185,6 +189,25 @@ table.buttons {
     background: #777777;
     color: white;  
 }
+
+table.radioset {
+  width: 100%; 
+
+  /* & references self */
+  &.changed tr {
+    background-color: #F7E570;
+  }
+
+  .labels {
+    td {
+      width: 40px;
+    }
+    td.empty {
+      width: 180px;
+//      border: dotted 1px red;    
+    }  
+  }
+}  
 
 .red {
   background-color: red;

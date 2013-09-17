@@ -120,6 +120,9 @@ function do_on_document_ready() {
 			}
 			$(this).attr('id', chunks.join('_'));
 //			console.log("ID after:  " + $(this).attr('id'));
+
+			$(this).addClass('changed');
+			$(this).addClass('new');
 		});
 
 		this_slot.after(new_slot);
@@ -135,16 +138,27 @@ function do_on_document_ready() {
 		this_slot.find(".hdn_deleted").attr('value', this_slot.hasClass('deleted'));
 		return false;
 	});
+
+	$(".paradigm input[type='text']").on('keyup', function () {
+		if ($(this).attr('value') == $(this).val() && !$(this).hasClass('new')) {
+			// slots marked as class=new should never be unhighlighted
+			$(this).removeClass('changed')
+		} else {
+			$(this).addClass('changed')
+		}
+	});
+
+	$(".paradigm input[type='radio']").on('change', function () {
+		target = $(this).parents(".radioset")
+		if ($(this).is(":checked") && $(this).attr('checked') == 'checked') {
+			target.removeClass('changed')
+		} else {
+			target.addClass('changed')
+		}
+	});
 };
 
 $(document).on('ready', function() {
 	do_on_document_ready();
 });
 
-/*
-$.ajax({
-	success: function() {
-		do_on_document_ready();
-	}
-});
-*/

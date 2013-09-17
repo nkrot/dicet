@@ -38,7 +38,6 @@
    * when saved, where does it redirect? -- should probably remain on the same page (similarly as DELETE button). use ajax? disable the button until a change is made to the paradigm.
    * allow renaming?
    * allow undeleting? at least just after it was deleted on paradigms#edit
-   * BUG: display tags that are not initially in paradigm of the given type (ex: an NN pdg was exxtended with a JJ tag, the JJ tag should also be displayed in #edit)
    * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
    * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
 
@@ -58,7 +57,7 @@
 
 18. DONE: in paradigms#edit, allow changing word text and word tag
   * changing word text
-  * changing the word tag -- needs testing
+  * changing the word tag
 
 19. DONE: when deleting the whole paradigm, disable the DELETE and SAVE buttons after the first use because they should not work when clicked again. Alternatively, allow undeleting.
 
@@ -71,8 +70,21 @@
 23. DONE: allow adding to a paradigm tags that are originally not in the paradigm. Show such tags in #edit
   * TODO: Paradigm#tags now returns an array, but should (?) rather return a Relation
 
-24. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+24. DONE: highlight changes that have not yet been saved 
+  * the word+tag inputs that have changed
+  * newly created slots should always be highlighted until saved
+  * highlight if the comment has changed
+  * highlight if the checked values of the radio box has changed
+  * TODO: styling: the user adds a new pdg slot (assiged: .changed) and then presses (-) to delete it (assigned: .deleted). How to combine .changed and .deleted? Maybe just hide the slot, pretend it was not created?
 
+25. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+
+
+== TODO for paradigms
+
+1. Dump database
+
+2. find all paradigms with unfilled slots, having comments and Review status
 
 == TODO for user input validation
 
