@@ -3,29 +3,11 @@
 
 %h2= @title
 
-= form_for @paradigm, remote: true do |f|
-  - if @current_word
-    Current word:
-    %span#current_word= @current_word.text
-    %span#notice &nbsp;
-    = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
-    %p
+- if @current_word
+  Current word:
+  %span#current_word= @current_word.text
+  %p
 
-  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
+= render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
 
-  %table.buttons
-    %tr
-      %td= f.submit "Save", accesskey:"s", class:'btn btn_save'
-      -# %td= link_to "Save", |
-                  url_for(controller: 'paradigms', action: 'create'), |
-                  remote: true, method: :post, |
-                  class: 'btn btn_save'
-      %td.empty
-      %td.has_balloon
-        = link_to "Delete", |
-                  url_for(controller: 'paradigms', action:'destroy', id: @paradigm.id), |
-                  remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
-                  class: 'btn btn_delete'
-        %span.balloon Delete the whole paradigm                
-
-%script#jscode
+-#%script#jscode

@@ -3,47 +3,77 @@
 - current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
 
-//= hidden_field_tag :paradigm_id, pdgid
+-#= hidden_field_tag :paradigm_id, pdgid
 
-%div#paradigm_data
-  %table.paradigm
-    %thead
+- page_section_id = "paradigm_data_#{idx}"
+
+%div{id: page_section_id}
+
+  = form_for paradigm, remote: true do |f|
+    %span#notice &nbsp;
+
+    -# used to correctly identify the current section of the page (div#paradigm_data_NUM)
+    = hidden_field_tag :page_section_id, page_section_id
+
+    - if current_word
+      = hidden_field_tag :word_id, current_word.id, id: 'current_word_id'
+
+    %table.paradigm
+      %thead
+        %tr
+          %th &nbsp;
+          %th.tag Tag
+          %th.word
+            %a.click_to_copy Word
+          %th &nbsp;
+      %tbody
+        - paradigm.each_word_with_tag do |word, tag|
+          - c_slot += 1
+
+          -# For 'other' paradigm type, make the current word appear in the pdg stub
+          - if current_word && tag.notag? && ! word.text
+            - word = current_word
+
+          %tr.pdg_slot
+            -# (+) | TAG input | WORD input | (-)
+            - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
+            %td.has_button
+              = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
+            %td.tag.has_balloon
+              = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
+                                class: "tag" #, readonly: tag.readonly_html?
+              %span.balloon= tag.description
+            %td.word
+              = text_field_tag "#{basename}[#{word.id_or_label}]", |
+                                word.text, class: "word"
+            %td.has_button
+              = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
+              = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
+
+        -# extras: comment area
+        %tr.comment
+          %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
+          %td{colspan:2}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
+
+        -# extras: radio boxes for statuses
+        %tr.last
+          %td{colspan:4}
+            = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
+
+    -# SAVE | DELETE        
+    %table.buttons
       %tr
-        %th &nbsp;
-        %th.tag Tag
-        %th.word
-          %a.click_to_copy Word
-        %th &nbsp;
-    %tbody
-      - paradigm.each_word_with_tag do |word, tag|
-        - c_slot += 1
-
-        -# For 'other' paradigm type, make the current word appear in the pdg stub
-        - if current_word && tag.notag? && ! word.text
-          - word = current_word
-
-        %tr.pdg_slot
-          -# BTN | TAG input | WORD input
-          - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
-          %td.has_button
-            = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
-          %td.tag.has_balloon
-            = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
-                              class: "tag" #, readonly: tag.readonly_html?
-            %span.balloon= tag.description
-          %td.word
-            = text_field_tag "#{basename}[#{word.id_or_label}]", |
-                              word.text, class: "word"
-          %td.has_button
-            = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
-            = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
-
-      -# extras: comment area
-      %tr.comment
-        %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-        %td{colspan:2}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
-
-      -# extras: radio boxes for statuses
-      %tr.last
-        %td{colspan:4}
-          = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
+        %td.has_balloon
+          = f.submit "Save", accesskey:"s", class:'btn btn_save'
+          %span.balloon Use accesskey: s
+        -#%td= link_to "Save", |
+                    url_for(controller: 'paradigms', action: 'create'), |
+                    remote: true, method: :post, |
+                    class: 'btn btn_save'
+        %td.empty
+        %td.has_balloon
+          = link_to "Delete", |
+                    url_for(controller: 'paradigms', action:'destroy', id: paradigm.id), |
+                    remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
+                    class: 'btn btn_delete'
+          %span.balloon Will delete the whole paradigm immediately                

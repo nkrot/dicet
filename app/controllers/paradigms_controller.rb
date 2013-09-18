@@ -57,6 +57,8 @@ class ParadigmsController < ApplicationController
   end
 
   def update
+#    puts "PARAMS: #{params.inspect}"
+
     update_paradigm(params)
 
     # TODO: same as in #edit
@@ -64,6 +66,7 @@ class ParadigmsController < ApplicationController
     @current_word = Word.find_by(id: params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
     @paradigm = Paradigm.find(params[:id])
     @idx = 1
+    @page_section_id = params[:page_section_id]
   end
 
   def destroy

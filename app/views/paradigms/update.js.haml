@@ -1,7 +1,8 @@
-$("#notice").html('<div class="alert alert-success">Paradigm may have been successfully updated</div>').fadeOut(1000)
 
 - options = {:partial => 'paradigm_for_form', :locals => { paradigm: @paradigm, idx: @idx, current_word: @current_word}}
 
-$("#paradigm_data").empty().html("#{escape_javascript(render options)}")
+$("##{@page_section_id}").empty().html("#{escape_javascript(render options)}")
+
+$("#notice").html('<div class="alert alert-success">Paradigm may have been successfully updated</div>').fadeOut(1000)
 
 do_on_document_ready()
