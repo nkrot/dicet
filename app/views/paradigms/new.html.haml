@@ -28,7 +28,7 @@
 
     %span.has_balloon
       = link_to "#{pdg.paradigm_type.name}", |
-                url_for(controller: 'paradigms', action: 'new_paradigm_of_type', 
+                url_for(controller: 'paradigms', action: 'new_paradigm_of_type', |
                         id: pdg.paradigm_type_id), |
                 remote: true, method: :get, class: 'btn'
       %span.balloon Create empty type #{pdg.paradigm_type.name} paradigm
