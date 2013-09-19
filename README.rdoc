@@ -12,14 +12,17 @@
   press (-) to remove JJR and JJT
   press SAVE.
   => error concerning nil.paradigm=
+  !!! how to fix: is the underlaying word does not exist, pressing (-) should simple clear the textbox
 
 == TODO for creating/editing paradigms
 
 1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
    * DONE: reimplement using ajax
    * DONE: how to ensure the paradigms added to the page have a unique div#id?
-   * INPROGRESS: fix new_paradigm_of_type.js to reuse existing div or create if not yet exists
+   * DONE: fix new_paradigm_of_type.js to reuse existing div or create iff it does not yet exist
+   * in paradigms_controller#create retrieve the ID of the recently saved paradigm (now hardcoded fake value)
    * ensure editing/deleting is also possible
+   * add tooltips to the pdg creation buttons, ensure the tooltip is positioned nicely
 
 2. [...] Free form for inputting word/tag pairs that do not come in paradigms. Ensure it is saved with tag!
    [+] in paradigms_controller#{new,create}

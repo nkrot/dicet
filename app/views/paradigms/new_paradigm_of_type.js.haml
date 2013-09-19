@@ -1,16 +1,12 @@
 
 - options = {:partial => 'paradigm_for_form', :locals => { paradigm: @paradigm, idx: @idx}}
+- data = escape_javascript(render options)
 
--# if the page section exists, reuse it. otherwise, create new and insert there
--#$(".paradigms").append("<div id='#{@page_section_id}'>#{escape_javascript(render options)}</div>")
+- section = "div##{@page_section_id}"
+if ( ! $("#{section}").length ) {
+$(".paradigms").prepend($("<div id='#{@page_section_id}'>"))
+}
 
-var div = document.createElement("div")
-div.setAttribute("id", "#{@page_section_id}")
-div.html("#{escape_javascript(render options)}")
-
-:javascript
-  console.log('hello')
-
-$(".paradigms").append(div)
+$("#{section}").html("#{data}")
 
 do_on_document_ready()
