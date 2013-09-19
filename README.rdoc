@@ -14,6 +14,13 @@
   => error concerning nil.paradigm=
   !!! how to fix: is the underlaying word does not exist, pressing (-) should simple clear the textbox
 
+6. BUG: scenario
+  start creating a new paradigm
+  press a button to open an empty paradigm, leave it empty
+  press a button to open a new empty paradigm, fill it in, press SAVE
+  => two instances of the paradigm are shown
+  !!! somehow remove the empty paradigm. or add a button to close it (DELETE with a different logic). or fix page_section_id
+
 == TODO for creating/editing paradigms
 
 1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
