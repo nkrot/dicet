@@ -35,6 +35,25 @@ function do_on_document_ready() {
 	});
 
 	$(".btn_pdg_creator").on("click", function () {
+		// keep the orignal value of href in old-href
+		if (! $(this).attr("old-href")) {
+			$(this).attr("old-href", $(this).attr("href"))
+		}
+
+		// build a new value of href based on old-href appending to it
+		// a new parameter ?page_section_id=NUMBER
+		$(this).attr("href", function () {
+			var sep = "&";
+			if ($(this).attr('old-href').indexOf('?') == -1) {
+				sep = "?"
+			}
+			var num = $(".paradigms").children().length;
+			var newhref = $(this).attr('old-href') + sep + "page_section_id=" + num;
+			return(newhref);
+		});
+	});
+
+	$(".btn_pdg_creator_OLD").on("click", function () {
 		var pdgid = $(this).attr('id'); // =>pdg_of_type_1
 //		console.log(pdgid);
 
