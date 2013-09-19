@@ -71,9 +71,14 @@
                     remote: true, method: :post, |
                     class: 'btn btn_save'
         %td.empty
-        %td.has_balloon
-          = link_to "Delete", |
-                    url_for(controller: 'paradigms', action:'destroy', id: paradigm.id), |
-                    remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
-                    class: 'btn btn_delete'
-          %span.balloon Will delete the whole paradigm immediately                
+        - if paradigm.id
+          -# show DELETE button if the paradigm is in DB
+          %td.has_balloon
+            = link_to "Delete", |
+                      url_for(controller: 'paradigms', action:'destroy', id: paradigm.id), |
+                      remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
+                      class: 'btn btn_delete'
+            %span.balloon Will delete the whole paradigm immediately                
+        - else
+          -# if pdg is unknown (not in DB) the DELETE button is not necessary
+          %td &nbsp

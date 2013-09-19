@@ -41,6 +41,13 @@ class ParadigmsController < ApplicationController
 #    puts @paradigms.first.class
   end
 
+  def new_paradigm_of_type
+    puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
+
+    @paradigm = Paradigm.new(paradigm_type_id: params[:id])
+    @idx = 1
+  end
+
   def create
     # bring a new paradigm and save it to db
     save_paradigms params

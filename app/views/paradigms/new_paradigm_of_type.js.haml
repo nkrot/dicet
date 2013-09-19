@@ -1,0 +1,11 @@
+
+- options = {:partial => 'paradigm_for_form', :locals => { paradigm: @paradigm, idx: @idx}}
+
+-# TODO: use a helper method, also in paradigms/update.js.haml
+- page_section_id = "paradigm_data_#{@idx}"
+
+-# TODO: need to wrap the rendered stuff in div#paradigm_data_NUM
+$(".paradigms").append("<div id='#{page_section_id}'>#{escape_javascript(render options)}</div>")
+
+
+do_on_document_ready()

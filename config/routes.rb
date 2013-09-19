@@ -29,6 +29,7 @@ Dicet::Application.routes.draw do
 
   resources :words
   resources :paradigms
+  match '/paradigms/new_paradigm_of_type/:id', to: 'paradigms#new_paradigm_of_type', via: 'get'
 
   resources :tasks, only: [:index, :update]
   match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'

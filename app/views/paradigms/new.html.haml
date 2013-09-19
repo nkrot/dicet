@@ -11,14 +11,38 @@
   return false;
   };
 
-%div.pdg_stubs
+-#%div.pdg_stubs
+-#  - @paradigm_types.each do |pdg|
+-#    %div{id:"stub_for_pdg_of_type_#{pdg.paradigm_type_id}"}
+-#      = render partial: 'paradigm_for_form',
+-#               locals: { paradigm: pdg, idx: idx, current_word: @word }
+-#      %p
+
+%div.pdg_creation_buttons
+  Add paradigm of type:
   - @paradigm_types.each do |pdg|
-    %div{id:"stub_for_pdg_of_type_#{pdg.paradigm_type_id}"}
-      = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx, current_word: @word }
-      %p
+    -#%button{type:  'button',
+            class: 'btn primary btn_pdg_creator',
+            id:    "pdg_of_type_#{pdg.paradigm_type_id}",
+            title: "Create empty type #{pdg.paradigm_type.name} paradigm"}= pdg.paradigm_type.name
+
+    %span.has_balloon
+      = link_to "#{pdg.paradigm_type.name}", |
+                url_for(controller: 'paradigms', action: 'new_paradigm_of_type', 
+                        id: pdg.paradigm_type_id), |
+                remote: true, method: :get, class: 'btn'
+      %span.balloon Create empty type #{pdg.paradigm_type.name} paradigm
+  %p
+
+- if @word
+  New word: 
+  %span#current_word= @word.text
+
+%div.paradigms
 
 /TODO: , html: {onsubmit:'return validate_form();'}
-= form_for(@paradigms.first) do |f|
+
+-#= form_for(@paradigms.first) do |f|
   / = render 'shared/error_messages'
   - if @word
     New word: 
@@ -27,19 +51,6 @@
     = hidden_field_tag :word_id, @word.id, id: 'current_word_id'
     %p
 
-  %div.pdg_creation_buttons
-    Add paradigm of type:
-    -# %button{type:  'button',
-      class: 'btn primary btn_pdg_creator',
-      id:    'pdg_of_type_other',
-      title: 'Free tag/word input' } Other
-
-    - @paradigm_types.each do |pdg|
-      %button{type:  'button',
-              class: 'btn primary btn_pdg_creator',
-              id:    "pdg_of_type_#{pdg.paradigm_type_id}",
-              title: "Create empty type #{pdg.paradigm_type.name} paradigm"}= pdg.paradigm_type.name
-    %p
 
   %div.paradigms
     -# @paradigms.each do |pdg|

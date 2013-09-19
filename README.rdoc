@@ -6,15 +6,25 @@
 
 4. FIXED: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R). -- Answer: this behaviour was due to turbolinks. I have switched it off, however, there are ways to fix it using turbolinks as well.
 
+5. BUG: in paradigms_controller#save_paradigms. Scenario:
+  start creating jj-type paradigm for the word 'success'
+  press Word to copy words to all slots
+  press (-) to remove JJR and JJT
+  press SAVE.
+  => error concerning nil.paradigm=
+
 == TODO for creating/editing paradigms
 
-1. [+] On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
+1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
+   * DONE: reimplement using ajax
+   * how to ensure the paradigms added to the page have a unique div#id?
+   * ensure editing/deleting is also possible
 
 2. [...] Free form for inputting word/tag pairs that do not come in paradigms. Ensure it is saved with tag!
    [+] in paradigms_controller#{new,create}
    [...] in paradigms_controller#{edit,update}
 
-3. In paradigms#new, prepopulate paradigms when possible if there is info in DB for some word forms
+3. In paradigms#new, prepopulate paradigms when possible if there is info in DB for some word forms.
 
 4. [+] How to create more that one paradigm with the same noun (Band: Bänder/Bande)?
 
@@ -40,6 +50,9 @@
    * allow undeleting? at least just after it was deleted on paradigms#edit
    * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
    * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
+   * refactor: get rid of local variables 'paradigm' and 'current_word' in paradigms/edit view
+   * refactor: rename _paradigm_for_form.html.haml --> paradigm_form.html.haml
+   * refactor: in paradigm_for_form.html.haml get rid of table.buttons, moving its content into table.paradigm
 
 13. DONE: pass word_id to paradigms#edit, so that click_to_copy works
 
