@@ -45,8 +45,18 @@ class ParadigmsController < ApplicationController
     # bring a new paradigm and save it to db
     save_paradigms params
 
-    @paradigm = Paradigm.new
-    redirect_to new_paradigm_url # TODO: for a new word from this task
+    # TODO: need to retrieve the paradigm that was saved
+    @paradigm = Paradigm.find(18) # TODO: fake
+    
+    # TODO: get rid of it @idx
+    @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
+    @page_section_id = params[:page_section_id]
+
+#    respond_to do |format|
+#      format.js { render partial: 'paradigms/new_paradigm_of_type' }
+#    end
+
+    render action: 'new_paradigm_of_type'
   end
 
   def new_paradigm_of_type

@@ -17,7 +17,8 @@
 
 1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
    * DONE: reimplement using ajax
-   * how to ensure the paradigms added to the page have a unique div#id?
+   * DONE: how to ensure the paradigms added to the page have a unique div#id?
+   * INPROGRESS: fix new_paradigm_of_type.js to reuse existing div or create if not yet exists
    * ensure editing/deleting is also possible
 
 2. [...] Free form for inputting word/tag pairs that do not come in paradigms. Ensure it is saved with tag!
