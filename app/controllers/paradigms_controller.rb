@@ -46,7 +46,7 @@ class ParadigmsController < ApplicationController
     save_paradigms params
 
     # TODO: need to retrieve the paradigm that was saved
-    @paradigm = Paradigm.find(18) # TODO: fake
+    @paradigm = Paradigm.find(4) # TODO: fake
     
     # TODO: get rid of it @idx
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
