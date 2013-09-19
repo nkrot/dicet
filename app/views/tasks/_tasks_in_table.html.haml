@@ -1,4 +1,6 @@
 
+- col_label ||= btn_label
+
 %table.table_of_tasks
   %thead
     %tr
@@ -6,7 +8,7 @@
       %th.center.fixed_width Priority
       %th.center.fixed_width Status
       %th.words Words
-      %th.center.fixed_width.last= btn_label
+      %th.center.fixed_width.last= col_label
     %tbody
       = render partial: "tasks/task", collection: @tasks,
               locals: { btn_action: btn_action, btn_label: btn_label }
