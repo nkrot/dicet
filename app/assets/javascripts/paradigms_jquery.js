@@ -48,7 +48,7 @@ function do_on_document_ready() {
 				sep = "?"
 			}
 			var num = $(".paradigms").children().length;
-			var newhref = $(this).attr('old-href') + sep + "page_section_id=" + num;
+			var newhref = $(this).attr('old-href') + sep + "page_section_id=paradigm_data_" + num;
 			return(newhref);
 		});
 	});

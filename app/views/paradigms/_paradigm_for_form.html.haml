@@ -3,17 +3,13 @@
 - current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
 
--#= hidden_field_tag :paradigm_id, pdgid
-
-- page_section_id = "paradigm_data_#{idx}"
-
-%div{id: page_section_id}
+%div{id: @page_section_id}
 
   = form_for paradigm, remote: true do |f|
-    %span#notice &nbsp;
+    %span.notice &nbsp;
 
     -# used to correctly identify the current section of the page (div#paradigm_data_NUM)
-    = hidden_field_tag :page_section_id, page_section_id
+    = hidden_field_tag :page_section_id, @page_section_id
 
     - if current_word
       = hidden_field_tag :word_id, current_word.id, id: 'current_word_id'

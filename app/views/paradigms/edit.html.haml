@@ -8,6 +8,7 @@
   %span#current_word= @current_word.text
   %p
 
-= render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
+%div.paradigms
+  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
 
 -#%script#jscode

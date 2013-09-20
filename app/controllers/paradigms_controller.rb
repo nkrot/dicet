@@ -52,10 +52,6 @@ class ParadigmsController < ApplicationController
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
     @page_section_id = params[:page_section_id]
 
-#    respond_to do |format|
-#      format.js { render partial: 'paradigms/new_paradigm_of_type' }
-#    end
-
     render action: 'new_paradigm_of_type'
   end
 
@@ -72,6 +68,7 @@ class ParadigmsController < ApplicationController
     @current_word = Word.find_by(id: params[:word_id])
     @paradigm = Paradigm.find(params[:id])
     @idx = 1
+    @page_section_id = "paradigm_data_#{@idx}"
   end
 
   def update

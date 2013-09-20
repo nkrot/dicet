@@ -3,10 +3,12 @@
 - data = escape_javascript(render options)
 
 - section = "div##{@page_section_id}"
-if ( ! $("#{section}").length ) {
-$(".paradigms").prepend($("<div id='#{@page_section_id}'>"))
+if ( $("#{section}").length == 0 ) {
+$(".paradigms").prepend("#{data}")
+} else {
+$("#{section}").replaceWith("#{data}")
 }
 
-$("#{section}").html("#{data}")
 
 do_on_document_ready()
+set_focus_to_editable_input($("#{section}"))

@@ -21,13 +21,22 @@
   => two instances of the paradigm are shown
   !!! somehow remove the empty paradigm. or add a button to close it (DELETE with a different logic). or fix page_section_id
 
+7. TODO: check if the following scenario works:
+  go to #new
+  create a nn paradigm. do not save
+  create a vb paradigm. save.
+  save nn paradigm
+
+8. BUG: on #new, when multiple paradigms are shown and DELETE is pressed, all paradigms are greyed out. Only the corrent one should be greyed. However, the deletion works correctly: only one paradigm is deleted.
+
+
 == TODO for creating/editing paradigms
 
 1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
    * DONE: reimplement using ajax
    * DONE: how to ensure the paradigms added to the page have a unique div#id?
    * DONE: fix new_paradigm_of_type.js to reuse existing div or create iff it does not yet exist
-   * in paradigms_controller#create retrieve the ID of the recently saved paradigm (now hardcoded fake value)
+   * DONE: in paradigms_controller#create retrieve the ID of the recently saved paradigm (now hardcoded fake value)
    * ensure editing/deleting is also possible
    * add tooltips to the pdg creation buttons, ensure the tooltip is positioned nicely
 
@@ -102,6 +111,8 @@
   * TODO: styling: the user adds a new pdg slot (assiged: .changed) and then presses (-) to delete it (assigned: .deleted). How to combine .changed and .deleted? Maybe just hide the slot, pretend it was not created?
 
 25. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+
+26. When creating a paradigm of type Other, the input box for Word should be prepopulated with the current word. Focus should be set to the tag.
 
 
 == TODO for paradigms

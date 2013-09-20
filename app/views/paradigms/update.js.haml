@@ -1,8 +1,9 @@
 
 - options = {:partial => 'paradigm_for_form', :locals => { paradigm: @paradigm, idx: @idx, current_word: @current_word}}
 
-$("##{@page_section_id}").empty().html("#{escape_javascript(render options)}")
+- section = "div##{@page_section_id}"
+$("#{section}").replaceWith("#{escape_javascript(render options)}")
 
-$("#notice").html('<div class="alert alert-success">Paradigm may have been successfully updated</div>').fadeOut(1000)
+$("#{section} .notice").html('<div class="alert alert-success">Paradigm may have been successfully updated</div>').fadeOut(3000)
 
 do_on_document_ready()
