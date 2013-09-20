@@ -2,10 +2,7 @@
 - idx ||= 0
 - @current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
-
--#%span
-  Current word:
-  = @current_word
+- @page_section_id ||= "paradigm_data_#{idx}"
 
 %div{id: @page_section_id}
 

@@ -20,25 +20,13 @@ class ParadigmsController < ApplicationController
       Paradigm.new(paradigm_type_id: pdgt.id)
     end
 
-    @paradigms = ParadigmType.all.map do |pdgt|
-      Paradigm.new(paradigm_type_id: pdgt.id)
-    end
-
+    @paradigms = []
     if params[:word_id]
       @current_word = Word.find(params[:word_id])
-      # if a word is already in paradigms, retrieve them
-      word_paradigms = Word.where(text: @current_word.text).map(&:paradigm) #=> Relation
-#      puts "WORD_PARADIGMS:"
-#      puts word_paradigms.inspect
-      word_paradigms = word_paradigms.to_a.compact
-      unless word_paradigms.empty?
-        @paradigms.unshift *word_paradigms
-      end
+      @paradigms = Word.where(text: @current_word.text).map(&:paradigm).uniq.compact # => Array
+#      puts "WORD_PARADIGMS: (#{@paradigms.class})"
+#      puts @paradigms.inspect
     end
-
-#    puts @paradigms.class
-#    puts @paradigms.methods.sort
-#    puts @paradigms.first.class
   end
 
   def create

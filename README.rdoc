@@ -27,44 +27,39 @@
   create a vb paradigm. save.
   save nn paradigm
 
-
 == TODO for creating/editing paradigms
 
-1. INPROGRESS: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
-   * DONE: reimplement using ajax
-   * DONE: how to ensure the paradigms added to the page have a unique div#id?
-   * DONE: fix new_paradigm_of_type.js to reuse existing div or create iff it does not yet exist
-   * DONE: in paradigms_controller#create retrieve the ID of the recently saved paradigm (now hardcoded fake value)
-   * ensure editing/deleting is also possible
-   * add tooltips to the pdg creation buttons, ensure the tooltip is positioned nicely
+1. DONE: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
+   * reimplement using ajax
+   * how to ensure the paradigms added to the page have a unique div#id?
+   * fix new_paradigm_of_type.js to reuse existing div or create iff it does not yet exist
+   * in paradigms_controller#create retrieve the ID of the recently saved paradigm
+   * TODO: add tooltips to the pdg creation buttons, ensure the tooltip is positioned nicely
 
-2. [...] Free form for inputting word/tag pairs that do not come in paradigms. Ensure it is saved with tag!
-   [+] in paradigms_controller#{new,create}
-   [...] in paradigms_controller#{edit,update}
+2. DONE: In paradigms#new, prepopulate paradigms when possible if there is info in DB for some word forms (e.g., the word was already processed in the past and has a paradigm or several paradigms).
 
-3. In paradigms#new, prepopulate paradigms when possible if there is info in DB for some word forms.
+3. In paradigms#new, allow editing/deleting individual paradigms.
+   * see bug#6 (deleting an unsaved paradigm)
 
-4. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
+4. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm.
 
-5. How to add multiple forms with the same tag to the paradigm (mosquitos and mosquitoes) -- Allow adding new tag+word slots
+5. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
-6. Possibility to extend a paradigm with other tags (like adding Other into a paradigm)
-   * JJing can have an RB
-   * ensure these extra tags are shown in #edit
+6. 
 
-7. Ensure that the tag that can be both in a paradigm or per se is handled correctly. Does it lead to word+tag duplicates in DB that differ in paradigm_id? 
-   * RB
+7.
 
-8. Once newly filled pdg was submitted, switch to the next word in the current task.
+8. In paradigms#new, allow jumping to editing the next word from the task. Implement is as a side pane listing all words from the current task
 
 9. Is there any sense if using word.id in view? It make retrieving word in paradigms_controller more cumbersome
     and seems of no use (words are often searched by word.text)
 
-11. [+] when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
+11. when a new empty pdg stub is opened, move cursor (set focus) to the closest empty input element.
+   * in Other paradigm, the focus should be in TAG field
+   * in non-other paradigms, the focus should come to the WORD field
 
-12. INPROGRESS: paradigms#edit edits only one (selected) paradigm.
-   * when saved, where does it redirect? -- should probably remain on the same page (similarly as DELETE button). use ajax? disable the button until a change is made to the paradigm.
-   * allow renaming?
+12. paradigms#edit edits only one (selected) paradigm.
+   * allow renaming (NP->NN type paradigm)?
    * allow undeleting? at least just after it was deleted on paradigms#edit
    * styling: the form that was changed should be highlighted to show a change was made. same, the save button should be highlighted to show the paradigm needs to be saved.
    * styling: a word that was originally in db should be highlighetd to distinguish it from the word newly added by some user when creating a paradigm.
@@ -76,7 +71,7 @@
 
 14. DONE: Deleting the whole paradigm. Ensure that the original word is never deleted, but it is relinked to an added homonym if one is available. (read more in Word#suicide)
 
-15. DONE: in paradigms#edit allow adding new slots (tag+word pairs)
+15. DONE: in paradigms#edit allow adding new slots (tag+word pairs). allows adding multiple forms with the same tag (NNS: mosquitos/mosquitoes)
   * add a button
   * controller: ensure updated pdg is saved correctly, with no duplicates.
 
@@ -116,6 +111,7 @@
 
 28. DONE. fix BUG: creating paradigms of type Other behaves weirdly: dispite the tag NOTAG is replaced and non-NOTAG is saved (?maybe) correctly, NOTAG shows up again in #edit
 
+
 == TODO for paradigms
 
 1. Dump database
@@ -141,6 +137,10 @@
   * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
 
 5. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
+
+6. assign task statuses, more particuraly, READY, and hide READY tasks by default
+
+7. sort tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
 == TODO for words
 
