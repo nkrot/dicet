@@ -84,6 +84,8 @@ class ParadigmsController < ApplicationController
   end
 
   def destroy
+#    puts "(DESTROY): #{params}"
+
     pdg = Paradigm.find(params[:id])
     if debug=false
       puts "Deleting #{pdg.inspect}"
@@ -91,6 +93,8 @@ class ParadigmsController < ApplicationController
     end
     pdg.words.each { |word| word.suicide }
     pdg.destroy
+
+    @page_section_id = params[:page_section_id]
   end
 
   private

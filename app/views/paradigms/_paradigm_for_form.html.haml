@@ -62,16 +62,13 @@
         %td.has_balloon
           = f.submit "Save", accesskey:"s", class:'btn btn_save'
           %span.balloon Use accesskey: s
-        -#%td= link_to "Save", |
-                    url_for(controller: 'paradigms', action: 'create'), |
-                    remote: true, method: :post, |
-                    class: 'btn btn_save'
         %td.empty
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB
           %td.has_balloon
             = link_to "Delete", |
-                      url_for(controller: 'paradigms', action:'destroy', id: paradigm.id), |
+                      url_for(controller: 'paradigms', action:'destroy', id: paradigm.id, |
+                              params: { page_section_id: @page_section_id } ), |
                       remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
                       class: 'btn btn_delete'
             %span.balloon Will delete the whole paradigm immediately                

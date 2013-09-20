@@ -27,8 +27,6 @@
   create a vb paradigm. save.
   save nn paradigm
 
-8. BUG: on #new, when multiple paradigms are shown and DELETE is pressed, all paradigms are greyed out. Only the corrent one should be greyed. However, the deletion works correctly: only one paradigm is deleted.
-
 
 == TODO for creating/editing paradigms
 
@@ -114,6 +112,7 @@
 
 26. When creating a paradigm of type Other, the input box for Word should be prepopulated with the current word. Focus should be set to the tag.
 
+27. FIXED: on #new, when multiple paradigms are shown and DELETE is pressed, all paradigms are greyed out. Only the current one should be greyed. However, the deletion works correctly: only one paradigm is deleted.
 
 == TODO for paradigms
 

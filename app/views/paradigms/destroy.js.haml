@@ -1,9 +1,12 @@
-/* message */
-$("#notice").html('<div class="alert alert-success">Paradigm was successfully deleted</div>')
 
-$(".paradigm").addClass('deleted');
+- section = "##{@page_section_id}"
+
+/* message */
+$("#{section} .notice").html('<div class="alert alert-success">Paradigm was successfully deleted</div>').fadeOut(3000)
+
+$("#{section} .paradigm").addClass('deleted');
 
 /* disable the link after the first click */
-$(".btn_delete").attr('disabled', 'disabled');
-$(".btn_save").attr('disabled', 'disabled');
+$("#{section} .btn_delete").attr('disabled', 'disabled');
+$("#{section} .btn_save").attr('disabled', 'disabled');
 
