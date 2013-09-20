@@ -1,7 +1,11 @@
 - pdgid = paradigm.paradigm_type_id
 - idx ||= 0
-- current_word ||= nil
+- @current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
+
+-#%span
+  Current word:
+  = @current_word
 
 %div{id: @page_section_id}
 
@@ -11,8 +15,8 @@
     -# used to correctly identify the current section of the page (div#paradigm_data_NUM)
     = hidden_field_tag :page_section_id, @page_section_id
 
-    - if current_word
-      = hidden_field_tag :word_id, current_word.id, id: 'current_word_id'
+    - if @current_word
+      = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
 
     %table.paradigm
       %thead
@@ -27,8 +31,8 @@
           - c_slot += 1
 
           -# For 'other' paradigm type, make the current word appear in the pdg stub
-          - if current_word && tag.notag? && ! word.text
-            - word = current_word
+          - if @current_word && tag.notag? && ! word.text
+            - word = @current_word
 
           %tr.pdg_slot
             -# (+) | TAG input | WORD input | (-)

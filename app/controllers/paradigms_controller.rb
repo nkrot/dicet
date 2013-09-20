@@ -25,9 +25,9 @@ class ParadigmsController < ApplicationController
     end
 
     if params[:word_id]
-      @word = Word.find(params[:word_id])
+      @current_word = Word.find(params[:word_id])
       # if a word is already in paradigms, retrieve them
-      word_paradigms = Word.where(text: @word.text).map(&:paradigm) #=> Relation
+      word_paradigms = Word.where(text: @current_word.text).map(&:paradigm) #=> Relation
 #      puts "WORD_PARADIGMS:"
 #      puts word_paradigms.inspect
       word_paradigms = word_paradigms.to_a.compact
@@ -50,6 +50,7 @@ class ParadigmsController < ApplicationController
     # TODO: get rid of it @idx
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
     @page_section_id = params[:page_section_id]
+    @current_word = Word.find(params[:word_id])
 
     render action: 'new_paradigm_of_type'
   end
@@ -60,6 +61,7 @@ class ParadigmsController < ApplicationController
     @paradigm = Paradigm.new(paradigm_type_id: params[:id])
     @idx = 1
     @page_section_id = params[:page_section_id]
+    @current_word = Word.find(params[:word_id])
   end
 
   def edit

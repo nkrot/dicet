@@ -3,7 +3,7 @@
 
 -# count of all pdgs (section) displayed
 - idx = 0
-- @word ||= nil
+- @current_word ||= nil
 
 %div.pdg_creation_buttons
   Add paradigm of type:
@@ -11,14 +11,14 @@
     %span.has_balloon
       = link_to "#{pdg.paradigm_type.name}", |
                 url_for(controller: 'paradigms', action: 'new_paradigm_of_type', |
-                        id: pdg.paradigm_type_id), |
+                        id: pdg.paradigm_type_id, params: {word_id: @current_word.id}), |
                 remote: true, method: :get, class: 'btn btn_pdg_creator'
       %span.balloon Create empty type #{pdg.paradigm_type.name} paradigm
   %p
 
-- if @word
+- if @current_word
   New word: 
-  %span#current_word= @word.text
+  %span#current_word= @current_word.text
 
 %div.paradigms
 
