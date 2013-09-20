@@ -27,7 +27,14 @@ class Paradigm < ActiveRecord::Base
     if self.id
       tags_from_words = Word.where({paradigm_id: self.id}).map {|w| w.tag}
     end
-    (self.paradigm_type.tags + tags_from_words).uniq
+
+    tags_from_pdg_type = self.paradigm_type.tags
+    unless tags_from_words.empty?
+      # do not include NOTAG if there are other tags
+      tags_from_pdg_type = tags_from_pdg_type.reject {|tag| tag.notag? }
+    end
+
+    (tags_from_pdg_type + tags_from_words).uniq
   end
 
   # iterates over word/tag pairs in the paradigm

@@ -115,9 +115,13 @@ class ParadigmsController < ApplicationController
 
     each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
       # update paradigm fields
-#      pdg.paradigm_type_id = pdg_type_id # no change must happen in #edit/#update
-      attrs = {comment: extras["comment"], status: extras["status"]}
+      attrs = {
+#        paradigm_type_id: pdg_type_id, # no change must happen in #edit/#update
+        comment: extras["comment"],
+        status:  extras["status"]
+      }
       pdg.update_attributes(attrs)
+
       # now update words linked to the paradigm
       each_word(tag_word_data) do |tag_id, old_word, new_word|
         puts "Compare: #{old_word.inspect} vs. #{new_word.inspect}"  if debug
@@ -254,8 +258,20 @@ class ParadigmsController < ApplicationController
           puts "old_word: #{old_word.inspect}"
           puts "new_word: #{new_word.inspect}"
         end
-        new_word.paradigm = pdg
-        saved = new_word.save && saved
+
+        # TODO: there are more cases, see update_paradigm
+        if !old_word && !new_word
+          # this happens if the user first added a new word+tag (w/o saving)
+          # and then marked it for deletion
+        elsif old_word
+          old_word.update_from(new_word)
+          old_word.paradigm = pdg
+          old_word.save
+#          puts "Saved: as #{Word.find(old_word.id).inspect}"
+        else
+          new_word.paradigm = pdg
+          new_word.save
+        end
       end
     end
     saved
