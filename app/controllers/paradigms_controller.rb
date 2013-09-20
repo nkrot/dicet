@@ -43,10 +43,9 @@ class ParadigmsController < ApplicationController
 
   def create
     # bring a new paradigm and save it to db
-    save_paradigms params
+    pdg_id = save_paradigms params
 
-    # TODO: need to retrieve the paradigm that was saved
-    @paradigm = Paradigm.find(4) # TODO: fake
+    @paradigm = Paradigm.find(pdg_id)
     
     # TODO: get rid of it @idx
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
@@ -56,7 +55,7 @@ class ParadigmsController < ApplicationController
   end
 
   def new_paradigm_of_type
-    puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
+#    puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
 
     @paradigm = Paradigm.new(paradigm_type_id: params[:id])
     @idx = 1
@@ -220,6 +219,7 @@ class ParadigmsController < ApplicationController
     debug = false
     puts params  if debug
 
+    pdg_ids = []
     saved = true
     each_paradigm_2(params) do |pdg_type_id, tag_word_data, extras|
       if debug
@@ -236,6 +236,8 @@ class ParadigmsController < ApplicationController
       pdg.update_attributes(attrs)
       saved = pdg.save && saved
 
+      pdg_ids << pdg.id
+
       # retrieve individual words
       each_word(tag_word_data) do |tag_id, old_word, new_word|
         # tag_id can be ignored (the user may have edited the tag)
@@ -251,6 +253,8 @@ class ParadigmsController < ApplicationController
       end
     end
     saved
+
+    pdg_ids.first
   end
 
 #  def paradigm_params
