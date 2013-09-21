@@ -1,6 +1,4 @@
 Dicet::Application.routes.draw do
-  get "paradigm_types/index"
-  get "tags/index"
 #  get "welcome/help"
 #  get "welcome/index"
 #  get "welcome/about"
@@ -28,8 +26,10 @@ Dicet::Application.routes.draw do
   match '/signup', to: 'users#new', via: 'get'
 
   resources :words
-  resources :paradigms
+
+  match '/paradigms/dump', to: 'paradigms#dump', via: 'get'
   match '/paradigms/new_paradigm_of_type/:id', to: 'paradigms#new_paradigm_of_type', via: 'get'
+  resources :paradigms
 
   resources :tasks, only: [:index, :update]
   match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
@@ -41,6 +41,10 @@ Dicet::Application.routes.draw do
 
   resources :tags,           only: [:index]
   resources :paradigm_types, only: [:index]
+
+#  namespace :api, defaults: { format: :text } do
+#    resources :paradigms, only: [:index]
+#  end
 
   # Example resource route with options:
   #   resources :products do

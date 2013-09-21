@@ -114,17 +114,31 @@
 28. DONE. fix BUG: creating paradigms of type Other behaves weirdly: dispite the tag NOTAG is replaced and non-NOTAG is saved (?maybe) correctly, NOTAG shows up again in #edit
 
 
+== TODO for retrieving paradigms
+
+1. DONE: Possibility to get paradigms in text format using a console command
+   * curl http://localhost:3000/paradigms/dump
+
+2. in paradigms#dump, allow filtering
+   * get only paradigms with status=ready
+   * what should be the default? dumping only ready paradigms?
+
+3. in paradigms#dump, mark paradigms that have already been dumped
+   * dumping procedure should modify the database. what is better for this purpose: get or post
+
+4. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
+
 == TODO for paradigms
 
-1. Dump database
+1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
 
-2. find all paradigms with unfilled slots, having comments and Review status
+2.
 
 == TODO for user input validation
 
 1. do not allow sending if the form contains NOTAG or empty tag???
 
-2. check that all tags are valid
+2. check that all tags are valid -- use Ajax or client side JS?
 
 == TODO for tasks
 
@@ -150,6 +164,8 @@
    * allow manipulating the word(s) found
 
 Why: suppose the user added a word when creating a paradigm. Now there is no chance to seek/change that word unless by finding it through the paradigm.
+
+2. How to add (in bulk) new words/tasks?
 
 == README
 

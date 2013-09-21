@@ -2,6 +2,10 @@ class ParadigmsController < ApplicationController
 
 #  before_filter :set_no_cache # no effect, maybe the issue is not in caching
 
+  # skip login for actions that are supposed to be used from command line
+  # with utilities like curl
+  skip_before_filter :require_login, only: [ :dump ]
+
   def index
     # show all
     @paradigms = Paradigm.all
@@ -85,6 +89,13 @@ class ParadigmsController < ApplicationController
     pdg.destroy
 
     @page_section_id = params[:page_section_id]
+  end
+
+  def dump
+    @paradigms = Paradigm.all
+    respond_to do |format|
+      format.text
+    end
   end
 
   private
