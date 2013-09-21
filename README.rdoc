@@ -113,7 +113,6 @@
 
 28. DONE. fix BUG: creating paradigms of type Other behaves weirdly: dispite the tag NOTAG is replaced and non-NOTAG is saved (?maybe) correctly, NOTAG shows up again in #edit
 
-
 == TODO for retrieving paradigms
 
 1. DONE: Possibility to get paradigms in text format using a console command
@@ -124,15 +123,17 @@
    * what should be the default? dumping only ready paradigms?
 
 3. in paradigms#dump, mark paradigms that have already been dumped
-   * dumping procedure should modify the database. what is better for this purpose: get or post
+   * dumping procedure should modify the database. what is better for this purpose: get or post?
 
 4. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
+
+5. Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication
 
 == TODO for paradigms
 
 1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
 
-2.
+2. if a paradigm has been dumped, show it somethow in #edit
 
 == TODO for user input validation
 
