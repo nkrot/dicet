@@ -34,6 +34,12 @@ function do_on_document_ready() {
 		}
 	});
 
+	$(".btn_dismiss").on("click", function () {
+		var section = $(this).attr("data-page-section-id");
+		$("#" + section).remove();
+		return false;
+	});
+
 	$(".btn_pdg_creator").on("click", function () {
 		// keep the orignal value of href in old-href
 		if (! $(this).attr("old-href")) {

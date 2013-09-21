@@ -6,13 +6,12 @@
 
 4. FIXED: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R). -- Answer: this behaviour was due to turbolinks. I have switched it off, however, there are ways to fix it using turbolinks as well.
 
-5. BUG: in paradigms_controller#save_paradigms. Scenario:
+5. FIXED. BUG: in paradigms_controller#save_paradigms. Scenario:
   start creating jj-type paradigm for the word 'success'
   press Word to copy words to all slots
   press (-) to remove JJR and JJT
   press SAVE.
   => error concerning nil.paradigm=
-  !!! how to fix: is the underlaying word does not exist, pressing (-) should simple clear the textbox
 
 6. BUG: scenario
   start creating a new paradigm
@@ -38,14 +37,17 @@
 
 2. DONE: In paradigms#new, prepopulate paradigms when possible if there is info in DB for some word forms (e.g., the word was already processed in the past and has a paradigm or several paradigms).
 
-3. In paradigms#new, allow editing/deleting individual paradigms.
-   * see bug#6 (deleting an unsaved paradigm)
+3. DONE: deleting an unsaved paradigm
+   * button DISMISS instead of DELETE
+   * the DISMISS button removes the relevant page section by its page_section_id. no server side action involved.
 
-4. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm.
+4. In paradigms#new, allow editing/deleting individual paradigms.
+   * see bug#5 (deleting an unsaved paradigm) -- not reproducible
+   * check other scenarios
 
-5. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
+5. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm.
 
-6. 
+6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
 7.
 

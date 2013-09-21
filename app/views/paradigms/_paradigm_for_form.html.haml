@@ -57,22 +57,31 @@
           %td{colspan:4}
             = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
 
-    -# SAVE | DELETE        
+    -# SAVE | DELETE
     %table.buttons
       %tr
         %td.has_balloon
+          - btn_save_balloon = 'Save this new paradigm'
+          - if paradigm.id
+            - btn_save_balloon = 'Save updates to this paradigm'
+
           = f.submit "Save", accesskey:"s", class:'btn btn_save'
-          %span.balloon Use accesskey: s
+          %span.balloon= btn_save_balloon
+
         %td.empty
+
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB
           %td.has_balloon
             = link_to "Delete", |
-                      url_for(controller: 'paradigms', action:'destroy', id: paradigm.id, |
+                      url_for(controller: 'paradigms', action: 'destroy', id: paradigm.id, |
                               params: { page_section_id: @page_section_id } ), |
                       remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
                       class: 'btn btn_delete'
             %span.balloon Will delete the whole paradigm immediately                
         - else
-          -# if pdg is unknown (not in DB) the DELETE button is not necessary
-          %td &nbsp
+          -# if pdg is unknown (not in DB) the DISMISS button is applicable
+          %td.has_balloon
+            = link_to "Dismiss", "#", class: 'btn btn_dismiss', |
+                      'data-page-section-id' => "#{@page_section_id}"
+            %span.balloon Will remove this form
