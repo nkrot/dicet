@@ -4,7 +4,9 @@ class ParadigmsController < ApplicationController
 
   # skip login for actions that are supposed to be used from command line
   # with utilities like curl
-  skip_before_filter :require_login, only: [ :dump ]
+  skip_before_filter :require_login, only: [ :dump, :peek ]
+
+  after_action :set_dumped, only: [ :dump ] 
 
   def index
     # show all
@@ -91,17 +93,77 @@ class ParadigmsController < ApplicationController
     @page_section_id = params[:page_section_id]
   end
 
-  def dump
-#    puts "(DUMP): #{params.inspect}"
-    attrs = params.select {|k,v| k == "status"}
-
-    @paradigms = Paradigm.all
-    @paradigms = @paradigms.where(attrs)  if attrs
- 
+  def peek
+#    puts "peek: #{params.inspect}"
+    @paradigms = paradigms_for_dump
     render formats: [:text]
   end
 
+  def dump
+#    puts "dump: #{params.inspect}"
+    # TODO: ideally, #dump is same as #peek followed by an action
+    # but with redirect_to we are redirected to signin: skip_before_filter does not work
+#    redirect_to action: 'peek' 
+
+    @paradigms = paradigms_for_dump
+    render action: 'peek', formats: [:text]
+    # here set_dumped is triggered
+  end
+
   private
+
+  # HOW FILTERS FOR SELECTING PARADIGMS ARE COMPUTED
+  #
+  #            | Ready | Review    <-- status field
+  # ----------------------------
+  #     Dumped |  #1   |  #2
+  # Not Dumped |  #3   |  #4
+  #
+  # dumped=false is assumed in the following cases
+  # (it can also be passed explicitly as ?dumped=f)
+  #   peek/          3+4      same as peek?dumped=f
+  #   peek/ready     3        same as peek/ready?dumped=f
+  #   peek/review    4        same as peek/review?dumped=f
+  # any value of dumped is assumed in:
+  #   peek/all       1+2+3+4
+  # explicit dumped is respected if present
+  #   peek?dumped=t         1+2
+  #   peek/all?dumped=t     1+2
+  #   peek/ready?dumped=t   1
+  #   peek/review?dumped=t  2
+  
+  def paradigms_for_dump
+#    puts "(paradigms_for_dump): #{params.inspect}"
+
+    attrs = params.permit(:status, :dumped)
+
+    if attrs["status"] == 'all'
+      # if URL is paradigms/peek/all
+      # no filtering should be applied:
+      # all 'review' and 'ready' paradigms, regardless of 'dumped' are needed
+      attrs.delete("status")
+
+    elsif ! attrs.key?("dumped")
+      # otherwise add filtering condition that picks not dumped paradigms
+      # but respect the value of :dumped if given (peek?dumped=true)
+      attrs["dumped"] = "false"
+    end
+
+    if attrs.key?("dumped")
+      attrs["dumped"] = attrs["dumped"].to_bool 
+    end
+
+#    puts "filtering: #{attrs.inspect}"
+
+    paradigms = Paradigm.all
+    paradigms = paradigms.where(attrs)  if attrs
+  end
+
+  def set_dumped
+#    puts "set_dumped: #{params.inspect}"
+#    puts @paradigms.count # correct
+    @paradigms.where(dumped: false).update_all(dumped: true, dumped_at: Time.now)
+  end
 
   def set_no_cache
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"

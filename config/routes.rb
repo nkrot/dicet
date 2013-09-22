@@ -28,6 +28,7 @@ Dicet::Application.routes.draw do
   resources :words
 
 #  match '/paradigms/dump', to: 'paradigms#dump', via: 'get'
+  match '/paradigms/peek(/:status)', to: 'paradigms#peek', via: 'get'
   match '/paradigms/dump(/:status)', to: 'paradigms#dump', via: 'get'
   match '/paradigms/new_paradigm_of_type/:id', to: 'paradigms#new_paradigm_of_type', via: 'get'
   resources :paradigms

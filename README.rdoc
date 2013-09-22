@@ -116,21 +116,24 @@
 == TODO for retrieving paradigms
 
 1. DONE: Possibility to get paradigms in text format using a console command
-   * curl http://localhost:3000/paradigms/dump
+   * curl http://localhost:3000/paradigms/peek   -- get paradigms
+   * curl http://localhost:3000/paradigms/dump   -- get paradigms and mark them as dumped
 
-2. DONE: in paradigms#dump, allow filtering
-   * get only paradigms with status=ready or status=review.
+2. DONE: in paradigms#{peek,dump}, allow filtering
+   * get only paradigms with status=ready or status=review, with different dumped value.
    * can filtering be accomplished using url format like this: paradigms/dump/all or paradigms/dump/ready -- yes. also works with urls in conventional form: paradigms/dump?status=ready
-   * what should be the default? dumping only ready paradigms? or dumping all paradigms -- dumping all, regardless of the status
+   * what should be the default? dumping only ready paradigms? or dumping all paradigms -- dumping all not dumped paradigms, regardless of the ready/review status
 
-3. in paradigms#dump, mark paradigms that have already been dumped
-   * dumping procedure should modify the database. what is better for this purpose: get or post?
+3. DONE: in paradigms#dump, mark paradigms that have already been dumped
+   * set dumped=true
+   * set dumped_at to the time when dumping occured
 
-4. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
+4. paradigms that have already been dumped should be visibly different from other paradigms. maybe to the extent that it should not be editable?
 
-5. paradigms that have already been dumped should be visibly different from other paradigms. maybe to the extent that it should not be editable?
+5. Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication
 
-6. Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication
+6. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
+
 
 == TODO for paradigms
 

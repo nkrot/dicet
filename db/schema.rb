@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130821140406) do
+ActiveRecord::Schema.define(version: 20130922231015) do
 
   create_table "paradigm_tags", force: true do |t|
     t.integer  "paradigm_type_id"
@@ -35,8 +35,11 @@ ActiveRecord::Schema.define(version: 20130821140406) do
     t.integer  "paradigm_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "dumped",           default: false
+    t.datetime "dumped_at"
   end
 
+  add_index "paradigms", ["dumped"], name: "index_paradigms_on_dumped"
   add_index "paradigms", ["paradigm_type_id"], name: "index_paradigms_on_paradigm_type_id"
 
   create_table "tags", force: true do |t|
