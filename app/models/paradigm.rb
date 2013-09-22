@@ -1,10 +1,5 @@
 class Paradigm < ActiveRecord::Base
-  STATUSES = [
-     "inprogress", # in progress
-     "ready",      # completed paradigm
-     "review",     # needs review
-     "dumped"      # was already taken from DB. means that changing it will not affect anything 
-    ]
+  STATUSES = [ "ready", "review" ]
 
   has_many   :words
 #  has_many   :tags, :through => :paradigm_type # TODO: try this
