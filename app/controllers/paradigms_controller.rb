@@ -92,10 +92,13 @@ class ParadigmsController < ApplicationController
   end
 
   def dump
+#    puts "(DUMP): #{params.inspect}"
+    attrs = params.select {|k,v| k == "status"}
+
     @paradigms = Paradigm.all
-    respond_to do |format|
-      format.text
-    end
+    @paradigms = @paradigms.where(attrs)  if attrs
+ 
+    render formats: [:text]
   end
 
   private

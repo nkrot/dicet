@@ -2,7 +2,7 @@
 - @paradigms.each do |pdg|
   -# show extra info (ID, COMMENT), each commented out
   -# #ID \tab 139
-  - [:id, :comment].each do |attr|
+  - [:id, :status, :comment].each do |attr|
     - if ! pdg.send(attr).to_s.empty?
       :plain
         ##{attr.upcase}	#{pdg.send(attr)}

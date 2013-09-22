@@ -1,9 +1,9 @@
 class Paradigm < ActiveRecord::Base
   STATUSES = [
-     "new",       # in progress
-     "ready",     # completed paradigm
-     "review",    # needs review
-     "dumped"     # was already taken from DB. means that changing it will not affect anything 
+     "inprogress", # in progress
+     "ready",      # completed paradigm
+     "review",     # needs review
+     "dumped"      # was already taken from DB. means that changing it will not affect anything 
     ]
 
   has_many   :words
