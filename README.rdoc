@@ -166,9 +166,11 @@
 
 5. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
 
-6. assign task statuses, more particuraly, READY, and hide READY tasks by default
+6. assign task statuses, more particularly, READY, and hide READY tasks by default
 
 7. sort tasks by modification time (allows finding most recently done tasks or tasks in progress)
+
+8. api for uploading new words to the server, preferably with predefined grouping in tasks and possibly with explicit assignee.
 
 == TODO for words
 
