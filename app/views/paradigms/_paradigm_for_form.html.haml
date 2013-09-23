@@ -15,7 +15,7 @@
     - if @current_word
       = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
 
-    %table.paradigm
+    %table.paradigm{class: ('dumped' if paradigm.dumped?)}
       %thead
         %tr
           %th &nbsp;
@@ -58,7 +58,7 @@
             = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
 
     -# SAVE | DELETE
-    %table.buttons
+    %table.buttons{class: ("dumped" if paradigm.dumped?)}
       %tr
         %td.has_balloon
           - btn_save_balloon = 'Save this new paradigm'
@@ -68,7 +68,9 @@
           = f.submit "Save", accesskey:"s", class:'btn btn_save'
           %span.balloon= btn_save_balloon
 
-        %td.empty
+        %td.empty{class: ("warning" if paradigm.dumped?)}
+          - if paradigm.dumped?
+            = "already dumped"
 
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB

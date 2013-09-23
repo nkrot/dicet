@@ -128,18 +128,23 @@
    * set dumped=true
    * set dumped_at to the time when dumping occured
 
-4. paradigms that have already been dumped should be visibly different from other paradigms. maybe to the extent that it should not be editable?
+4. DONE: paradigms that have already been dumped should be visibly different from other paradigms.
+   * greyed out in #edit
+   * greyed out background in tasks
+   * TODO: should such paradigms be editable?
 
 5. Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication
 
 6. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
 
+7. Allow #peeking and #dumping individual/selected paradigms. I dont know when it could be necessary.
 
 == TODO for paradigms
 
 1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
+   those that would be peeked or dumped
 
-2. if a paradigm has been dumped, show it somethow in #edit
+
 
 == TODO for user input validation
 
