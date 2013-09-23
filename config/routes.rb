@@ -25,6 +25,7 @@ Dicet::Application.routes.draw do
   resources :users
   match '/signup', to: 'users#new', via: 'get'
 
+  match '/words/upload', to: 'words#upload', via: 'post'
   resources :words
 
 #  match '/paradigms/dump', to: 'paradigms#dump', via: 'get'

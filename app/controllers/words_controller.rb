@@ -1,5 +1,8 @@
 class WordsController < ApplicationController
 
+  protect_from_forgery :except => :upload
+  skip_before_filter :require_login, only: [ :upload ]
+
   def index
     # show all
     @words = Word.all
@@ -38,6 +41,17 @@ class WordsController < ApplicationController
 
   def destroy
     # no page
+  end
+
+  # example:
+  # curl -F "words[file]=@tmp/newwords.txt" http://localhost:3000/words/upload
+  # NOTE: @ is mandatory
+  def upload
+    puts "#{self.class}#upload: #{params.inspect}"
+    fname = params["words"]["file"]
+    data = fname.read
+    puts "Data read:\n#{data}"
+    render :text => "File uploaded\n"
   end
 
   private
