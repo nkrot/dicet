@@ -8,6 +8,6 @@ module WordsHelper
       end
 
       link_to "#{w.tagname}:#{w.paradigm_id}", edit_paradigm_path(:id => w.paradigm_id, :word_id => word.id), html_options
-    end.join(", ")
+    end
   end
 end

@@ -1,24 +1,35 @@
 - @paradigms ||= []
 - @current_word ||= nil
 
-%h2= @title
+%table#paradigm_page_layout
+  %tr
+    %td#leftpane
+      &nbsp
 
-%div.pdg_creation_buttons
-  Add paradigm of type:
-  - @paradigm_types.each do |pdg|
-    %span.has_balloon
-      = link_to "#{pdg.paradigm_type.name}", |
-                url_for(controller: 'paradigms', action: 'new_paradigm_of_type', |
-                        id: pdg.paradigm_type_id, params: {word_id: @current_word.id}), |
-                remote: true, method: :get, class: 'btn btn_pdg_creator'
-      %span.balloon Create empty type #{pdg.paradigm_type.name} paradigm
-  %p
+    %td#main
 
-- if @current_word
-  New word: 
-  %span#current_word= @current_word.text
+      %h2= @title
 
-%div.paradigms
-  - @paradigms.each_with_index do |pdg, idx|
-    - @page_section_id = "paradigm_data_#{idx}"
-    = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
+      %div.pdg_creation_buttons
+        Add paradigm of type:
+        - @paradigm_types.each do |pdg|
+          %span.has_balloon
+            = link_to "#{pdg.paradigm_type.name}", |
+                      url_for(controller: 'paradigms', action: 'new_paradigm_of_type', |
+                              id: pdg.paradigm_type_id, params: {word_id: @current_word.id}), |
+                      remote: true, method: :get, class: 'btn btn_pdg_creator'
+            %span.balloon Create empty type #{pdg.paradigm_type.name} paradigm
+        %p
+
+      - if @current_word
+        New word: 
+        %span#current_word= @current_word.text
+
+      %div.paradigms
+        - @paradigms.each_with_index do |pdg, idx|
+          - @page_section_id = "paradigm_data_#{idx}"
+          = render partial: 'paradigm_for_form', locals: { paradigm: pdg, idx: idx }
+
+    %td#rightpane
+      = render partial: 'tasks/task_in_sidepane'
+

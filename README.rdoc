@@ -49,9 +49,12 @@
 
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
-7.
+7. INPROGRESS: Implement navigation through the task words of the current task in a side pane
+  * DONE: show the current task content
+  * styling. highlight the current word
+  * update changed word dynamically
 
-8. In paradigms#new, allow jumping to editing the next word from the task. Implement is as a side pane listing all words from the current task
+8.
 
 9. Is there any sense if using word.id in view? It make retrieving word in paradigms_controller more cumbersome
     and seems of no use (words are often searched by word.text)
@@ -194,6 +197,12 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 2. How to add (in bulk) new words/tasks through web interface?
 
+3. NEXT: (important!) allow marking a word as a typo and allow adding the correct variant
+    * what about having it as a paradigm of type Typo that opens with two positions
+	* output it in the dump
+
+4. find words from other tasks that have been touched when editing another word. for example, when editing 'loose' we have added a looser_JJR. find other occurrences of 'looser' and complement this word with other paradigms.
+	
 
 == README
 

@@ -25,6 +25,14 @@ $grayMediumLight: #eaeaea;
 	background: lightgreen;
 }
 
+.container {
+  width: 98%;
+}
+
+.center {
+  text-align: center;
+}
+
 /* forms */
 
 input, textarea, select, .uneditable-input {
@@ -116,6 +124,32 @@ table.buttons {
 
 .pdg_stubs {
   display: none;
+}
+
+/********************************************************************\
+ *
+ * layout of paradigms pages with side pane
+ *
+\********************************************************************/
+
+#paradigm_page_layout {
+  width: 100%;
+
+  #leftpane {
+    vertical-align: top;
+    width: 40px;
+  }
+
+  #main {
+    vertical-align: top;
+  }
+
+  #rightpane {
+    width: 200px;
+    background: #A8BA80;
+    padding-top: 20px;
+    vertical-align: top;
+  }  
 }
 
 /********************************************************************\
@@ -286,6 +320,23 @@ table.radioset {
   th.words {
     width: 400px;
   }  
+}
+
+// task displayed in side pane
+#task_in_sp {
+  .title {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  li.word {
+    padding-top: 2px;
+    padding-bottom: 5px;
+  }
+
+  .word.active {
+    background: #A8BA80;
+  }
 }
 
 /********************************************************************\

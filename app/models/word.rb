@@ -23,6 +23,10 @@ class Word < ActiveRecord::Base
     "word"
   end
 
+  def same? other
+    self.id == other.id
+  end
+
   def id_or_label
     self.id || Word.label
   end

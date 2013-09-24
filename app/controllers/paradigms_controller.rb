@@ -29,6 +29,7 @@ class ParadigmsController < ApplicationController
     @paradigms = []
     if params[:word_id]
       @current_word = Word.find(params[:word_id])
+      @current_task = @current_word.task
       @paradigms = Word.where(text: @current_word.text).map(&:paradigm).uniq.compact # => Array
 #      puts "WORD_PARADIGMS: (#{@paradigms.class})"
 #      puts @paradigms.inspect
@@ -45,6 +46,7 @@ class ParadigmsController < ApplicationController
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
+    @current_task = @current_word.task
 
     render action: 'new_paradigm_of_type'
   end
