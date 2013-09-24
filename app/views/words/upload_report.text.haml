@@ -1,0 +1,13 @@
+
+:plain
+  Words added:     #{@infos['number_of_words']}
+  Words rejected:  #{@infos['rejected_lines'].length}
+  Tasks created:   #{@infos['number_of_tasks']}
+
+- unless @infos['rejected_lines'].empty?
+  \
+  The following lines have been rejected, because the given word already exists in the database
+  \
+  - @infos['rejected_lines'].each do |line|
+    = line
+    

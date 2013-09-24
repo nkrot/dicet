@@ -1,2 +1,47 @@
-%h1 Help
+%h4 Help
 %p Need help? You've come to the right place
+
+%h2 How to add new words
+
+%p Use curl to upload a plain text file:
+
+%code curl -F "words[file]=@/path/to/file" http://server:3000/words/upload
+
+%p Note @ before the path! The path can be either absolute or relative.
+
+%h4 Format of the file to upload
+
+%p each line has 1+ tab separated fields, the 1st mandatory field is assumed to be the word itself, the 2nd optional field is the priority (1..10)
+
+%p special lines: tasksize=NUM and priority=NUM
+
+%pre
+  
+  \# word \tab priority
+  tasksize=2
+  car	9
+  pen	9
+  pencil	9
+  pens	9
+  cup	8
+  bricolage
+  Emacs
+  Ruby
+  Python
+  project
+  development
+  bugs
+  develop
+  new
+  create
+  save	2
+  model	2
+  controller
+
+%p
+  You can download this file
+  = link_to "here", "newwords.txt"
+
+%h2 How to retrieve ready words
+
+%code curl http://server:3000/paradigms/peek/ready

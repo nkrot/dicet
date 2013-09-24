@@ -113,6 +113,9 @@
 
 28. DONE. fix BUG: creating paradigms of type Other behaves weirdly: dispite the tag NOTAG is replaced and non-NOTAG is saved (?maybe) correctly, NOTAG shows up again in #edit
 
+29. How to add an absolutely new word and a paradigm? How to assign a task to it? Allow empty current_word in paradigms#new?
+
+
 == TODO for retrieving paradigms
 
 1. DONE: Possibility to get paradigms in text format using a console command
@@ -171,8 +174,16 @@
 
 7. sort tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
-8. api for uploading new words to the server, preferably with predefined grouping in tasks and possibly with explicit assignee.
+8. DONE: api for uploading new words to the server
   * http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
+  * priority can be specified in the file in the 2nd field. if absent, the default is assumed
+  * special keyword `priority=NUM` is recognized in the file that specifies the default priority for the words for which it is not given explicitly in the 2nd field
+  * special keyword `tasksize=NUM` is recognized that allows specifying how many individual words will be added to a single task.
+  * TODO: allow specifying grouping into tasks?
+  * TODO: allow specifying assignee?
+
+9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
+
 
 == TODO for words
 
@@ -181,7 +192,8 @@
 
 Why: suppose the user added a word when creating a paradigm. Now there is no chance to seek/change that word unless by finding it through the paradigm.
 
-2. How to add (in bulk) new words/tasks?
+2. How to add (in bulk) new words/tasks through web interface?
+
 
 == README
 

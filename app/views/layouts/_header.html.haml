@@ -6,6 +6,8 @@
   |
   = link_to "All Tasks", tasks_path
   |
+  = link_to "Help", help_path
+  |
   - if signed_in?
     = link_to "Sign out", signout_path, method: "delete"
   - else

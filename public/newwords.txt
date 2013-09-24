@@ -1,0 +1,22 @@
+# word \tab priority
+tasksize=2
+car	9
+pen	9
+pencil	9
+pens	9
+cup	8
+bricolage
+Emacs
+Ruby
+Python
+project
+development
+bugs
+develop
+new
+create
+save	2
+model	2
+controller
+view
+rendering
