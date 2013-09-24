@@ -10,3 +10,7 @@ $("#{section} .paradigm").addClass('deleted');
 $("#{section} .btn_delete").attr('disabled', 'disabled');
 $("#{section} .btn_save").attr('disabled', 'disabled');
 
+// regenerate the sidepane
+- sp_options = {:partial => 'tasks/task_in_sidepane'}
+$("#task_in_sp").replaceWith("#{escape_javascript(render sp_options)}")
+

@@ -9,5 +9,9 @@ $(".paradigms").prepend("#{data}")
 $("#{section}").replaceWith("#{data}")
 }
 
+-# regenerate the sidepane
+- sp_options = {:partial => 'tasks/task_in_sidepane'}
+$("#task_in_sp").replaceWith("#{escape_javascript(render sp_options)}")
+
 do_on_document_ready()
 set_focus_to_editable_input($("#{section}"))

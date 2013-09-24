@@ -58,11 +58,13 @@ class ParadigmsController < ApplicationController
     @idx = 1
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
+    @current_task = @current_word.task
   end
 
   def edit
     @title = "Edit paradigm"
-    @current_word = Word.find_by(id: params[:word_id])
+    @current_word = Word.find(params[:word_id])
+    @current_task = @current_word.task
     @paradigm = Paradigm.find(params[:id])
     @idx = 1
     @page_section_id = "paradigm_data_#{@idx}"
@@ -75,7 +77,8 @@ class ParadigmsController < ApplicationController
 
     # TODO: same as in #edit
     @title = "Edit paradigm"
-    @current_word = Word.find_by(id: params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
+    @current_word = Word.find(params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
+    @current_task = @current_word.task
     @paradigm = Paradigm.find(params[:id])
     @idx = 1
     @page_section_id = params[:page_section_id]
@@ -84,6 +87,10 @@ class ParadigmsController < ApplicationController
   def destroy
 #    puts "(DESTROY): #{params}"
 
+    @page_section_id = params[:page_section_id]
+    @current_word = Word.find(params[:word_id])
+    @current_task = @current_word.task
+
     pdg = Paradigm.find(params[:id])
     if debug=false
       puts "Deleting #{pdg.inspect}"
@@ -91,8 +98,6 @@ class ParadigmsController < ApplicationController
     end
     pdg.words.each { |word| word.suicide }
     pdg.destroy
-
-    @page_section_id = params[:page_section_id]
   end
 
   def peek

@@ -24,6 +24,7 @@ class Word < ActiveRecord::Base
   end
 
   def same? other
+    return false  unless other
     self.id == other.id
   end
 

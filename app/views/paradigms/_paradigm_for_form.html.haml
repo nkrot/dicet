@@ -75,9 +75,10 @@
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB
           %td.has_balloon
+            - url_params = { page_section_id: @page_section_id, word_id: @current_word.id }
             = link_to "Delete", |
                       url_for(controller: 'paradigms', action: 'destroy', id: paradigm.id, |
-                              params: { page_section_id: @page_section_id } ), |
+                              params: url_params ), |
                       remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
                       class: 'btn btn_delete'
             %span.balloon Will delete the whole paradigm immediately                

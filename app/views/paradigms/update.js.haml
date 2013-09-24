@@ -6,4 +6,8 @@ $("#{section}").replaceWith("#{escape_javascript(render options)}")
 
 $("#{section} .notice").html('<div class="alert alert-success">Paradigm may have been successfully updated</div>').fadeOut(3000)
 
+-# regenerate the sidepane
+- sp_options = {:partial => 'tasks/task_in_sidepane'}
+$("#task_in_sp").replaceWith("#{escape_javascript(render sp_options)}")
+
 do_on_document_ready()

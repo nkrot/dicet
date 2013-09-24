@@ -329,14 +329,23 @@ table.radioset {
     margin-bottom: 10px;
   }
 
-  li.word {
+  .word {
+    padding-left: 0.1em;
     padding-top: 2px;
-    padding-bottom: 5px;
+    padding-bottom: 0.3em;
   }
 
   .word.active {
-    background: #A8BA80;
+    background: lightgreen;
   }
+
+  .word img {
+    margin: 0;
+   }
+
+  .tag {
+    margin-left: 1em;
+   }   
 }
 
 /********************************************************************\

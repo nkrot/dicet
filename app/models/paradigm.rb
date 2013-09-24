@@ -57,6 +57,10 @@ class Paradigm < ActiveRecord::Base
     self.status.to_s.downcase == "review"
   end
 
+  def has_comment?
+    ! self.comment.to_s.empty?
+  end
+
   # not used yet
 #  def dumped?
 #    self.status.to_s.downcase == "dumped"

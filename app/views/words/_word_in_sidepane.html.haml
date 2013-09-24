@@ -1,0 +1,17 @@
+-#- task.words.each do |word|
+
+- is_current = word.same?(@current_word)
+
+%div.word{class: ('active' if is_current) }
+  - if is_current
+    = image_tag 'bullet_star.png'
+    = word.text
+  - else          
+    = image_tag 'bullet_blue.png'
+    = link_to word.text, new_paradigm_path(:word_id => word)
+
+  - if word.paradigm_id
+    - each_word_with_link_to_paradigm_edit(word) do |wd, lnk|
+      %div.tag
+        = image_tag "#{select_bullet_image(wd)}"
+        != lnk

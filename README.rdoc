@@ -49,10 +49,13 @@
 
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
-7. INPROGRESS: Implement navigation through the task words of the current task in a side pane
-  * DONE: show the current task content
-  * styling. highlight the current word
-  * update changed word dynamically
+7. INPROGRESS: Implement navigation through the words of the current task in a side pane
+  * DONE: show the current task content in #new
+  * DONE: highlight the current word
+  * DONE: update changed word dynamically
+  * DONE: use bullets of different colors to show whether the paradigm has comments or has review status
+  * add the side pane to the #edit view
+  * keep current_task in a session rather than carry it in links?
 
 8.
 

@@ -5,19 +5,8 @@
   - if task
     .title Current task ##{task.id}
 
-    %ul
-      - task.words.each do |word|
-        - is_current = word.same?(@current_word)
-        %li.word{class: ('active' if is_current) }
-          - if is_current
-            = word.text
-          - else          
-            = link_to word.text, new_paradigm_path(:word_id => word)
-
-          - if word.paradigm_id
-            %ul
-              - links_to_paradigm_edit(word).each do |lnk|
-                %li!= lnk
+    %div.words
+      = render partial: 'words/word_in_sidepane', collection: task.words, as: :word
 
   - else
     = "No task to display"
