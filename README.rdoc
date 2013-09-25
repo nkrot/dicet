@@ -49,15 +49,14 @@
 
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
-7. INPROGRESS: Implement navigation through the words of the current task in a side pane
+7. DONE: Implement navigation through the words of the current task in a side pane
   * DONE: show the current task content in #new
   * DONE: highlight the current word
   * DONE: update changed word dynamically
   * DONE: use bullets of different colors to show whether the paradigm has comments or has review status
-  * add the side pane to the #edit view
-  * keep current_task in a session rather than carry it in links?
+  * DONE: add the side pane to the #edit view
 
-8.
+8. Refactoring: use sessions for passing around @current_task and @current_word rather than carry it through links?
 
 9. Is there any sense if using word.id in view? It make retrieving word in paradigms_controller more cumbersome
     and seems of no use (words are often searched by word.text)
@@ -121,6 +120,7 @@
 
 29. How to add an absolutely new word and a paradigm? How to assign a task to it? Allow empty current_word in paradigms#new?
 
+30. When clicking on a particular tag in the sidepane, open paradigm in #edit and highlight the tag in the paradigm that was clicked.
 
 == TODO for retrieving paradigms
 

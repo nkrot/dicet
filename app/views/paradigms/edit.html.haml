@@ -1,14 +1,23 @@
 
 - @idx ||= 1 # any will do
 
-%h2= @title
+%table#paradigm_page_layout
+  %tr
+    %td#leftpane
+      &nbsp
 
-- if @current_word
-  Current word:
-  %span#current_word= @current_word.text
-  %p
+    %td#main
 
-%div.paradigms
-  = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
+      %h2= @title
 
--#%script#jscode
+      - if @current_word
+        Current word:
+        %span#current_word= @current_word.text
+        %p
+
+      %div.paradigms
+        = render partial: 'paradigm_for_form', locals: { paradigm: @paradigm, idx: @idx, current_word: @current_word }
+
+    %td#rightpane
+      = render partial: 'tasks/task_in_sidepane'
+
