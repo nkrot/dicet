@@ -152,8 +152,7 @@ table.buttons {
 
   #rightpane {
     width: 200px;
-    background: #A8BA80;
-    padding-top: 20px;
+    padding-top: 10px;
     vertical-align: top;
   }  
 }
@@ -330,6 +329,13 @@ table.radioset {
 
 // task displayed in side pane
 #task_in_sp {
+    background: #A8BA80;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    height: 100%;
+    padding-top: 0.3em;
+
   .title {
     text-align: center;
     margin-bottom: 10px;
