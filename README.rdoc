@@ -110,7 +110,7 @@
   * highlight if the checked values of the radio box has changed
   * TODO: styling: the user adds a new pdg slot (assiged: .changed) and then presses (-) to delete it (assigned: .deleted). How to combine .changed and .deleted? Maybe just hide the slot, pretend it was not created?
 
-25. BUG: click_to_copy should fill in empty elements only, it should not overwrite existing words
+25. DONE: fixed bug: click_to_copy should fill in empty elements only, it should not overwrite existing words
 
 26. DONE: When creating a paradigm of type Other, the input box for Word should be prepopulated with the current word. Focus should be set to the tag.
 

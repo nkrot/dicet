@@ -14,7 +14,9 @@ function set_click_to_copy(obj) {
 	obj.find(".click_to_copy").click(function () {
 		parent = $(this).closest(".paradigm");
 		parent.find("input.word[type='text']").each(function () {
-			$(this).attr('value', $("#current_word").text());
+			if ( ! $(this).val() ) {
+				$(this).attr('value', $("#current_word").text());
+			}
 		});
 	});
 };
@@ -64,7 +66,9 @@ function do_on_document_ready() {
 	$(".click_to_copy").on("click", function () {
 		parent = $(this).closest(".paradigm");
 		parent.find("input.word[type='text']").each(function () {
-			$(this).attr('value', $("#current_word").text());
+			if ( ! $(this).val() ) {
+				$(this).attr('value', $("#current_word").text());
+			}
 		});
 	});
 
