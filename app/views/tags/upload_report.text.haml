@@ -1,0 +1,13 @@
+
+:plain
+  Tags added:     #{@infos['added_tags']}
+  Updated descriptions:  #{@infos['updated_descriptions']}
+  Tags rejected:  #{@infos['rejected_lines'].length}
+
+- unless @infos['rejected_lines'].empty?
+  \
+  The following lines have been rejected, because the given tag already exists in the database
+  \
+  - @infos['rejected_lines'].each do |line|
+    = line
+    

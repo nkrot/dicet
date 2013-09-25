@@ -165,12 +165,18 @@
 
 1. Allow adding tags via web interface
 
-2. Allow adding tags in bulk via console API
+2. INPROGRESS: Allow adding tags in bulk via console API and seeds
+	* db/seeds/tagset_eng.txt
+	* curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
+	* rake db:seed -- calls TagsController#add_file_data and works slowly!
+	* TODO: add a description to help page
 
 3. Allow editing tags via web interface?
 
-4. Allow adding new paradigm tags via web interface
+4. Allow adding new paradigm types via web interface
 	* add validations of tag correctness: via ajax or on the client side?
+
+5. Allow adding new paradigm types via console api and seeds
 
 == TODO for user input validation
 

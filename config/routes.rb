@@ -42,7 +42,9 @@ Dicet::Application.routes.draw do
   match '/signin',  to: 'sessions#new',     via: 'get'
   match '/signout', to: 'sessions#destroy', via: 'delete'
 
+  match '/tags/upload', to: 'tags#upload', via: 'post'
   resources :tags,           only: [:index]
+
   resources :paradigm_types, only: [:index]
 
 #  namespace :api, defaults: { format: :text } do
