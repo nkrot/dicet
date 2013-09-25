@@ -5,6 +5,15 @@
 
 $grayMediumLight: #eaeaea;
 
+/* $layoutPanes: #99ccff; ok */
+$layoutPanes: #99ddff;
+$layoutPanesHlight: #99ffff;
+/* $layoutPanesHlight: #66AAff;
+$layoutPanesHlight: #55bbee;
+$layoutPanesHlight: #55bbbb; */
+
+$changedData: #F7E570;
+
 @mixin box_sizing {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -26,7 +35,8 @@ html, body {
 }
 
 .footer, .header {
-	background: lightgreen;
+  background: $layoutPanes;
+  padding-left: 1em;
 }
 
 .container {
@@ -223,7 +233,7 @@ table.buttons {
   }  
 
   input[type='text'].changed {
-    background: #F7E570; /* kind of gold color */
+    background: $changedData;
   }
 
 }
@@ -267,7 +277,7 @@ table.radioset {
 
   /* & references self */
   &.changed tr {
-    background-color: #F7E570;
+    background-color: $changedData;
   }
 
   .labels {
@@ -298,7 +308,7 @@ table.radioset {
   }
 
   thead {
-    background-color: #a1a1a1;
+    background-color: #99cccc;;
     
     th {
       padding: 10px;
@@ -329,12 +339,13 @@ table.radioset {
 
 // task displayed in side pane
 #task_in_sp {
-    background: #A8BA80;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    height: 100%;
-    padding-top: 0.3em;
+  background: $layoutPanes;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  
+  height: 100%;
+  padding-top: 0.3em;
 
   .title {
     text-align: center;
@@ -348,7 +359,8 @@ table.radioset {
   }
 
   .word.active {
-    background: lightgreen;
+    background: $layoutPanesHlight; /* #9999ff; */
+//    color: gold;
   }
 
   .word img {
