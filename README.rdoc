@@ -167,15 +167,15 @@
 1. Allow adding tags via web interface
 
 2. DONE: Allow adding tags in bulk via console API and seeds
-	* db/seeds/tagset_eng.txt
-	* curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
-	* seed.rb calls the same procedure for parsing the file
-	* add a description to help page
+   * db/seeds/tagset_eng.txt
+   * curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
+   * seed.rb calls the same procedure for parsing the file
+   * add a description to help page
 
 3. Allow editing tags via web interface?
 
 4. Allow adding new paradigm types via web interface. This would be very useful
-	* add validations of tag correctness: via ajax or on the client side?
+   * add validations of tag correctness: via ajax or on the client side?
 
 5. DONE: Allow adding new paradigm types via console api and seeds
    * db/seeds/pdg_types_eng.txt
@@ -234,12 +234,24 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 2. How to add (in bulk) new words/tasks through web interface?
 
-3. INPROGRESS: allow marking a word as a typo and allow adding the correct variant
-    * DONE: what about having it as a paradigm of type Typo that opens with two positions
-	* DONE: output it in the dump
+3. DONE: allow marking a word as a typo and allow adding the correct variant
+    * what about having it as a paradigm of type Typo that opens with two positions
+	* output it in the dump
 
 4. find words from other tasks that have been touched when editing another word. for example, when editing 'loose' we have added a looser_JJR. find other occurrences of 'looser' and complement this word with other paradigms.
-	
+
+== TODO for conversions
+
+a new model Conversion serves to convert given word with the given tag to the given tags
+
+it runs syn_ldb as a pipe. How to point it to a particular prosao version?
+
+new controls into paradigm#edit for launching conversion procedure
+
+when insering words into the form, looks like it is easier to regenerate the form (this is also useful because conversions can produce multiple forms
+for which no input box is available in the initial version of the form)
+
+test it using FSE to be aware of encoding issues	
 
 == README
 
