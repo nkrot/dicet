@@ -200,9 +200,9 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 2. How to add (in bulk) new words/tasks through web interface?
 
-3. NEXT: (important!) allow marking a word as a typo and allow adding the correct variant
-    * what about having it as a paradigm of type Typo that opens with two positions
-	* output it in the dump
+3. INPROGRESS: allow marking a word as a typo and allow adding the correct variant
+    * DONE: what about having it as a paradigm of type Typo that opens with two positions
+	* DONE: output it in the dump
 
 4. find words from other tasks that have been touched when editing another word. for example, when editing 'loose' we have added a looser_JJR. find other occurrences of 'looser' and complement this word with other paradigms.
 	
