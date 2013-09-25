@@ -26,6 +26,12 @@
   create a vb paradigm. save.
   save nn paradigm
 
+8. BUG: creating a paradigm of type Other destroys one of the other paradigm. scenario:
+	* create a JJ paradigm for loose. save
+	* create a VB paradigm for loose. save
+    * create an Other paradigm for loose. save
+    * see loose_JJ from the JJ-paradigm being deleted, while the rest of the paradigm persists!
+
 == TODO for creating/editing paradigms
 
 1. DONE: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
@@ -50,11 +56,12 @@
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
 7. DONE: Implement navigation through the words of the current task in a side pane
-  * DONE: show the current task content in #new
-  * DONE: highlight the current word
-  * DONE: update changed word dynamically
-  * DONE: use bullets of different colors to show whether the paradigm has comments or has review status
-  * DONE: add the side pane to the #edit view
+  * show the current task content in #new
+  * highlight the current word
+  * update changed word dynamically
+  * use bullets of different colors to show whether the paradigm has comments or has review status
+  * add the side pane to the #edit view
+  * TODO: @show_link_to_self gets lost after deleting of a paradigm (history is lost that we come either from #new or #edit). Use sessions for storing its value?
 
 8. Refactoring: use sessions for passing around @current_task and @current_word rather than carry it through links?
 
@@ -154,7 +161,16 @@
 1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
    those that would be peeked or dumped
 
+== TODO for tagset and paradigm types
 
+1. Allow adding tags via web interface
+
+2. Allow adding tags in bulk via console API
+
+3. Allow editing tags via web interface?
+
+4. Allow adding new paradigm tags via web interface
+	* add validations of tag correctness: via ajax or on the client side?
 
 == TODO for user input validation
 
