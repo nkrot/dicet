@@ -29,6 +29,21 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.add_file_data(data)
+    data.split(/\n/).each do |line|
+      line = line.chomp.strip.sub(/\s+#.*$/, "")
+      if line =~ /^#/ || line.empty?
+        # skip
+      elsif line =~ /^(.*[^\s])\s+([^\s]+@[^\s]+)\s+(.+)/
+        User.create do |u|
+          u.login    = $1
+          u.email    = $2
+          u.password = $3
+        end
+      end
+    end
+  end
+
   private
 
   def create_remember_token

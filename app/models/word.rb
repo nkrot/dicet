@@ -88,4 +88,55 @@ class Word < ActiveRecord::Base
       other.save
     end
   end
+
+  def self.add_file_data(data)
+    tasksize = Task::NUMWORDS
+    priority = Task::PRIORITY
+
+    task = nil
+
+    infos = {
+      'number_of_tasks' => 0,
+      'number_of_words' => 0,
+      'rejected_lines'  => []
+    }
+
+    data.split(/\n/).each do |line|
+      line.chomp!
+      case line
+      when line.empty?
+        # skip
+      when /^#/
+        # skip comments
+      when /^tasksize=(\d+)/i
+        tasksize = $1.to_i
+      when /^priority=(\d+)/i
+        priority = $1.to_i
+      else
+        # word \t priority
+        word, prty = line.sub(/\s#.+/, "").split
+        prty = prty ? prty.to_i : priority
+
+        if Word.exists?(text: word)
+          infos['rejected_lines'] << line
+        else
+          unless task
+            task = Task.create(priority: prty)
+          end
+
+          task.words.create(text: word)
+          infos ['number_of_words'] += 1
+
+          if task.words.count >= tasksize
+            task.save
+            task = nil
+            infos ['number_of_tasks'] += 1
+          end
+        end
+      end
+    end
+
+    infos
+  end
+
 end

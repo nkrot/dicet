@@ -162,14 +162,14 @@
 1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
    those that would be peeked or dumped
 
-== TODO for tagset and paradigm types
+== TODO for loading initial data (users, tagset, paradigm types)
 
 1. Allow adding tags via web interface
 
 2. DONE: Allow adding tags in bulk via console API and seeds
 	* db/seeds/tagset_eng.txt
 	* curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
-	* rake db:seed -- calls TagsController#add_file_data and works slowly!
+	* seed.rb calls the same procedure for parsing the file
 	* add a description to help page
 
 3. Allow editing tags via web interface?
@@ -182,12 +182,13 @@
    * paradigm_types#upload
    * reuse saving method in db/seeds.rb
 
-6. INPROGRESS: move xxx_controller.add_file_data to corresponding models!
-   * tags_controller.rb
-   * words_controller.rb
-   * DONE: paradigm_types_controller.rb
+6. DONE: (refactoring) move xxx_controller.add_file_data to corresponding models!
+   * tags_controller.rb -> tag.rb
+   * words_controller.rb -> word.rb
+   * paradigm_types_controller.rb -> paradigm_type.rb
+   * users_controller.rb -> user.rb
 
-7. in Model#add_file_data access errors in object.errors.full_messages and display them in the generated report.
+7. in Model#add_file_data access DB errors in <object>.errors.full_messages and display them in the generated report.
 
 == TODO for user input validation
 

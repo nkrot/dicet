@@ -10,18 +10,7 @@ users_file = "db/seeds/users.txt"
 
 File.open(Rails.root.join(users_file)) do |f|
   puts " -- loading users from #{users_file}"
-  f.readlines.each do |line|
-    line = line.chomp.strip.sub(/\s+#.*$/, "")
-    if line =~ /^#/ || line.empty?
-      # skip
-    elsif line =~ /^(.*[^\s])\s+([^\s]+@[^\s]+)\s+(.+)/
-      User.create do |u|
-        u.login    = $1
-        u.email    = $2
-        u.password = $3
-      end
-    end
-  end
+  User.add_file_data(f.read)
 end
 
 ######################################################################
@@ -30,7 +19,7 @@ tagset_file = "db/seeds/tagset_eng.txt"
 
 File.open(Rails.root.join(tagset_file)) do |f|
   puts " -- loading tagset from #{tagset_file}"
-  TagsController.add_file_data(f.read)
+  Tag.add_file_data(f.read)
 end
 
 ######################################################################
