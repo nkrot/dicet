@@ -126,6 +126,7 @@
 28. DONE. fix BUG: creating paradigms of type Other behaves weirdly: dispite the tag NOTAG is replaced and non-NOTAG is saved (?maybe) correctly, NOTAG shows up again in #edit
 
 29. How to add an absolutely new word and a paradigm? How to assign a task to it? Allow empty current_word in paradigms#new?
+	* BUG: Now opening paradigms/new w/o word_id leads to a crash
 
 30. When clicking on a particular tag in the sidepane, open paradigm in #edit and highlight the tag in the paradigm that was clicked.
 
@@ -165,18 +166,28 @@
 
 1. Allow adding tags via web interface
 
-2. INPROGRESS: Allow adding tags in bulk via console API and seeds
+2. DONE: Allow adding tags in bulk via console API and seeds
 	* db/seeds/tagset_eng.txt
 	* curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
 	* rake db:seed -- calls TagsController#add_file_data and works slowly!
-	* TODO: add a description to help page
+	* add a description to help page
 
 3. Allow editing tags via web interface?
 
-4. Allow adding new paradigm types via web interface
+4. Allow adding new paradigm types via web interface. This would be very useful
 	* add validations of tag correctness: via ajax or on the client side?
 
-5. Allow adding new paradigm types via console api and seeds
+5. DONE: Allow adding new paradigm types via console api and seeds
+   * db/seeds/pdg_types_eng.txt
+   * paradigm_types#upload
+   * reuse saving method in db/seeds.rb
+
+6. INPROGRESS: move xxx_controller.add_file_data to corresponding models!
+   * tags_controller.rb
+   * words_controller.rb
+   * DONE: paradigm_types_controller.rb
+
+7. in Model#add_file_data access errors in object.errors.full_messages and display them in the generated report.
 
 == TODO for user input validation
 

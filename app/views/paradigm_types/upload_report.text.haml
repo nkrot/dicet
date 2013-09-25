@@ -1,0 +1,12 @@
+
+:plain
+  Paradigm types added: #{@infos['added_pdg_types']}
+  Lines rejected:       #{@infos['rejected_lines'].length}
+
+- unless @infos['rejected_lines'].empty?
+  \
+  The following lines have been rejected
+  \
+  - @infos['rejected_lines'].each do |line|
+    = line
+    

@@ -1,6 +1,11 @@
 #
 # ESE tagset plus a few aditional tags
 #
+# FORMAT
+# -----
+# tag \tab description
+#
+# the description is optional but very welcome
 
 # special tags to handle typos
 TYPO	The word has a spelling mistake
@@ -117,5 +122,6 @@ WRB
 XNOT	Negation particle
 POS	Possessive 's
 ZZ	I have no idea what this tag is for
+NOTAG	Dao of all tags, be more specific, please.
 
 ## EOF

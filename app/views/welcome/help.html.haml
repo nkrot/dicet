@@ -1,11 +1,65 @@
-%h4 Help
+%h2 Help
 %p Need help? You've come to the right place
 
-%h2 How to add new words
+%h3 Deploying the application
+
+%code git clone
+
+%p
+
+%code bundle install
+
+%p and start the app by executing the command
+
+%code rails s
+
+%h3 How to populate the database with initial data: tagset, paradigm types, users ?
+
+%p
+  All files that contain initial data for the database tables is contained in the directory
+  %code db/seeds/
+
+%p
+  Tagset is available in the file:
+  %code db/seeds/tagset_eng.txt
+
+%p
+  Paradigm types are listed in:
+  %code db/seeds/paradigm_types_eng.txt
+
+%p The simplest way of loading the data (that includes users, tagset, paradigm types) in DB is by running the following rake command:
+
+%code rake db:seed
+
+%p Uploading tagset through the command line is also possible by executing the following command:
+
+%code curl -F "tags[file]=@db/seeds/tagset_eng.txt" #{tags_upload_url}
+-# http://server:3000/tags/upload
+
+%p
+
+%p Paradigm types can similarly be either seeded as described above or uploaded via command line:
+
+%code curl -F "paradigm_types[file]=@db/seeds/pdg_types_eng.txt" #{paradigm_types_upload_url}
+-# http://server:3000/paradigm_types/upload
+
+%p
+
+%p
+  Users can either sign up individually by filling in the form at 
+  %code #{link_to("Signup Page", signup_path)}
+  or the list of users
+  %code db/seeds/users.txt
+  can be seeded as described above.
+
+%h3 How to add new words
 
 %p Use curl to upload a plain text file:
 
-%code curl -F "words[file]=@/path/to/file" http://server:3000/words/upload
+%code curl -F "words[file]=@/path/to/file" #{words_upload_url}
+-# http://server:3000/words/upload
+
+%p
 
 %p Note @ before the path! The path can be either absolute or relative.
 
@@ -45,3 +99,5 @@
 %h2 How to retrieve ready words
 
 %code curl http://server:3000/paradigms/peek/ready
+
+%p

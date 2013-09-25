@@ -6,51 +6,40 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-users = [["alpha", "alpha@example.com", 111],
-         ["beta",  "beta@example.com",  222],
-         ["gamma", "gamma@example.com", 333],
-         ["delta", "delta@example.com", 444]]
+users_file = "db/seeds/users.txt"
 
-users.each do |user|
-  User.create(login: user[0], email: user[1], password: user[2])
+File.open(Rails.root.join(users_file)) do |f|
+  puts " -- loading users from #{users_file}"
+  f.readlines.each do |line|
+    line = line.chomp.strip.sub(/\s+#.*$/, "")
+    if line =~ /^#/ || line.empty?
+      # skip
+    elsif line =~ /^(.*[^\s])\s+([^\s]+@[^\s]+)\s+(.+)/
+      User.create do |u|
+        u.login    = $1
+        u.email    = $2
+        u.password = $3
+      end
+    end
+  end
 end
 
 ######################################################################
 
-fname = "db/seeds/tagset_eng.txt"
+tagset_file = "db/seeds/tagset_eng.txt"
 
-File.open(Rails.root.join(fname)) do |f|
-  puts "Loading tagset from #{fname}"
+File.open(Rails.root.join(tagset_file)) do |f|
+  puts " -- loading tagset from #{tagset_file}"
   TagsController.add_file_data(f.read)
 end
 
 ######################################################################
 
-pdg_types = {
-  "nn"  => ["NN", "NNS"],
-  "np"  => ["NP", "NPS"],
-  "npt" => ["NPT", "NPTS"],
-  "npl" => ["NPL", "NPLS"],
-  "vb"  => ["VB", "VBZ", "VBG", "VBD", "VBN", "JJing", "JJed"],
-  "jj"  => ["JJ", "JJR", "JJT", "RB"],
-  "rb"  => ["RB", "RBR", "RBT"],
-  "other" => ["NOTAG"],
-  "typo"  => ["TYPO", "NOTYPO"]
-}
+pdg_types_file = "db/seeds/pdg_types_eng.txt"
 
-pdg_types.each do |name, tags|
-  ts = tags.map {|tag| Tag.where(name: tag).first}
-  pdg_type = ParadigmType.create(name: name)
-  # set the proxytable ParadigmTag, more specifically, this hack sets order field
-  # TODO: how to accomplish it in a nicer way?
-  ts.each_with_index do |t, idx|
-    pdg_type.paradigm_tags << ParadigmTag.create do |pt|
-      pt.paradigm_type_id = pdg_type.id
-      pt.tag_id           = t.id
-      pt.order            = idx
-    end
-  end
-  pdg_type.save
+File.open(Rails.root.join(pdg_types_file)) do |f|
+  puts " -- loading paradigm types from #{pdg_types_file}"
+  ParadigmType.add_file_data(f.read)
 end
 
 ######################################################################
@@ -95,10 +84,11 @@ tasks.each_with_index do |words, idx|
 
   unless user_id
     # assign a user
-    i = idx - (idx/users.length) * users.length
-    user_name = users[i].first
-    user = User.find_by(login: user_name)
-    task.user = user
+#    i = idx - (idx/users.length) * users.length
+#    user_name = users[i].first
+#    user = User.find_by(login: user_name)
+    i = 1 + idx - (idx/User.count) * User.count
+    task.user = User.find(i)
   end
 
   unless task.save

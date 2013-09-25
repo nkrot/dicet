@@ -1,0 +1,24 @@
+#
+# paradigm types
+#
+# FORMAT
+# =====
+# pdg_type_name tag1 tag2 ...
+#
+# * fields can be separated by any number of spaces/tabs
+# * all fields are case sensitive
+# * no spaces are allowed in a field
+#
+typo  TYPO NOTYPO	# artificial paradigm type for linking misspelled words and their correct variants
+other NOTAG         # mandatory! this allows inputting any tag
+
+# the rest are optional :)
+nn	NN NNS
+np	NP NPS
+npt	NPT NPTS
+npl	NPL NPLS
+vb	VB VBZ VBG VBD VBN JJing JJed
+jj	JJ JJR JJT RB
+rb	RB RBR RBT
+
+# EOF

@@ -1,0 +1,18 @@
+#
+# a list of users in the system
+#
+# FORMAT
+# ======
+# name \tab email \tab initial password
+#
+# * all fields are case sensitive
+# * spaces are allowed in name field
+#
+# this file is then seeded by 
+#    rake db:seed
+#
+alpha	alpha@example.com	111
+beta	beta@example.com	222
+gamma	gamma@example.com	333
+delta	delta@example.com	444
+ivanov ivan iivanov@ihs.com	555	# who is that?
