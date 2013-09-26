@@ -32,6 +32,7 @@ Dicet::Application.routes.draw do
   match '/paradigms/peek(/:status)', to: 'paradigms#peek', via: 'get'
   match '/paradigms/dump(/:status)', to: 'paradigms#dump', via: 'get'
   match '/paradigms/new_paradigm_of_type/:id', to: 'paradigms#new_paradigm_of_type', via: 'get'
+  match '/paradigms/add_conversions', to: 'paradigms#add_conversions', via: 'patch'
   resources :paradigms
 
   resources :tasks, only: [:index, :update]

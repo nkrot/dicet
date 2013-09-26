@@ -3,6 +3,7 @@
 - @current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
 - @page_section_id ||= "paradigm_data_#{idx}"
+- url_params = { page_section_id: @page_section_id, word_id: @current_word.id }
 
 %div{id: @page_section_id}
 
@@ -15,6 +16,7 @@
     - if @current_word
       = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
 
+
     %table.paradigm{class: ('dumped' if paradigm.dumped?)}
       %thead
         %tr
@@ -22,7 +24,8 @@
           %th.tag Tag
           %th.word
             %a.click_to_copy Word
-          %th &nbsp;
+          %th.has_button{colspan:2}
+            = link_to "convert", paradigms_add_conversions_path, class: 'btn_convert'
       %tbody
         - paradigm.each_word_with_tag do |word, tag|
           - c_slot += 1
@@ -32,15 +35,17 @@
             - word = @current_word
 
           %tr.pdg_slot
-            -# (+) | TAG input | WORD input | (-)
+            -# (+) | TAG input | WORD input | (<) | (-)
             - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
 
             %td.has_button
               = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
+
             %td.tag.has_balloon
               = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
                                 class: "tag" #, readonly: tag.readonly_html?
               %span.balloon= tag.description
+
             %td.word
               = text_field_tag "#{basename}[#{word.id_or_label}]", |
                                 word.text, class: "word"
@@ -51,7 +56,6 @@
             %td.has_button
               = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
               = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
-
 
         -# extras: comment area
         %tr.comment
@@ -81,7 +85,6 @@
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB
           %td.has_balloon
-            - url_params = { page_section_id: @page_section_id, word_id: @current_word.id }
             = link_to "Delete", |
                       url_for(controller: 'paradigms', action: 'destroy', id: paradigm.id, |
                               params: url_params ), |

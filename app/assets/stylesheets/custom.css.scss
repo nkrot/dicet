@@ -217,6 +217,7 @@ table.buttons {
     border-left: dotted 1px black;    
   }
 
+
   tr.comment label,  
   tr.comment input {
     margin-top: 5px;
@@ -228,6 +229,7 @@ table.buttons {
     padding-left: 8px;
   }
 
+  th.has_button,  
   td.has_button {
     padding: 0 5px 0 5px;
   }  
@@ -236,6 +238,9 @@ table.buttons {
     background: $changedData;
   }
 
+  .btn_convert {
+    font-variant: small-caps;
+  }  
 }
 
 .paradigm.deleted {

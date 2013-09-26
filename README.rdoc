@@ -249,9 +249,11 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* fix letter case of words returned from prosao1 syn_ldb
 
 2. INPROGRESS: implement converting words in paradigm#edit
-	* DONE: add button to inserting current word into the desired word box
-	* add button for triggering conversion procedure
-	* use ajax to serve conversion procedure.
+	* DONE: add button (<) for inserting current word into the desired word box
+	* DONE: add button (convert) for triggering conversion procedure
+	* INPROGRESS: use ajax to serve conversion procedure.
+	* double clicking on (<) button should trigger conversion procedure
+	* do not submit the form if there are no empty slots
 
 when insering words into the form, looks like it is easier to regenerate the form (this is also useful because conversions can produce multiple forms
 for which no input box is available in the initial version of the form)

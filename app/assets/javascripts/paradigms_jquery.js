@@ -115,6 +115,18 @@ function do_on_document_ready() {
 		return false;
 	});
 
+	$(".btn_convert").on("click", function () {
+		var action = $(this).attr("href");
+		$(this).closest("form").attr("action", action).submit();
+		return false;
+	});
+
+/*
+	$("form").on("submit", function () {
+		console.log("Form " + $(this).attr("id") + " submitted to action " + $(this).attr('action'));
+	});
+*/
+
 	$(".btn_delete_pdg_slot").on("click", function () {
 		// grey out the row
 		this_slot = $(this).closest(".pdg_slot"); 
@@ -127,7 +139,9 @@ function do_on_document_ready() {
 	$(".btn_fill_with_word").on("click", function () {
 		$(this).closest(".pdg_slot").find("input.word[type='text']").each(function () {
 			// overwrite any existing value
-			$(this).attr('value', $("#current_word").text());
+			$(this).val($("#current_word").text()).trigger("keyup");
+			// console.log(".attr(value)=" + $(this).attr("value"));
+			// console.log(".val()=" + $(this).val());
 		});
 		return false
 	});

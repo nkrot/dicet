@@ -117,6 +117,18 @@ class ParadigmsController < ApplicationController
     # here set_dumped is triggered
   end
 
+  def add_conversions
+    puts "add_conversions: #{params.inspect}"
+
+    @current_word = Word.find(params[:word_id])
+    @current_task = @current_word.task
+#    @paradigm = Paradigm.find(params[:id])
+#    @idx = 1
+    @page_section_id = params[:page_section_id]
+
+    render nothing: true
+  end
+
   private
 
   # HOW FILTERS FOR SELECTING PARADIGMS ARE COMPUTED
