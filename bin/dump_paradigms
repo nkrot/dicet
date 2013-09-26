@@ -1,12 +1,10 @@
 #!/bin/sh
 
-curl -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -X POST http://localhost:3000/signin \
-  -d '{"login" : "alpha", "password" : "111"}' \
-  -c cookie
+# # #
+# see documentation
+#
 
-curl -H 'Content-Type: application/json' \
-  -H 'Accept: application/json' \
-  -X GET http://localhost:3000/paradigms.txt \
-  -b cookie
+curl http://krot:3000/paradigms/peek/ready
+
+##
+#curl http://krot:3000/paradigms/dump/ready
