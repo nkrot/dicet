@@ -130,6 +130,8 @@
 
 30. When clicking on a particular tag in the sidepane, open paradigm in #edit and highlight the tag in the paradigm that was clicked.
 
+31. DONE: add navigation across word slots and tag slots using up- and down-arrows.
+
 == TODO for retrieving paradigms
 
 1. DONE: Possibility to get paradigms in text format using a console command

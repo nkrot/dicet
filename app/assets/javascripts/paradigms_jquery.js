@@ -25,6 +25,32 @@ function set_focus_to_editable_input(obj) {
 	obj.find("input").filter(':visible').not("[disabled]").not("[readonly]").first().focus();
 };
 
+/* 
+   Pressing UP-ARROW when in word slot moves the focus to the PREVIOUS word slot.
+   Pressing DOWN-ARROW when in word slot moves the focus to the NEXT word slot.
+   The same logic works for the tag slot.
+*/
+function navigation_with_arrows(obj, evt) {
+
+	klass = null;
+	if ($(obj).hasClass('word')) {
+		klass = '.word'
+	} else if ($(obj).hasClass('tag')) {
+		klass = '.tag'
+	}
+
+	switch (evt.keyCode) {
+	case 38:
+		// up-arrow pressed
+		$(obj).closest(".pdg_slot").prev(".pdg_slot").find("input[type='text']").filter(klass).focus()
+		break;
+	case 40:
+		// down-arrow pressed
+		$(obj).closest(".pdg_slot").next(".pdg_slot").find("input[type='text']").filter(klass).focus()
+		break;
+	}
+};
+
 function do_on_document_ready() {
 
 //	alert('document ready!');
@@ -154,27 +180,7 @@ function do_on_document_ready() {
 			$(this).addClass('changed')
 		}
 
-		// navigation across word/tag fields
-		klass = null;
-		if ($(this).hasClass('word')) {
-			klass = '.word'
-		} else if ($(this).hasClass('tag')) {
-			klass = '.tag'
-		}
-
-//		console.log("Current input: " + klass)
-
-		switch(evt.keyCode) {
-		case 38:
-//			console.log("Up arrow pressed")
-			$(this).closest(".pdg_slot").prev(".pdg_slot").find("input[type='text']").filter(klass).focus()
-			break;
-		case 40:
-//			console.log("Down arrow pressed")
-			$(this).closest(".pdg_slot").next(".pdg_slot").find("input[type='text']").filter(klass).focus()
-			break;
-		}
-
+		navigation_with_arrows(this, evt);
 	});
 
 	$(".paradigm input[type='radio']").on('change', function () {
