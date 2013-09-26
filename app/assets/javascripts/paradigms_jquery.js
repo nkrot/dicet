@@ -142,8 +142,36 @@ function do_on_document_ready() {
 	});
 
 	$(".btn_convert").on("click", function () {
-		var action = $(this).attr("href");
-		$(this).closest("form").attr("action", action).submit();
+		var fields = $(this).closest("form").find("input[type='text']").filter(".word");
+		var c_empty = fields.filter(function () { return this.value === '' }).length;
+
+//		console.log(fields.length)
+//		console.log(c_empty)
+
+		if (c_empty == 0) {
+			// all fields are filled in => no need to retrieve conversions
+			alert('No conversions needed: all word slots are filled in')
+/*
+			var prev_bg_color = $(this).css('background-color');
+			var prev_fg_color = $(this).css('color');
+			console.log(prev_bg_color)
+			console.log(prev_fg_color)
+			$(this).parent().css('background-color', 'red');
+			$(this).css('color', 'white');
+			var ms = 3000;
+			$(this).fadeOut(ms).fadeIn(ms).fadeOut(ms).fadeIn(ms).queue(function () {
+				$(this).parent().css('background-color', prev_bg_color)
+				$(this).css('color', prev_fg_color);
+			}, 30000).dequeue();
+*/
+		} else if ( fields.length == c_empty ) {
+			alert('Conversion impossible: not a sole base word given')
+
+		} else {
+			// submit the form
+			var action = $(this).attr("href");
+			$(this).closest("form").attr("action", action).submit();
+		}
 		return false;
 	});
 
