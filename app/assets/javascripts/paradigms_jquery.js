@@ -163,6 +163,7 @@ function do_on_document_ready() {
 	});
 
 	$(".btn_fill_with_word").on("click", function () {
+//		console.log("clicked: " + $(this).attr('class'))
 		$(this).closest(".pdg_slot").find("input.word[type='text']").each(function () {
 			// overwrite any existing value
 			$(this).val($("#current_word").text()).trigger("keyup");
@@ -170,6 +171,12 @@ function do_on_document_ready() {
 			// console.log(".val()=" + $(this).val());
 		});
 		return false
+	});
+
+	$(".btn_fill_with_word").on("dblclick", function (e) {
+//		$(this).trigger("click"); // unnecessary as double click does not prevent single click
+		$(this).closest(".paradigm").find(".btn_convert").trigger("click");
+//		e.preventDefault() // has no effect?
 	});
 
 	$(".paradigm input[type='text']").on('keyup', function (evt) {
