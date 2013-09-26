@@ -1,0 +1,28 @@
+#!/usr/bin/awk -f
+
+# # #
+# temporary replacement for syn_ldb utility
+#
+
+BEGIN {
+	print "Starting a-la syn_ldb" >"/dev/stderr" 
+
+	# this is a joke
+	suffixes["VBZ"] = "á"
+	suffixes["VBN"] = "ò"
+	suffixes["VBD"] = "ñ"
+	suffixes["_"]   = "ï"
+}
+
+{
+	# in:  convert VB VBZ run
+	# out: runs
+	print $4 suffix($3) "_" $3
+	fflush()
+}
+
+function suffix(tag) {
+	if (tag in suffixes)
+		return suffixes[tag]
+	return suffixes["_"]
+}
