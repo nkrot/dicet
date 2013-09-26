@@ -242,11 +242,16 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 == TODO for conversions
 
-a new model Conversion serves to convert given word with the given tag to the given tags
+1. INPROGRESS: a new model Inflector serves to convert given word with the given tag to the given tags
+	* DONE: Inflector#convert
+	* how to configure the external script to be used?
+	* any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
+	* fix letter case of words returned from prosao1 syn_ldb
 
-it runs syn_ldb as a pipe. How to point it to a particular prosao version?
-
-new controls into paradigm#edit for launching conversion procedure
+2. INPROGRESS: implement converting words in paradigm#edit
+	* DONE: add button to inserting current word into the desired word box
+	* add button for triggering conversion procedure
+	* use ajax to serve conversion procedure.
 
 when insering words into the form, looks like it is easier to regenerate the form (this is also useful because conversions can produce multiple forms
 for which no input box is available in the initial version of the form)

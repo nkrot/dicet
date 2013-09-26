@@ -34,6 +34,7 @@
           %tr.pdg_slot
             -# (+) | TAG input | WORD input | (-)
             - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
+
             %td.has_button
               = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
             %td.tag.has_balloon
@@ -43,18 +44,23 @@
             %td.word
               = text_field_tag "#{basename}[#{word.id_or_label}]", |
                                 word.text, class: "word"
+
+            %td.has_button
+              = link_to "&lt;".html_safe, "#", class:'btn btn_small btn_fill_with_word'
+
             %td.has_button
               = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
               = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
 
+
         -# extras: comment area
         %tr.comment
           %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-          %td{colspan:2}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
+          %td{colspan:3}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
 
         -# extras: radio boxes for statuses
         %tr.last
-          %td{colspan:4}
+          %td{colspan:5}
             = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
 
     -# SAVE | DELETE

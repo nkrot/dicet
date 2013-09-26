@@ -124,6 +124,14 @@ function do_on_document_ready() {
 		return false;
 	});
 
+	$(".btn_fill_with_word").on("click", function () {
+		$(this).closest(".pdg_slot").find("input.word[type='text']").each(function () {
+			// overwrite any existing value
+			$(this).attr('value', $("#current_word").text());
+		});
+		return false
+	});
+
 	$(".paradigm input[type='text']").on('keyup', function () {
 		if ($(this).attr('value') == $(this).val() && !$(this).hasClass('new')) {
 			// slots marked as class=new should never be unhighlighted
