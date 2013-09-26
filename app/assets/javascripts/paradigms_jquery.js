@@ -146,13 +146,35 @@ function do_on_document_ready() {
 		return false
 	});
 
-	$(".paradigm input[type='text']").on('keyup', function () {
+	$(".paradigm input[type='text']").on('keyup', function (evt) {
 		if ($(this).attr('value') == $(this).val() && !$(this).hasClass('new')) {
 			// slots marked as class=new should never be unhighlighted
 			$(this).removeClass('changed')
 		} else {
 			$(this).addClass('changed')
 		}
+
+		// navigation across word/tag fields
+		klass = null;
+		if ($(this).hasClass('word')) {
+			klass = '.word'
+		} else if ($(this).hasClass('tag')) {
+			klass = '.tag'
+		}
+
+//		console.log("Current input: " + klass)
+
+		switch(evt.keyCode) {
+		case 38:
+//			console.log("Up arrow pressed")
+			$(this).closest(".pdg_slot").prev(".pdg_slot").find("input[type='text']").filter(klass).focus()
+			break;
+		case 40:
+//			console.log("Down arrow pressed")
+			$(this).closest(".pdg_slot").next(".pdg_slot").find("input[type='text']").filter(klass).focus()
+			break;
+		}
+
 	});
 
 	$(".paradigm input[type='radio']").on('change', function () {
@@ -163,6 +185,7 @@ function do_on_document_ready() {
 			target.addClass('changed')
 		}
 	});
+
 };
 
 $(document).on('ready', function() {
