@@ -66,4 +66,70 @@ class Paradigm < ActiveRecord::Base
 #    self.status.to_s.downcase == "dumped"
 #  end
 
+
+  # unknown paradigm
+  #  Parameters: {"page_section_id"=>"paradigm_data_2", "word_id"=>"7", pdg=>...}
+  #  "pdg"=>{
+  #    "1"=>{
+  #      ---- can be abstracted into ParadigmForm model ---
+  #      "8"=>{ # paradigm_type.id
+  #        "53"=>{ # tag.id
+  #          "0"=>{"tag"=>"JJ", "word"=>"run", "deleted"=>"false"}
+  #        },
+  #        "54"=>{
+  #          "1"=>{"tag"=>"JJR", "word"=>"", "deleted"=>"false"}
+  #        },
+  #        "55"=>{
+  #          "2"=>{"tag"=>"JJT", "word"=>"", "deleted"=>"false"}
+  #        },
+  #        "92"=>{
+  #          "3"=>{"tag"=>"RB", "word"=>"", "deleted"=>"false"}
+  #        },
+  #        "extras"=>{"comment"=>"", "status"=>"ready"}
+  #      }
+  #     -----------------------------------------------
+  #    }
+  #  }
+  #
+  # Known paradigm
+  #Parameters: {"page_section_id"=>"paradigm_data_0", "word_id"=>"7", pdg=>...}
+  #  "pdg"=>{
+  #    "0"=>{
+  #      ---- can be abstracted into ParadigmForm model ---
+  #      "3"=>{                          # paradigm_type.id=3
+  #        "60"=>{                       # tag.id=60
+  #          "0"=>{"tag" => "NN",
+  #                 "7"  => "run",       # word.id=7
+  #                 "deleted"=>"false"}
+  #        },
+  #        "61"=>{
+  #           "1"=>{"tag"=>"NNS",
+  #                 "10"=>"",            # word.id=10
+  #                 "deleted"=>"false"}
+  #        },
+  #        "extras"=>{"comment"=>"", "status"=>"ready"
+  #       }
+  #      ----------------------------------------------
+  #      }
+  #    }
+  #  }
+ 
+  # # know paradigm with two NNS and an extra VB
+  #  Parameters: {"page_section_id"=>"paradigm_data_0", "word_id"=>"7", "pdg"=>"..."}
+  #  "pdg"=> {
+  #    "0"=>{
+  #      "3"=>{
+  #        "60"=>{
+  #          "0"=>{"tag"=>"NN", "7"=>"run", "deleted"=>"false"}
+  #        },
+  #        "61"=>{ # NNS
+  #          "1"=>{"tag"=>"NNS", "10"=>"runs", "deleted"=>"false"},
+  #          "9"=>{"tag"=>"NNS", "word"=>"runz", "deleted"=>"false"},
+  #          "10"=>{"tag"=>"VB", "word"=>"", "deleted"=>"false"}    # obtained by copying NNS, should be moved away
+  #        },
+  #        "extras"=>{"comment"=>"", "status"=>"ready"}
+  #      }
+  #    }
+  #  }
+
 end

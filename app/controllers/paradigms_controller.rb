@@ -126,6 +126,7 @@ class ParadigmsController < ApplicationController
 #    @idx = 1
     @page_section_id = params[:page_section_id]
 
+#    @paradigm = ParadigmForm.xxx(params[:pdg])
     render nothing: true
   end
 
