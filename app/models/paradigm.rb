@@ -132,4 +132,13 @@ class Paradigm < ActiveRecord::Base
   #    }
   #  }
 
+  def shilo
+#    ParadigmForm ::= paradigm_type.id comment status ParadigmSlot+;
+#    ParadigmSlot ::= OldWord NewWord
+#
+#    pdg_form.each_tag {|t| pdg_slots = pdg_form[tag]} # NOTE a slot may have diff tags
+#    pdg_form.each_slot do ||
+#    end
+  end
+
 end

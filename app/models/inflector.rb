@@ -1,13 +1,33 @@
 class Inflector
   
+  # TODO: how to start it only once, at app start up
   @@cmd = IO.popen(Rails.root.join("bin/syn_ldb").to_s, "w+")
+
+  # all trg_words are Word.new {tag=Tag, text=nil}
+  def convert(src_words, trg_words)
+    trg_words.each do |tw|
+      next  if tw.text
+      src_words.each do |sw|
+        tw.text = convert_ll(sw.text, sw.tag.name, tw.tag.name)
+      end
+    end
+  end
+
+  private
+
+  def convert_ll(src_word, src_tag, trg_tag)
+    puts "Converting #{src_word}_#{src_tag} --> #{trg_tag}"
+    @@cmd.puts "convert #{src_tag} #{trg_tag} #{src_word}"
+    res = @@cmd.gets.chomp
+    res.empty? ? nil : res
+  end
 
   # return hash
   # {
   #   "VBZ" => [word1, word2,...],
   #   "VBN" => [word]
   # }
-  def convert(word, src_tag, trg_tags)
+  def convert_unused(word, src_tag, trg_tags)
 
     if trg_tags.is_a? String
       trg_tags = [ trg_tags ]

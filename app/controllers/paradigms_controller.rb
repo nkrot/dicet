@@ -127,6 +127,13 @@ class ParadigmsController < ApplicationController
     @page_section_id = params[:page_section_id]
 
 #    @paradigm = ParadigmForm.xxx(params[:pdg])
+
+    # conversions
+    # get all filled in words -> src_words
+    # get all empty slots (except deleted) -> trg_words
+    # fill in all trg_words with Inflector
+
+
     render nothing: true
   end
 
