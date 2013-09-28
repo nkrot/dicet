@@ -238,9 +238,26 @@ table.buttons {
     background: $changedData;
   }
 
+  th.has_convert_button {
+    padding-top: 5px;    
+  }  
+
   .btn_convert {
     font-variant: small-caps;
 	padding: 0 6px 0 6px;
+    
+    border: dotted 1px #4479BA;    
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+  }
+
+  .btn_convert:hover {
+    border-style: solid;
+    border-color: #2A4E77;
+//    background: #4479BA;
+//    color: #fff;
+  
   }  
 }
 

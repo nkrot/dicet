@@ -24,7 +24,7 @@
           %th.tag Tag
           %th.word
             %a.click_to_copy Word
-          %th.has_button{colspan:2}
+          %th.has_button.has_convert_button{colspan:2}
             = link_to "convert", paradigms_add_conversions_path, class: 'btn_convert'
       %tbody
         - paradigm.each_word_with_tag do |word, tag|
