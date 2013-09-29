@@ -362,7 +362,8 @@ table.radioset {
 
 // task displayed in side pane
 #task_in_sp {
-  background: $layoutPanes;
+//  background: $layoutPanes;
+  border: solid 1px #4479BA;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
@@ -382,7 +383,12 @@ table.radioset {
   }
 
   .word.active {
-    background: $layoutPanesHlight; /* #9999ff; */
+//    background: $layoutPanesHlight; /* #9999ff; */
+    background: $layoutPanes;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+
 //    color: gold;
   }
 
