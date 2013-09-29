@@ -132,6 +132,8 @@
 
 31. DONE: add navigation across word slots and tag slots using up- and down-arrows.
 
+32. Show somehow (with highlighting or explanation) when the paradigm is a new one or an existing one is being edited. Presently the SAVE button tooltips are different, but this is to scarce, be more explicit.
+
 == TODO for retrieving paradigms
 
 1. DONE: Possibility to get paradigms in text format using a console command
@@ -246,7 +248,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 1. INPROGRESS: a new model Inflector serves to convert given word with the given tag to the given tags
 	* DONE: Inflector#convert
-	* how to configure the external script to be used?
+	* how to configure the external script to be used? maybe as a server
 	* any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
 	* fix letter case of words returned from prosao1 syn_ldb
 
@@ -258,6 +260,16 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* DONE: double clicking on (<) button should trigger conversion procedure. TODO: double click does not prevent two single clicks from happening. it does not harm however
 	* DONE: do not submit the form if there are no empty slots
 
+3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
+   * DONE: create it from params
+   * create it from Paradigm object
+   * write tests spec/model/paradigm_form_slot_spec.rb
+   * write tests spec/model/paradigm_form_spec.rb
+   * switch all views to using ParadigmForm instead of Paradigm
+   * implement save_paradigm and update_paradigm using ParadigmForm#save
+   * write cool tests for ParadigmForm#save
+   * use ParadigmForm in CONVERT 
+   
 when insering words into the form, looks like it is easier to regenerate the form (this is also useful because conversions can produce multiple forms
 for which no input box is available in the initial version of the form)
 

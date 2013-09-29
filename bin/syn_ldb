@@ -1,4 +1,5 @@
 #!/usr/bin/awk -f
+# -*- coding: windows-1252; -*-
 
 # # #
 # temporary replacement for syn_ldb utility
@@ -8,17 +9,32 @@ BEGIN {
 	print "Starting a-la syn_ldb" >"/dev/stderr" 
 
 	# this is a joke
-	suffixes["VBZ"] = "Ã¡"
-	suffixes["VBN"] = "Ã²"
-	suffixes["VBD"] = "Ã±"
-	suffixes["_"]   = "Ã¯"
+	suffixes["VBZ"] = "á"
+	suffixes["VBN"] = "ò"
+	suffixes["VBD"] = "ñ"
+	suffixes["_"]   = "ï"
 }
 
 {
 	# in:  convert VB VBZ run
 	# out: runs
-	print $4 suffix($3) "-" tolower($3)
+	if ( are_same_pos($2, $3) ) {
+		print $4 suffix($3) "-" tolower($3)
+	} else {
+		# in: convert VB NN run
+		# out: ""
+		print ""
+	}
 	fflush()
+}
+
+function are_same_pos(t1, t2) {
+	return fl(t1) == fl(t2)
+}
+
+function fl(str, chars) {
+	split(str, chars, "")
+	return chars[1]
 }
 
 function suffix(tag) {

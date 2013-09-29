@@ -5,9 +5,9 @@ class Inflector
 
   # all trg_words are Word.new {tag=Tag, text=nil}
   def convert(src_words, trg_words)
-    trg_words.each do |tw|
-      next  if tw.text
-      src_words.each do |sw|
+    src_words.each do |sw|
+      trg_words.each do |tw|
+        next  if tw.text
         tw.text = convert_ll(sw.text, sw.tag.name, tw.tag.name)
       end
     end
@@ -19,6 +19,7 @@ class Inflector
     puts "Converting #{src_word}_#{src_tag} --> #{trg_tag}"
     @@cmd.puts "convert #{src_tag} #{trg_tag} #{src_word}"
     res = @@cmd.gets.chomp
+    # TODO: fix lettercase
     res.empty? ? nil : res
   end
 

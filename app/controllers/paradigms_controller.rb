@@ -280,6 +280,7 @@ class ParadigmsController < ApplicationController
     end
   end
 
+  # TODO: all this stuff is also in ParadigmForm::Slot#parse_hash
   def each_word tag_word_data
     tag_word_data.each do |tag_id, hash|
       # "0"=>{"tag"=>"VB", "101"=>"run", "deleted=>""},   # word.id=101
@@ -287,6 +288,7 @@ class ParadigmsController < ApplicationController
       # "0"=>{"tag"=>"VB", "word"=>"run", "deleted"=>""},  # no word.id
       #   or with deleted set to true
       # "4"=>{"tag"=>"NNS", "128"=>"palabras", "deleted"=>"true"}
+      # TODO: no need to iterate?
       hash.each do |num, tw_hash|
         old_word = nil
         if tw_hash.key? Word.label
