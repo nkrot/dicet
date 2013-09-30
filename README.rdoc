@@ -166,6 +166,10 @@
 1. find/show all paradigms with unfilled slots, having comments and specific status (Ready, Review)
    those that would be peeked or dumped
 
+2. add description field to ParadigmType
+	* add to loading procedure
+	* use it in the tooltip
+
 == TODO for loading initial data (users, tagset, paradigm types)
 
 1. Allow adding tags via web interface
