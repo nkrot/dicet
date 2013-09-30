@@ -6,23 +6,65 @@ describe ParadigmForm do
     @nns = Tag.create!(name: "NNS")
     @vb  = Tag.create!(name: "VB")
     @vbz = Tag.create!(name: "VBZ")
+    @vbg = Tag.create!(name: "VBG")
+    @vbd = Tag.create!(name: "VBD")
+    @vbn = Tag.create!(name: "VBN")
 
-    @words = {
+    @pdgt_nn = ParadigmType.create!(name: "nn")
+    [@nn, @nns].each_with_index do |tag, idx|
+      @pdgt_nn.paradigm_tags << ParadigmTag.create! do |pt|
+        pt.paradigm_type = @pdgt_nn
+        pt.tag           = tag
+        pt.order         = idx
+      end
+    end
+    @pdgt_nn.save
+#    puts @pdgt_nn.inspect
+#    puts @pdgt_nn.paradigm_tags.inspect
+
+    @pdgt_vb = ParadigmType.create!(name: "vb")
+    [@vb, @vbz, @vbg, @vbd, @vbn].each do |tag, idx|
+      @pdgt_vb.paradigm_tags << ParadigmTag.create! do |pt|
+        pt.paradigm_type = @pdgt_vb
+        pt.tag           = tag
+        pt.order         = idx
+      end
+    end
+    @pdgt_vb.save
+#    puts @pdgt_vb.inspect
+#    puts @pdgt_vb.paradigm_tags.inspect
+
+    @pdgs = {
       "palabras" => {
-        "NNS" => Word.create!(text: "palabras", tag: @nns)
+        "nn" => Paradigm.create!(paradigm_type: @pdgt_nn, status: 'ready')
       },
       "run" => {
-        "VB" => Word.create!(text: "run", tag: @vb), 
-        "NN" => Word.create!(text: "run", tag: @nn), 
+        "vb" => Paradigm.create!(paradigm_type: @pdgt_vb, status: 'ready'),
+        "nn" => Paradigm.create!(paradigm_type: @pdgt_nn, status: 'ready')
+      },
+      "mosquitos" => {
+        "vb" => Paradigm.create!(paradigm_type: @pdgt_vb, status: 'ready'),
+      }
+    }
+
+    # NOTE, when a word is assigned a tag, it also gets a paradigm_id
+    @words = {
+      "palabras" => {
+        "NNS" => Word.create!(text: "palabras", tag: @nns, paradigm: @pdgs["palabras"]["nn"])
+      },
+      "run" => {
+        "VB" => Word.create!(text: "run", tag: @vb, paradigm: @pdgs["run"]["vb"]),
+        "NN" => Word.create!(text: "run", tag: @nn, paradigm: @pdgs["run"]["nn"]), 
       },
       "runs" => {
-#        "VBZ" => Word.create!(text: "runs", tag: @vbz), 
-        "NNS" => Word.create!(text: "runs", tag: @nns), 
+#        "VBZ" => Word.create!(text: "runs", tag: @vbz, paradigm: @pdgs["run"]["vb"]), 
+        "NNS" => Word.create!(text: "runs", tag: @nns, paradigm: @pdgs["run"]["nn"]), 
       },
       "Emacs" => {
         "UNKNOWN" => Word.create!(text: "Emacs")
       }
     }
+
   end
 
   describe "when initializing from a params hash" do
@@ -91,10 +133,109 @@ describe ParadigmForm do
 
   describe "when initializing from a Paradigm object" do
 
-    # test scenarios:
-    # a-la #new -- an empty paradigm
-    # after #create -- complete or partial paradigm
-#    it
+    it "that is new (has no words attached), should contain empty Word objects" do
+      pdg = Paradigm.new(paradigm_type: @pdgt_nn)
+      pdg_form = ParadigmForm.new(pdg)
+
+      pdg_form.slots.each do |sl|
+        expect( sl.old_word ).to be_kind_of Word
+        expect( sl.new_word ).to be_nil
+      end
+    end
+
+    it "that is already in DB, should contain words from DB" do
+      wd  = Word.where(text: "run").first
+      pdg = wd.paradigm
+      pdg_form = ParadigmForm.new(pdg)
+
+      # pdg.words.length counts only words that are in DB ignoring unsaved Words.new
+      expect( pdg_form.slots.length ).to eq pdg.tags.length
+
+      pdg.each_word_with_tag do |w, t|
+        if w.id
+          expect( pdg_form.words ).to include w
+        else
+          # unsaved words are not in the collections and (looks like) cannot be checked with include
+          found = pdg_form.old_words.any? {|w_f|
+            w_f.tag_id == w.tag_id && w_f.paradigm_id == w.paradigm_id
+          }
+          expect( found ).to be_true
+        end
+      end
+    end
   end
 
+  describe "when saving the paradigm" do
+
+    before do
+      @params = {}
+
+      @params['mosquito'] = {
+        "page_section_id" => "paradigm_data_0", "word_id" => "7",
+        "pdg" => {
+          "0" => {
+            "#{@pdgt_nn.id}" => {
+              "#{@nn.id}" => {
+                "0"=>{"tag"=>"NN",   "word"=>"mosquito",   "deleted"=>"false"}
+              },
+              "#{@nns.id}" => {
+                "1" =>{"tag"=>"NNS", "word"=>"mosquitos",  "deleted"=>"false"},
+                "3" =>{"tag"=>"NNS", "word"=>"mosquitoes", "deleted"=>"false"},
+              },
+              "extras"=>{"comment"=>"double NNS", "status"=>"ready"}
+            }
+          }
+        }
+      }
+
+#      @params['apple']
+    end
+
+    
+    describe "that is not in DB yet" do
+
+      it "recognize existing words and add unknown words to DB" do
+        mosquito_notag = Word.create!(text: 'mosquito')
+        mosquitos_vbz  = Word.create!(text: 'mosquitos', tag: @vbz, paradigm: @pdgs['mosquitos']['vb'])
+
+        # check counts before
+        expect( Word.where(text: 'mosquito').count   ).to eq 1
+        expect( Word.where(text: 'mosquitos').count  ).to eq 1
+        expect( Word.where(text: 'mosquitoes').count ).to eq 0
+
+        pdgf = ParadigmForm.new @params['mosquito']
+        pdgf.save
+
+        # check counts after
+        expect( Word.where(text: 'mosquito').count   ).to eq 1
+        expect( Word.where(text: 'mosquitos').count  ).to eq 2
+        expect( Word.where(text: 'mosquitoes').count ).to eq 1
+
+        # expectations:
+        # + mosquito_notag should get its tag and paradigm attributes set
+        # + no other mosquito should be added to db
+        expect( mosquitos_notag.tag      ).to eq @nn
+        expect( mosquitos_notag.paradigm ).not_to be_nil
+
+        # expectations:
+        # + mosquito_vbz should not be affected
+        # + instead, another instance of mosquito should be created in DB with NNS tag
+        expect( mosquitos_vbz.tag ).to eq @vbz
+        expect( Word.where({text: 'mosquitos', tag: @nns}).count ).to eq 1
+
+        # expectations:
+        # + mosquitoes should be added to db with NNS tag
+        expect( Word.where({text: 'mosquitos', tag: @nns}).count ).to eq 1
+      end
+
+    end
+
+    describe "that is in DB (that is, we are editing an existing paradigm)" do
+      it "tests for updating an existing paradigm"
+    end
+
+    it "tests for deletion of individual words"
+
+    it "should update comment and status fields"
+  end
 end

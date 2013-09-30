@@ -14,14 +14,16 @@ class ParadigmForm
 
   # based on paradigms_controller#each_paradigm
   # TODO: do not use it to parse a form that contains multiple paradigms!
+  # TODO: a way to linking the paradigm from params to a real paradigm existing in DB.
+  #       this is necessary to serve updating existing paradigms (see update_paradigm)
   def parse_params(params)
-    @paradigm = Paradigm.new
+    @paradigm = Paradigm.find_or_initialize_by(params["id"])
 
     params["pdg"].each do |num, pdgtid_data|
       pdgtid_data.each do |pdg_type_id, slots|
-        @paradigm.paradigm_type_id = pdg_type_id
-        @paradigm.status  = slots["extras"]["status"]
-        @paradigm.comment = slots["extras"]["comment"]
+        @paradigm.paradigm_type_id = pdg_type_id       # TODO: when editing an existing pdg
+        @paradigm.status  = slots["extras"]["status"]  # should wait until #save method is called
+        @paradigm.comment = slots["extras"]["comment"] #
 
         slots.each do |tag_id, hash|
           if tag_id == "extras"
@@ -34,6 +36,14 @@ class ParadigmForm
         end
       end
     end
+  end
+
+  def old_words
+    @slots.collect {|slot| slot.old_word }
+  end
+
+  def new_words
+    @slots.collect {|slot| slot.new_word }
   end
 
   def extras
@@ -118,10 +128,20 @@ class ParadigmForm
 
   end
 
+#  def each
+#    @slots.each do ||
+#    end
+#  end
+
   def method_missing(name, *args)
     @paradigm.send(name, *args)
   end
 
+  def save
+    # TODO: update comment, status
+    
+    @slots.each {|slot| slot.save}
+  end
 end
 
 ######################################################################
@@ -145,6 +165,27 @@ class ParadigmForm
 
 #    def changed?
 #    end
+
+    def save
+      debug = false
+      # TODO: take logic from paradigms_controller#{save,update}_paradigm
+      puts "Compare: #{@old_word.inspect} vs. #{@new_word.inspect}"  if debug
+      if !@old_word && !@new_word
+        # this happens if the user first added a new word+tag (w/o saving)
+        # and then marked it for deletion
+      elsif @old_word && ! @new_word
+        # the old word was marked for deletion
+        @old_word.suicide
+      elsif old_word
+        @old_word.update_from(@new_word)
+        @old_word.paradigm = pdg  # originally, it was in save_paradigm only
+        @old_word.save            # originally, it was in save_paradigm only
+      else
+        # newly added word+tag pair
+        @new_word.paradigm = pdg
+        @new_word.save
+      end
+    end
 
     private
 
@@ -179,7 +220,7 @@ class ParadigmForm
         @new_word = nil
       else
         # otherwise,
-        # new_word is set from submitted *values* of the keys "tag" and 101/"word"
+        # new_word is set from submitted *values* of the keys "tag" and 101 or "word"
         # or is retrieved from db if it is already there and has not yet been taken to a pdg
         word_text = tw_hash[word_id].strip
         attrs = {text: word_text, tag_id: nil, paradigm_id: nil}

@@ -21,6 +21,7 @@ class Paradigm < ActiveRecord::Base
     tags_from_words = []
     if self.id
       tags_from_words = Word.where({paradigm_id: self.id}).map {|w| w.tag}
+#      puts "Tag associated with the current paradigm (#{tags_from_words.length}): #{tags_from_words.inspect}"
     end
 
     tags_from_pdg_type = self.paradigm_type.tags
