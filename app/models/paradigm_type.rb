@@ -37,9 +37,11 @@ class ParadigmType < ActiveRecord::Base
           # that can not be set through an association.
           tags.each_with_index do |t, idx|
             pdg_type.paradigm_tags << ParadigmTag.create do |pt|
-              pt.paradigm_type_id = pdg_type.id
-              pt.tag_id           = t.id
-              pt.order            = idx
+#              pt.paradigm_type_id = pdg_type.id
+#              pt.tag_id           = t.id
+              pt.paradigm_type = pdg_type
+              pt.tag           = t
+              pt.order         = idx
             end
           end
           pdg_type.save
