@@ -1,0 +1,48 @@
+#!/usr/bin/ruby
+
+# # #
+# USAGE:
+#   cd some_prosao_dir
+#   . scripts/set_prosao1_env LANG
+#   syn_ldb_server &
+#
+
+require 'socket'
+
+port = 3001
+
+######################################################################
+
+if ENV.include?('LDBPATH')
+  @cmd = IO.popen("#{ENV['LDBPATH']}/syn_ldb", "w+")
+else
+  $stderr.puts "Prosao not found in environment. Using fake command"
+  @cmd = IO.popen("bin/syn_ldb", "w+")
+end
+
+def convert(line)
+  @cmd.puts line
+  @cmd.gets.chomp
+end
+
+######################################################################
+
+server = TCPServer.open(port)
+
+loop {
+  Thread.start(server.accept) do |client|
+#    $stderr.puts "Client connected!"
+
+    while line = client.gets
+      line.chomp!
+#      $stderr.puts "Received from the client:\n#{line}"
+      client.puts convert(line)
+    end
+
+    client.close
+#    $stderr.puts "Closing connection"
+  end
+}
+
+@cmd.close
+

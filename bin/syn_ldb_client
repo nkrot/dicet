@@ -1,0 +1,26 @@
+#!/usr/bin/ruby
+
+# # #
+# an example of a client
+# similar code is in app/models/inflector.rb
+#
+
+require 'socket'
+
+host = 'localhost'
+port = 3001
+
+server = TCPSocket.open(host, port)
+
+puts "Type anything"
+
+while line = gets
+  line.chomp!
+
+  server.puts line
+  resp = server.gets.chomp
+
+  puts "Server responded:\n#{resp}"
+end
+
+server.close

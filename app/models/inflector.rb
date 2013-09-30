@@ -1,5 +1,8 @@
 class Inflector
   
+  @@host = '10.165.64.112' # syn-proc2
+  @@post = 3001
+
   # TODO: how to start it only once, at app start up
   @@cmd = IO.popen(Rails.root.join("bin/syn_ldb").to_s, "w+")
 
@@ -11,6 +14,18 @@ class Inflector
         tw.text = convert_ll(sw.text, sw.tag.name, tw.tag.name)
       end
     end
+  end
+
+  def test_server
+    server = TCPSocket.open(@@host, @@port)
+
+    ["VB VBZ run", "NNS NN bacteria"].each do |q|
+      server.puts "convert #{q}"
+      res = server.gets.chomp
+      puts "Server responded with: #{res}"
+    end
+
+    server.close
   end
 
   private
