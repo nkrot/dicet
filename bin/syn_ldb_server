@@ -14,7 +14,7 @@ port = 3001
 ######################################################################
 
 if ENV.include?('LDBPATH')
-  @cmd = IO.popen("#{ENV['LDBPATH']}/syn_ldb", "w+")
+  @cmd = IO.popen("#{ENV['LDBPATH']}/../syn_ldb", "w+")
 else
   $stderr.puts "Prosao not found in environment. Using fake command"
   @cmd = IO.popen("bin/syn_ldb", "w+")
