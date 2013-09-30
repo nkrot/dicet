@@ -1,7 +1,7 @@
 class Inflector
   
   @@host = '10.165.64.112' # syn-proc2
-  @@post = 3001
+  @@port = 3001 # this value is hardcoded into bin/syn_ldb_server
 
   # TODO: how to start it only once, at app start up
   @@cmd = IO.popen(Rails.root.join("bin/syn_ldb").to_s, "w+")
@@ -19,10 +19,12 @@ class Inflector
   def test_server
     server = TCPSocket.open(@@host, @@port)
 
-    ["VB VBZ run", "NNS NN bacteria"].each do |q|
+    [["VB VBZ run", "runs"],
+     ["NNS NN bacteria", "bacterium"]].each do |q,r|
       server.puts "convert #{q}"
       res = server.gets.chomp
-      puts "Server responded with: #{res}"
+      check = r == res ? 'correct' : 'incorrect'
+      puts "Server responded with: \"#{res}\", this is #{check}"
     end
 
     server.close
