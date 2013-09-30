@@ -211,11 +211,14 @@ describe ParadigmForm do
         expect( Word.where(text: 'mosquitos').count  ).to eq 2
         expect( Word.where(text: 'mosquitoes').count ).to eq 1
 
+        puts Word.where(text: 'mosquito').inspect
+        puts mosquito_notag.inspect # oops, why tag is not updated?
+
         # expectations:
         # + mosquito_notag should get its tag and paradigm attributes set
         # + no other mosquito should be added to db
-        expect( mosquitos_notag.tag      ).to eq @nn
-        expect( mosquitos_notag.paradigm ).not_to be_nil
+        expect( mosquito_notag.tag      ).to eq @nn
+        expect( mosquito_notag.paradigm ).not_to be_nil
 
         # expectations:
         # + mosquito_vbz should not be affected
@@ -230,7 +233,7 @@ describe ParadigmForm do
 
     end
 
-    describe "that is in DB (that is, we are editing an existing paradigm)" do
+    describe "that is in DB (we are editing an existing paradigm)" do
       it "tests for updating an existing paradigm"
     end
 

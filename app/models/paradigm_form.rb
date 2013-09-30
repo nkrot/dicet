@@ -17,7 +17,7 @@ class ParadigmForm
   # TODO: a way to linking the paradigm from params to a real paradigm existing in DB.
   #       this is necessary to serve updating existing paradigms (see update_paradigm)
   def parse_params(params)
-    @paradigm = Paradigm.find_or_initialize_by(params["id"])
+    @paradigm = Paradigm.find_or_initialize_by(id: params["id"])
 
     params["pdg"].each do |num, pdgtid_data|
       pdgtid_data.each do |pdg_type_id, slots|
@@ -26,12 +26,12 @@ class ParadigmForm
         @paradigm.comment = slots["extras"]["comment"] #
 
         slots.each do |tag_id, hash|
-          if tag_id == "extras"
-            # skip
-          else
-            hash.each do |num, tw_hash|
-              @slots << Slot.new(tw_hash.merge({tag_id: tag_id}))
-            end
+          next  if tag_id == "extras"
+
+          hash.each do |num, tw_hash|
+            slot = Slot.new(tw_hash.merge({tag_id: tag_id}))
+            slot.paradigm_id = @paradigm.id
+            @slots << slot
           end
         end
       end
@@ -121,6 +121,7 @@ class ParadigmForm
 
     pdg.each_word_with_tag do |word, tag|
       slot = Slot.new
+      slot.paradigm_id = pdg.id
       slot.old_word = word
 
       @slots << slot
@@ -149,14 +150,11 @@ end
 class ParadigmForm
   class Slot
 
-    attr_accessor :old_word, :new_word
+    attr_accessor :old_word, :new_word, :paradigm_id
 
     def initialize(hash=nil)
       @old_word = @new_word = nil
-
-      if hash
-        parse_hash hash
-      end
+      parse_hash(hash)  if hash
     end
 
     def deleted?
@@ -170,19 +168,24 @@ class ParadigmForm
       debug = false
       # TODO: take logic from paradigms_controller#{save,update}_paradigm
       puts "Compare: #{@old_word.inspect} vs. #{@new_word.inspect}"  if debug
+      
       if !@old_word && !@new_word
         # this happens if the user first added a new word+tag (w/o saving)
         # and then marked it for deletion
+      
       elsif @old_word && ! @new_word
         # the old word was marked for deletion
         @old_word.suicide
+ 
       elsif old_word
         @old_word.update_from(@new_word)
-        @old_word.paradigm = pdg  # originally, it was in save_paradigm only
-        @old_word.save            # originally, it was in save_paradigm only
+        # !!! originally, it was in save_paradigm only
+        @old_word.paradigm_id = paradigm_id  # !!!
+        @old_word.save                       # !!!
+      
       else
         # newly added word+tag pair
-        @new_word.paradigm = pdg
+        @new_word.paradigm_id = paradigm_id
         @new_word.save
       end
     end
