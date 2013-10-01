@@ -92,12 +92,7 @@ class ParadigmsController < ApplicationController
     @current_task = @current_word.task
 
     pdg = Paradigm.find(params[:id])
-    if debug=false
-      puts "Deleting #{pdg.inspect}"
-      puts "WORDS: #{pdg.words.length}"
-    end
-    pdg.words.each { |word| word.suicide }
-    pdg.destroy
+    pdg.suicide
   end
 
   def peek

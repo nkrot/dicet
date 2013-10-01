@@ -62,6 +62,16 @@ class Paradigm < ActiveRecord::Base
     ! self.comment.to_s.empty?
   end
 
+  def suicide
+    if debug=false
+      puts "Deleting #{self.inspect}"
+      puts "WORDS: #{self.words.length}"
+    end
+
+    self.words.each { |word| word.suicide }
+    self.destroy
+  end
+
   # not used yet
 #  def dumped?
 #    self.status.to_s.downcase == "dumped"
