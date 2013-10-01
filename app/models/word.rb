@@ -33,6 +33,8 @@ class Word < ActiveRecord::Base
   end
 
   def suicide
+    debug = false
+    puts "<<< in #{self.class}#suicide >>> " if debug
     if self.task_id
       # find an added word and make it replace the original word
       # that we intent to delete.
@@ -42,6 +44,7 @@ class Word < ActiveRecord::Base
       #  3) delete paradigm pdg_id=1 with word_NN. we now want original word contain word_VB and point to pdg_id=2 
       homonym = Word.where(text: self.text, task_id: nil).where.not(tag_id: nil, id: self.id, paradigm_id: self.paradigm_id).first
 #      puts "Homonym: #{homonym.inspect}"
+
       if homonym
         # copy added attributes from the homonym
         attrs = {
@@ -50,42 +53,63 @@ class Word < ActiveRecord::Base
           tag_id:      homonym.tag_id,
           paradigm_id: homonym.paradigm_id
         }
+        puts "#{self.inspect} will be switched to its homonym"  if debug
         self.update_attributes(attrs)
         homonym.destroy
+
       else
         # reset added attributes
-        attrs = {typo: nil, comment: nil, tag_id: nil, paradigm_id: nil}
+        puts "#{self.inspect} is going to get its added attributes reset"  if debug
+        attrs = {typo: nil, comment: nil, tag: nil, paradigm: nil}
         self.update_attributes(attrs)
+        puts "Reset to #{self.inspect}"  if debug
       end
+
     else
+      puts "#{self.inspect} is going to be destroyed"  if debug
       self.destroy
     end
   end
 
-  # update the current word from the other word
+  # update the current word from the other word and return
+  # the updated object, that is either updated self or other
+  #
+  # NOTE: this method should be used like this:
+  #   wd = wd.update_from(other)
+  # because we can not replace self with another object
+  #
   # TODO: other fields (typo, comment) not handled yet
+
   def update_from other
     debug = false
     puts "update_from: current is #{self.inspect}; the other is #{other.inspect}" if debug
+
     # compare fields
     eq_text = self.text == other.text
     eq_tag  = self.tag  == other.tag
+
     if eq_text && eq_tag
       # the word's text and tag have not changed
       # => just keep the current word and throw away the other word
       puts " keep the current word"  if debug
+      self
+
     elsif eq_text
       # the word's text is the same but the word's tag changed
       # => update the tag of the current word to the new value
       puts " change the tag from #{self.tag} to #{other.tag}"  if debug
       self.tag = other.tag
       self.save
+      self
+
     else
       # prefer the other word
+      # TODO: need to set self=other
       puts " dismiss the current word and keep the other word."  if debug
       other.paradigm = self.paradigm
-      self.suicide
       other.save
+      self.suicide
+      other
     end
   end
 
