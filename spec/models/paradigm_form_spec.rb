@@ -204,26 +204,25 @@ describe ParadigmForm do
         expect( Word.where(text: 'mosquitoes').count ).to eq 0
 
         pdgf = ParadigmForm.new @params['mosquito']
-        pdgf.save
+        expect { pdgf.save }.to change{ Paradigm.count }.by 1
 
         # check counts after
         expect( Word.where(text: 'mosquito').count   ).to eq 1
         expect( Word.where(text: 'mosquitos').count  ).to eq 2
         expect( Word.where(text: 'mosquitoes').count ).to eq 1
 
-        puts Word.where(text: 'mosquito').inspect
-        puts mosquito_notag.inspect # oops, why tag is not updated?
-
         # expectations:
         # + mosquito_notag should get its tag and paradigm attributes set
         # + no other mosquito should be added to db
-        expect( mosquito_notag.tag      ).to eq @nn
-        expect( mosquito_notag.paradigm ).not_to be_nil
+        _mosquito_notag = Word.find(mosquito_notag.id)
+        expect( _mosquito_notag.tag      ).to eq @nn
+        expect( _mosquito_notag.paradigm ).not_to be_nil
 
         # expectations:
         # + mosquito_vbz should not be affected
         # + instead, another instance of mosquito should be created in DB with NNS tag
-        expect( mosquitos_vbz.tag ).to eq @vbz
+        _mosquitos_vbz = Word.find(mosquitos_vbz.id)
+        expect( _mosquitos_vbz.tag ).to eq @vbz
         expect( Word.where({text: 'mosquitos', tag: @nns}).count ).to eq 1
 
         # expectations:
@@ -231,14 +230,377 @@ describe ParadigmForm do
         expect( Word.where({text: 'mosquitos', tag: @nns}).count ).to eq 1
       end
 
+      it "should update comment and status fields" do
+
+        pdgf = ParadigmForm.new @params['mosquito']
+
+        expect( pdgf.paradigm.comment ).to be_nil
+        expect( pdgf.paradigm.status  ).to be_nil
+
+        expect( pdgf.comment ).to eq 'double NNS'
+        expect( pdgf.status  ).to eq 'ready'
+
+        pdgf.save
+
+        expect( pdgf.paradigm.comment ).to eq 'double NNS'
+        expect( pdgf.paradigm.status  ).to eq 'ready'
+
+        expect( pdgf.comment ).to eq 'double NNS'
+        expect( pdgf.status  ).to eq 'ready'
+      end
     end
 
     describe "that is in DB (we are editing an existing paradigm)" do
-      it "tests for updating an existing paradigm"
+
+      it "word(s) can be added" do
+        # initially, we have in DB
+        # - Word time_NN
+        # - Word times
+        # - Paradigm with only one word time_NN
+        # we add
+        # - existing Word times as NNS to this paradigm
+        # - a new Word tempora to this paradigm
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review')
+        time_nn     = Word.create!(text: 'time', tag: @nn, paradigm: pdg_nn_time)
+        times_notag = Word.create!(text: 'times')
+
+        word_count = Word.count
+
+        params = {
+          "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_nn.id}" => {
+                "#{@nn.id}" => {
+                  "0" => {"tag"=>"NN",  "#{time_nn.id}"=>"#{time_nn.text}",  "deleted"=>"false"}
+                },
+                "#{@nns.id}" => {
+                  "1" => {"tag"=>"NNS", "word"=>"#{times_notag.text}",  "deleted"=>"false"},
+                  "3" => {"tag"=>"NNS", "word"=>"tempora",              "deleted"=>"false"},
+                },
+                "extras"=>{"comment"=>"time+times+tempora", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        # initial state:
+        # + there is 1 word in the paradigm
+        expect( pdg_nn_time.words.count ).to eq 1
+
+        pdgf = ParadigmForm.new params
+        expect { pdgf.save }.not_to change{ Paradigm.count }
+
+        # expectations:
+        # + the word that was originally in the paradigm was not affected
+        _time_nn = Word.find(time_nn.id)
+        expect( _time_nn ).to eq time_nn
+
+        # expectations:
+        # + addition finds an existing word in DB and sets its attributes
+        _times_nns = Word.find(times_notag.id)
+        expect( _times_nns.tag      ).to eq @nns
+        expect( _times_nns.paradigm ).to eq pdg_nn_time
+
+        # expectations:
+        # + addition creates a new word in DB
+        expect( Word.count ).to eq word_count+1
+        _tempora_nns = Word.where(text: "tempora").first
+        expect( _tempora_nns.tag      ).to eq @nns
+        expect( _tempora_nns.paradigm ).to eq pdg_nn_time
+
+        # expectations
+        # + now the paradigm has 3 words
+        expect( pdg_nn_time.words.count ).to eq 3
+      end
+
+      it "word(s) can be deleted" do
+        # initially in DB we have
+        # - Word time_nn
+        # - Word times_nns
+        # - Word tempora_nns
+        # - Word Zeiten_nns that does not belong to the original word list
+        # - a paradigm with time_nn, tempora_nns and Zeiten_nns
+        # then we
+        # - delete tempora_nns and Zeiten_nns from the paradigm
+        # - add times_nns
+        # - try adding another word but change our mind
+        task = Task.create!
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review')
+        time_nn     = Word.create!(text: 'time', tag: @nn, paradigm: pdg_nn_time, task: task)
+        times_notag = Word.create!(text: 'times')
+        tempora_nns = Word.create!(text: 'tempora', tag: @nns, paradigm: pdg_nn_time, task: task)
+        zeiten_nns  = Word.create!(text: 'Zeiten',  tag: @nns, paradigm: pdg_nn_time)
+
+        word_count  = Word.count
+
+        params = {
+          "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_nn.id}" => {
+                "#{@nn.id}" => {
+                  "0" => {"tag"=>"NN",  "#{time_nn.id}"=>"#{time_nn.text}",  "deleted"=>"false"}
+                },
+                "#{@nns.id}" => {
+                  "1" => {"tag"=>"NNS", "#{tempora_nns.id}"=>"#{tempora_nns.text}",  "deleted"=>"true"},
+                  "5" => {"tag"=>"NNS", "#{zeiten_nns.id}"=>"#{zeiten_nns.text}",    "deleted"=>"true"},
+                  "2" => {"tag"=>"NNS", "word"=>"#{times_notag.text}",  "deleted"=>"false"},
+                  "3" => {"tag"=>"NNS", "word"=>"", "deleted"=>"true"}, # we changed our mind
+                },
+                "extras"=>{"comment"=>"time+times-tempora", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        pdgf = ParadigmForm.new params
+        expect{ pdgf.save }.not_to change{ Paradigm.count }
+
+        # expectations
+        # + Word tempora was released
+        _tempora_nns = Word.find(tempora_nns.id)
+        expect( _tempora_nns.tag      ).to be_nil
+        expect( _tempora_nns.paradigm ).to be_nil
+
+        # expectations:
+        # + Word times was taken into the paradigm
+        _times_nns = Word.find(times_notag.id)
+        expect( _times_nns.tag      ).to eq @nns
+        expect( _times_nns.paradigm ).to eq pdg_nn_time
+        
+        # expectations:
+        # + the word Zeiten_nns was removed from the database
+        expect( Word.where(text: zeiten_nns.text) ).to be_empty
+        expect( Word.count                        ).to eq word_count-1
+
+        # expectations:
+        # + the new paradigm has two words
+        expect( pdg_nn_time.words.count ).to eq 2
+      end
+
+      it "word.tag can be changed" do
+        # we have in DB
+        # - Word time_nn
+        # - Word times_vbz
+        # - a paradigm that groups time_nn and times_vbz
+        # we then
+        # - change tag of times_vbz to NNS
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review')
+        time_nn     = Word.create!(text: 'time',  tag: @nn,  paradigm: pdg_nn_time)
+        times_vbz   = Word.create!(text: 'times', tag: @vbz, paradigm: pdg_nn_time)
+
+        word_count  = Word.count
+
+        params = {
+          "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_nn.id}" => {
+                "#{@nn.id}" => {
+                  "0" => {"tag"=>"NN",  "#{time_nn.id}"=>"#{time_nn.text}",  "deleted"=>"false"}
+                },
+                "#{@vbz.id}" => {
+                  "1" => {"tag"=>"NNS", "#{times_vbz.id}"=>"#{times_vbz.text}",  "deleted"=>""},
+                },
+                "extras"=>{"comment"=>"times_vbz->times_nns", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        # initial state
+        # + there are two words in the paradigm
+        expect( pdg_nn_time.words.count ).to eq 2
+
+        pdgf = ParadigmForm.new params
+        expect { pdgf.save }.not_to change{ Paradigm.count }
+
+        # expectations:
+        # + number of words in DB stays the same
+        # + number of words in the paradigm stays the same
+        expect( Word.count              ).to eq word_count
+        expect( pdg_nn_time.words.count ).to eq 2
+
+        # expectations:
+        # + tag is changed in the same record record
+        # + tag of times_vbz is changed to NNS
+        _times_nns = Word.find(times_vbz.id)
+        expect( _times_nns.tag      ).to eq @nns
+        expect( _times_nns.paradigm ).to eq pdg_nn_time
+      end
+
+      it "word.text can be changed, release the old word" do
+        # initially we have in DB
+        # - Word time_nn
+        # - Word times_nns
+        # - Word tempora_nns
+        # - Paradigm that groups time_nn, tempora_nns
+        # then we
+        # - replace tempora_nns with times_nns
+        task = Task.create!
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review')
+        time_nn     = Word.create!(text: 'time',    tag: @nn,  paradigm: pdg_nn_time, task: task)
+        tempora_nns = Word.create!(text: 'tempora', tag: @nns, paradigm: pdg_nn_time, task: task)
+        times_notag = Word.create!(text: 'times')
+
+        word_count  = Word.count
+
+        params = {
+          "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_nn.id}" => {
+                "#{@nn.id}" => {
+                  "0" => {"tag"=>"NN",  "#{time_nn.id}"=>"#{time_nn.text}",  "deleted"=>"false"}
+                },
+                "#{@nns.id}" => {
+                  "1" => {"tag"=>"NNS", "#{tempora_nns.id}"=>"#{times_notag.text}",  "deleted"=>""},
+                },
+                "extras"=>{"comment"=>"tempora_nns->times_nns", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        pdgf = ParadigmForm.new params
+        expect{ pdgf.save }.not_to change{ Paradigm.count }
+
+        # expectations:
+        # + the number of words in the paradigm continues to be 2
+        # + the number of words in DB has not changed
+        expect( pdg_nn_time.words.count ).to eq 2
+        expect( Word.count              ).to eq word_count
+
+        # expectations:
+        # + changing text should find another suitable word
+        _times_nns = Word.find(times_notag.id)
+        expect( _times_nns.paradigm ).to eq pdg_nn_time
+        expect( _times_nns.tag      ).to eq @nns
+
+        # expectations:
+        # + old word should be released
+        _tempora_notag = Word.find(tempora_nns.id)
+        expect( _tempora_notag.tag      ).to be_nil
+        expect( _tempora_notag.paradigm ).to be_nil
+      end
+
+      it "word.text can be changed, delete the old word" do
+        # initially we have in DB
+        # - Word time_nn
+        # - Word times_nns
+        # - Paradigm that groups time_nn, tempora_nns
+        # then we
+        # - replace tempora_nns with times_nns
+        task = Task.create!
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review')
+        time_nn     = Word.create!(text: 'time',    tag: @nn,  paradigm: pdg_nn_time, task: task)
+        tempora_nns = Word.create!(text: 'tempora', tag: @nns, paradigm: pdg_nn_time) # added word
+        times_notag = Word.create!(text: 'times')
+
+        word_count  = Word.count
+
+        params = {
+          "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_nn.id}" => {
+                "#{@nn.id}" => {
+                  "0" => {"tag"=>"NN",  "#{time_nn.id}"=>"#{time_nn.text}",  "deleted"=>"false"}
+                },
+                "#{@nns.id}" => {
+                  "1" => {"tag"=>"NNS", "#{tempora_nns.id}"=>"#{times_notag.text}",  "deleted"=>""},
+                },
+                "extras"=>{"comment"=>"tempora_nns->times_nns", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        pdgf = ParadigmForm.new params
+        expect{ pdgf.save }.not_to change{ Paradigm.count }
+
+        # expectations:
+        # + the number of words in the paradigm continues to be 2
+        # + the number of words in DB decreased, because tempora_nns was deleted
+        expect( pdg_nn_time.words.count ).to eq 2
+        expect( Word.count              ).to eq word_count-1
+
+        # expectations:
+        # + changing text should find another suitable word
+        _times_nns = Word.find(times_notag.id)
+        expect( _times_nns.paradigm ).to eq pdg_nn_time
+        expect( _times_nns.tag      ).to eq @nns
+
+        # expectations:
+        # + word that was not originally in Word should be deleted
+        expect{ Word.find(tempora_nns.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "word.text and word.tag can be changed at once"
+
+
+      it "should update comment and status fields of the underlying paradigm", focus: true do
+
+        pdg_vb_read = Paradigm.create!(paradigm_type: @pdgt_vb, status: 'review', comment: 'initial comment')
+        read_vb     = Word.create!(text: 'read',  tag: @vb,  paradigm: pdg_vb_read)
+        reads_vbz   = Word.create!(text: 'reads', tag: @vbz, paradigm: pdg_vb_read)
+        read_vbn    = Word.create!(text: 'read',  tag: @vbn, paradigm: pdg_vb_read)
+
+        params = {
+          "id" => "#{pdg_vb_read.id}", # this is mandatory when editing an existing paradigm
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_vb.id}" => {
+                "#{@vb.id}" => {
+                  "0" => {"tag"=>"VB",  "#{read_vb.id}"=>"#{read_vb.text}",  "deleted"=>"false"}
+                },
+                "#{@vbz.id}" => {
+                  "1" => {"tag"=>"VBZ", "#{reads_vbz.id}"=>"#{reads_vbz.text}",  "deleted"=>""},
+                },
+                "#{@vbg.id}" => {
+                  "2" => {"tag"=>"VBG", "word"=>"",  "deleted"=>""},
+                },
+                "#{@vbd.id}" => {
+                  "3" => {"tag"=>"VBD", "word"=>"",  "deleted"=>""},
+                },
+                "#{@vbn.id}" => {
+                  "4" => {"tag"=>"VBN", "#{read_vbn.id}"=>"#{read_vbn.text}",  "deleted"=>""},
+                },
+                "extras" => {"comment"=>"updated comment", "status"=>"ready"}
+              }
+            }
+          }
+        }
+
+        expect( Word.where(text: 'read').count ).to eq 2
+        expect( pdg_vb_read.words.count        ).to eq 3
+
+        pdgf = ParadigmForm.new params
+
+        expect( Word.where(text: 'read').count ).to eq 2
+        expect( pdg_vb_read.words.count        ).to eq 3
+
+        expect( pdgf.comment ).to eq 'updated comment'
+        expect( pdgf.status  ).to eq 'ready'
+
+        # expectations:
+        # + until saved the underlaying paradigm keeps original values
+        expect( pdgf.paradigm.comment ).to eq pdg_vb_read.comment
+        expect( pdgf.paradigm.status  ).to eq pdg_vb_read.status
+
+        pdgf.save
+
+        expect( Word.where(text: 'read').count ).to eq 2
+        expect( pdg_vb_read.words.count        ).to eq 3
+
+        # expectations:
+        # + once saved, comment and status fields of the underlying paradigm are updated
+        expect( pdgf.paradigm.comment ).to eq 'updated comment'
+        expect( pdgf.paradigm.status  ).to eq 'ready'
+      end
+
     end
 
-    it "tests for deletion of individual words"
-
-    it "should update comment and status fields"
   end
 end

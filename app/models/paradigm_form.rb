@@ -1,9 +1,11 @@
 class ParadigmForm
   attr_accessor :slots, :paradigm
+  attr_reader :comment, :status, :paradigm_type_id
 
   def initialize(obj=nil)
     @slots = []
     @paradigm = nil
+    @comment = @status = @paradigm_type_id = nil
 
     if obj.is_a? Hash
       parse_params obj
@@ -13,24 +15,26 @@ class ParadigmForm
   end
 
   # based on paradigms_controller#each_paradigm
-  # TODO: do not use it to parse a form that contains multiple paradigms!
-  # TODO: a way to linking the paradigm from params to a real paradigm existing in DB.
-  #       this is necessary to serve updating existing paradigms (see update_paradigm)
+  # NOTE: do not use it to parse a form that contains multiple paradigms!
+  #
   def parse_params(params)
     @paradigm = Paradigm.find_or_initialize_by(id: params["id"])
 
+    debug = false
+
     params["pdg"].each do |num, pdgtid_data|
       pdgtid_data.each do |pdg_type_id, slots|
-        @paradigm.paradigm_type_id = pdg_type_id       # TODO: when editing an existing pdg
-        @paradigm.status  = slots["extras"]["status"]  # should wait until #save method is called
-        @paradigm.comment = slots["extras"]["comment"] #
+        @paradigm_type_id = pdg_type_id.to_i
+        @status  = slots["extras"]["status"]
+        @comment = slots["extras"]["comment"]
 
         slots.each do |tag_id, hash|
           next  if tag_id == "extras"
 
           hash.each do |num, tw_hash|
             slot = Slot.new(tw_hash.merge({tag_id: tag_id}))
-            slot.paradigm_id = @paradigm.id
+            slot.paradigm = @paradigm
+            puts "SLOT: #{slot.inspect}"  if debug
             @slots << slot
           end
         end
@@ -47,7 +51,7 @@ class ParadigmForm
   end
 
   def extras
-    {"comment" => @paradigm.comment, "status" => @paradigm.status}
+    {"comment" => @comment, "status" => @status}
   end
 
   # unknown paradigm
@@ -121,7 +125,7 @@ class ParadigmForm
 
     pdg.each_word_with_tag do |word, tag|
       slot = Slot.new
-      slot.paradigm_id = pdg.id
+      slot.paradigm = pdg
       slot.old_word = word
 
       @slots << slot
@@ -139,8 +143,12 @@ class ParadigmForm
   end
 
   def save
-    # TODO: update comment, status
-    
+    attrs = {
+      status: @status,
+      comment: @comment,
+      paradigm_type_id: @paradigm_type_id
+    }
+    @paradigm.update_attributes(attrs) # this also calls @paradigm.save which is important
     @slots.each {|slot| slot.save}
   end
 end
@@ -150,7 +158,7 @@ end
 class ParadigmForm
   class Slot
 
-    attr_accessor :old_word, :new_word, :paradigm_id
+    attr_accessor :old_word, :new_word, :paradigm
 
     def initialize(hash=nil)
       @old_word = @new_word = nil
@@ -175,17 +183,20 @@ class ParadigmForm
       
       elsif @old_word && ! @new_word
         # the old word was marked for deletion
+        puts "the old word will be deleted"  if debug
         @old_word.suicide
  
       elsif old_word
-        @old_word.update_from(@new_word)
+        puts "the old word will be updated from the new word"  if debug
+        @old_word = @old_word.update_from(@new_word)
         # !!! originally, it was in save_paradigm only
-        @old_word.paradigm_id = paradigm_id  # !!!
-        @old_word.save                       # !!!
+        @old_word.paradigm = @paradigm # !!!
+        @old_word.save                 # !!!
       
       else
+        puts "the new word will be added"  if debug
         # newly added word+tag pair
-        @new_word.paradigm_id = paradigm_id
+        @new_word.paradigm = @paradigm
         @new_word.save
       end
     end
