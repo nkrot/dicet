@@ -161,6 +161,27 @@ class ParadigmForm
     sanitize
   end
 
+  def fill_with_conversions
+    debug = false
+
+    src_words = new_words.select {|w| !w.empty? }
+    trg_words = new_words.select {|w|  w.empty? }
+
+    if debug
+      puts "***** BEFORE *****"
+      puts src_words.inspect
+      puts trg_words.inspect
+    end
+
+    Inflector.convert(src_words, trg_words)
+
+    if debug
+      puts "***** AFTER *****"
+      puts src_words.inspect
+      puts trg_words.inspect
+    end
+  end
+
   private
 
   def sanitize

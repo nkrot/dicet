@@ -129,33 +129,17 @@ class ParadigmsController < ApplicationController
   end
 
   def add_conversions
-    puts "add_conversions: #{params.inspect}"
+    debug = !true
+    puts "add_conversions: #{params.inspect}"  if debug
 
     @current_word = Word.find(params[:word_id])
     @current_task = @current_word.task
     @idx = 1
     @page_section_id = params[:page_section_id]
 
-    @paradigm_form = ParadigmForm.new(params)
-    src_words = @paradigm_form.new_words.select {|w| w && !w.text.empty? }
-    trg_words = @paradigm_form.new_words.select {|w| w &&  w.text.empty? }
+    @paradigm = ParadigmForm.new(params)
+    @paradigm.fill_with_conversions
 
-    puts "***** BEFORE *****"
-    puts src_words.inspect
-    puts trg_words.inspect
-
-    # can be refactored to class methods
-    Inflector.new.convert(src_words, trg_words)
-
-    puts "***** AFTER *****"
-    puts src_words.inspect
-    puts trg_words.inspect
-
-    @paradigm = @paradigm_form.paradigm
-
-    puts @paradigm_form.inspect
-
-    # TODO: render this paradigm_form w/o extracting paradigm
     render action: 'new_paradigm_of_type'
   end
 
