@@ -32,6 +32,14 @@ class Word < ActiveRecord::Base
     self.id || Word.label
   end
 
+  def empty?
+    self.text.to_s.empty?
+  end
+
+  def nonempty?
+    ! self.empty?
+  end
+
   def suicide
     debug = false
     puts "<<< in #{self.class}#suicide >>> " if debug

@@ -23,6 +23,7 @@ class ParadigmsController < ApplicationController
     @title = "Add a new paradigm"
 
     @paradigm_types = ParadigmType.all.map do |pdgt|
+      # TODO: why converting to Paradigm?
       Paradigm.new(paradigm_type_id: pdgt.id)
     end
 
@@ -31,6 +32,7 @@ class ParadigmsController < ApplicationController
       @current_word = Word.find(params[:word_id])
       @current_task = @current_word.task
       @paradigms = Word.where(text: @current_word.text).map(&:paradigm).uniq.compact # => Array
+      @paradigms.map! {|pdg| ParadigmForm.new(pdg) }
 #      puts "WORD_PARADIGMS: (#{@paradigms.class})"
 #      puts @paradigms.inspect
     end
@@ -38,9 +40,16 @@ class ParadigmsController < ApplicationController
 
   def create
     # bring a new paradigm and save it to db
-    pdg_id = save_paradigms params
+#    pdg_id = save_paradigms params
+#    @paradigm = Paradigm.find(pdg_id)
+    @paradigm = ParadigmForm.new(params)
+    puts "**** BEFORE SAVED ****"
+    puts @paradigm.inspect
 
-    @paradigm = Paradigm.find(pdg_id)
+    @paradigm.save
+
+#    puts "**** AFTER SAVED ****"
+#    puts @paradigm.inspect
     
     # TODO: get rid of it @idx
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
@@ -52,9 +61,13 @@ class ParadigmsController < ApplicationController
   end
 
   def new_paradigm_of_type
-#    puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
+    puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
 
     @paradigm = Paradigm.new(paradigm_type_id: params[:id])
+    @paradigm = ParadigmForm.new(@paradigm)
+
+#    puts @paradigm.inspect
+
     @idx = 1
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
@@ -65,7 +78,7 @@ class ParadigmsController < ApplicationController
     @title = "Edit paradigm"
     @current_word = Word.find(params[:word_id])
     @current_task = @current_word.task
-    @paradigm = Paradigm.find(params[:id])
+    @paradigm = ParadigmForm.new(Paradigm.find(params[:id]))
     @idx = 1
     @page_section_id = "paradigm_data_#{@idx}"
   end
@@ -73,13 +86,16 @@ class ParadigmsController < ApplicationController
   def update
 #    puts "PARAMS: #{params.inspect}"
 
-    update_paradigm(params)
+#    update_paradigm(params)
+#    @paradigm = Paradigm.find(params[:id])
+
+    @paradigm = ParadigmForm.new(params)
+    @paradigm.save
 
     # TODO: same as in #edit
     @title = "Edit paradigm"
     @current_word = Word.find(params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
     @current_task = @current_word.task
-    @paradigm = Paradigm.find(params[:id])
     @idx = 1
     @page_section_id = params[:page_section_id]
   end

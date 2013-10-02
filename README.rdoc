@@ -170,6 +170,8 @@
 	* add to loading procedure
 	* use it in the tooltip
 
+3. in paradigms_controller#new, there is no need to convert ParadigmType to Paradigm. the view paradigms#new can operate on ParadigmType object directly
+
 == TODO for loading initial data (users, tagset, paradigm types)
 
 1. Allow adding tags via web interface
@@ -254,7 +256,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* DONE: Inflector#convert
 	* how to configure the external script to be used? maybe as a server
 	* any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
-	* fix letter case of words returned from prosao1 syn_ldb
+	* fix letter case of words returned from prosao1 syn_ldb if necessary
 
 2. INPROGRESS: implement converting words in paradigm#edit
 	* DONE: add button (<) for inserting current word into the desired word box
@@ -263,21 +265,22 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* BUG: try CONVERT on an existing paradigm and a newly opened one
 	* DONE: double clicking on (<) button should trigger conversion procedure. TODO: double click does not prevent two single clicks from happening. it does not harm however
 	* DONE: do not submit the form if there are no empty slots
+	* test it using FSE to be aware of encoding issues	
 
 3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
    * DONE: create it from params
    * DONE: create it from Paradigm object
    * write tests spec/model/paradigm_form_slot_spec.rb
    * write tests spec/model/paradigm_form_spec.rb
-   * switch all views to using ParadigmForm instead of Paradigm
-   * implement save_paradigm and update_paradigm using ParadigmForm#save
+   * DONE: switch all views to using ParadigmForm instead of Paradigm
+   * DONE: implement save_paradigm and update_paradigm using ParadigmForm#save
+   * remove original code for save_paradigm and update_paradigm
    * write cool tests for ParadigmForm#save
    * use ParadigmForm in CONVERT 
-   
-when insering words into the form, looks like it is easier to regenerate the form (this is also useful because conversions can produce multiple forms
-for which no input box is available in the initial version of the form)
 
-test it using FSE to be aware of encoding issues	
+4. DONE. Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
+
+
 
 == README
 

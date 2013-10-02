@@ -1,13 +1,20 @@
-- pdgid = paradigm.paradigm_type_id
+-# in the new approach, the view renders ParadigmForm object
+- pdgform = paradigm
+
+- pdgid = pdgform.paradigm_type_id
 - idx ||= 0
 - @current_word ||= nil
 - c_slot = -1 # number of slots in paradigm. helps distinguish homotags
 - @page_section_id ||= "paradigm_data_#{idx}"
 - url_params = { page_section_id: @page_section_id, word_id: @current_word.id }
 
+
 %div{id: @page_section_id}
 
-  = form_for paradigm, remote: true do |f|
+  -# the old implementation used to produce this:
+  -# <form accept-charset="UTF-8" action="/paradigms/6" class="edit_paradigm" data-remote="true" id="edit_paradigm_6" method="post">
+
+  = form_for pdgform.paradigm, remote: true do |f|
     %span.notice &nbsp;
 
     -# used to correctly identify the current section of the page (div#paradigm_data_NUM)
@@ -17,7 +24,7 @@
       = hidden_field_tag :word_id, @current_word.id, id: 'current_word_id'
 
 
-    %table.paradigm{class: ('dumped' if paradigm.dumped?)}
+    %table.paradigm{class: ('dumped' if pdgform.dumped?)}
       %thead
         %tr
           %th &nbsp;
@@ -27,27 +34,31 @@
           %th.has_button.has_convert_button{colspan:2}
             = link_to "convert", paradigms_add_conversions_path, class: 'btn_convert'
       %tbody
-        - paradigm.each_word_with_tag do |word, tag|
+        -# paradigm.each_word_with_tag do |word, tag|
+        - pdgform.each_pair_of_words do |old_word, new_word|
           - c_slot += 1
 
           -# For 'other' paradigm type, make the current word appear in the pdg stub
-          - if @current_word && tag.notag? && ! word.text
-            - word = @current_word
+          -#  TODO: not adapted
+          -# if @current_word && tag.notag? && ! word.text
+          -# word = @current_word
 
           %tr.pdg_slot
             -# (+) | TAG input | WORD input | (<) | (-)
-            - basename = "pdg[#{idx}][#{pdgid}][#{tag.id}][#{c_slot}]"
+            - basename = "pdg[#{idx}][#{pdgid}][#{old_word.tag.id}][#{c_slot}]"
 
             %td.has_button
               = link_to "+", "#", class:'btn btn_small btn_add_pdg_slot'
 
             %td.tag.has_balloon
+              - tag = new_word.tag || old_word.tag 
               = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
                                 class: "tag" #, readonly: tag.readonly_html?
               %span.balloon= tag.description
 
             %td.word
-              = text_field_tag "#{basename}[#{word.id_or_label}]", |
+              - word = new_word.nonempty? ? new_word : old_word
+              = text_field_tag "#{basename}[#{old_word.id_or_label}]", |
                                 word.text, class: "word"
 
             %td.has_button
@@ -60,33 +71,33 @@
         -# extras: comment area
         %tr.comment
           %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-          %td{colspan:3}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", paradigm.comment
+          %td{colspan:3}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", pdgform.comment
 
         -# extras: radio boxes for statuses
         %tr.last
           %td{colspan:5}
-            = render partial: 'radioset_status', locals: { paradigm: paradigm, idx: idx }
+            = render partial: 'radioset_status', locals: { paradigm: pdgform, idx: idx }
 
     -# SAVE | DELETE
-    %table.buttons{class: ("dumped" if paradigm.dumped?)}
+    %table.buttons{class: ("dumped" if pdgform.dumped?)}
       %tr
         %td.has_balloon
           - btn_save_balloon = 'Save this new paradigm'
-          - if paradigm.id
+          - if pdgform.id
             - btn_save_balloon = 'Save updates to this paradigm'
 
           = f.submit "Save", accesskey:"s", class:'btn btn_save'
           %span.balloon= btn_save_balloon
 
-        %td.empty{class: ("warning" if paradigm.dumped?)}
-          - if paradigm.dumped?
+        %td.empty{class: ("warning" if pdgform.dumped?)}
+          - if pdgform.dumped?
             = "already dumped"
 
         - if paradigm.id
           -# show DELETE button if the paradigm is in DB
           %td.has_balloon
             = link_to "Delete", |
-                      url_for(controller: 'paradigms', action: 'destroy', id: paradigm.id, |
+                      url_for(controller: 'paradigms', action: 'destroy', id: pdgform.id, |
                               params: url_params ), |
                       remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
                       class: 'btn btn_delete'

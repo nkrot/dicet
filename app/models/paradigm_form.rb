@@ -42,6 +42,8 @@ class ParadigmForm
         end
       end
     end
+
+    sanitize
   end
 
   def old_words
@@ -124,6 +126,7 @@ class ParadigmForm
 
   def parse_paradigm pdg
     @paradigm = pdg
+    @paradigm_type_id = @paradigm.paradigm_type_id
 
     pdg.each_word_with_tag do |word, tag|
       slot = Slot.new
@@ -133,12 +136,14 @@ class ParadigmForm
       @slots << slot
     end
 
+    sanitize
   end
 
-#  def each
-#    @slots.each do ||
-#    end
-#  end
+  def each_pair_of_words
+    @slots.each do |sl|
+      yield sl.old_word, sl.new_word
+    end
+  end
 
   def method_missing(name, *args)
     @paradigm.send(name, *args)
@@ -152,6 +157,54 @@ class ParadigmForm
     }
     @paradigm.update_attributes(attrs) # this also calls @paradigm.save which is important
     @slots.each {|slot| slot.save}
+
+    sanitize
+  end
+
+  private
+
+  def sanitize
+
+    pdg_tags = @paradigm.tags
+
+    # delete unnecessary paradigm slots
+    @slots.delete_if do |sl|
+      # delete an empty slot
+      sl.empty? \
+      && \
+      ( \
+        # that duplicates another non-empty slot
+        @slots.any? {|_sl| _sl.tag == sl.tag && ! _sl.empty? } \
+        || \
+        # or that has the tag that does not belong to this paradigm type
+        ! pdg_tags.include?(sl.tag)
+      )
+    end
+
+    # add slots for the tags that must be in the paradigm but are missing
+    pdg_tags.each do |t|
+      if ! @slots.any? {|sl| sl.tag == t}
+        sl = Slot.new
+        sl.old_word = Word.new(tag: t)
+        @slots << sl
+      end
+    end
+
+    # ensure the order of tags is also correct:
+    # first go tags that belong to the paradigm
+    # followed by other tags
+    pdgt_tags = @paradigm.paradigm_type.tags
+
+    @slots.sort_by! do |s|
+      # compute a number that represents the tag position based on
+      # 1. the order of the tag in this paradigm
+      pdg_tag = s.tag.paradigm_tags.first 
+      n = pdg_tag ? pdg_tag.order : s.tag.id
+      # 2. if the tag is not in this paradigm, order the tag by its global id
+      #    and add 1000 to push this tag to the end of the ordered sequence
+      n += (pdgt_tags.include?(s.tag) ? 0 : 1000)
+      n
+    end
   end
 end
 
@@ -163,32 +216,50 @@ class ParadigmForm
     attr_accessor :old_word, :new_word, :paradigm
 
     def initialize(hash=nil)
-      @old_word = @new_word = nil
-      parse_hash(hash)  if hash
+      if hash
+        parse_hash(hash)  
+      else
+        @old_word = Word.new
+        @new_word = Word.new
+      end
     end
 
     def deleted?
-      ! @new_word
+      @new_word.empty?
     end
 
 #    def changed?
 #    end
 
+    def empty?
+      old_word.empty? && new_word.empty?
+    end
+
+#    def nonempty?
+#      ! empty?
+#    end
+
+    def tag
+      old_word.tag
+    end
+
     def save
-      debug = false
+      debug = !false
       # TODO: take logic from paradigms_controller#{save,update}_paradigm
       puts "Compare: #{@old_word.inspect} vs. #{@new_word.inspect}"  if debug
       
-      if !@old_word && !@new_word
+      if @old_word.empty? && @new_word.empty?
         # this happens if the user first added a new word+tag (w/o saving)
         # and then marked it for deletion
       
-      elsif @old_word && ! @new_word
+      elsif @old_word.nonempty? && @new_word.empty?
         # the old word was marked for deletion
         puts "the old word will be deleted"  if debug
+        old_word = Word.new {|w| w.tag = @old_word.tag}
         @old_word.suicide
+        @old_word = old_word
  
-      elsif old_word
+      elsif @old_word.nonempty?
         puts "the old word will be updated from the new word"  if debug
         @old_word = @old_word.update_from(@new_word)
         # !!! originally, it was in save_paradigm only
@@ -200,6 +271,7 @@ class ParadigmForm
         # newly added word+tag pair
         @new_word.paradigm = @paradigm
         @new_word.save
+        @old_word = @new_word
       end
     end
 
@@ -223,6 +295,8 @@ class ParadigmForm
       if tw_hash.key? Word.label  # hits { ... "word"=>"run" ... }
         # no old word
         word_id = Word.label
+        @old_word = Word.new {|w| w.tag_id = tw_hash["tag_id"].to_i }
+
       else                        # hits { ... "101"=>"run"  ... }
         # old_word is set from word.id
         word_id = tw_hash.keys.detect {|k| k =~ /^\d+$/} #=>101
@@ -233,7 +307,7 @@ class ParadigmForm
       if tw_hash["deleted"].to_s.downcase =~ /^[1ty]/
         # if the word+tag is marked for deletion, we do not need the new word
         # the new word being equal to nil will signal the old word needs to be deleted
-        @new_word = nil
+        @new_word = Word.new
       else
         # otherwise,
         # new_word is set from submitted *values* of the keys "tag" and 101 or "word"
