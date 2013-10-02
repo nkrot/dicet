@@ -18,8 +18,6 @@ class ParadigmForm
   # NOTE: do not use it to parse a form that contains multiple paradigms!
   #
   def parse_params(params)
-    @paradigm = Paradigm.find_or_initialize_by(id: params["id"])
-
     debug = false
 
     params["pdg"].each do |num, pdgtid_data|
@@ -27,6 +25,10 @@ class ParadigmForm
         @paradigm_type_id = pdg_type_id.to_i
         @status  = slots["extras"]["status"]
         @comment = slots["extras"]["comment"]
+
+        @paradigm ||= Paradigm.find_or_initialize_by(id: params["id"]) do |pdg|
+          pdg.paradigm_type_id = @paradigm_type_id 
+        end
 
         slots.each do |tag_id, hash|
           next  if tag_id == "extras"

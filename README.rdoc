@@ -266,7 +266,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
    * DONE: create it from params
-   * create it from Paradigm object
+   * DONE: create it from Paradigm object
    * write tests spec/model/paradigm_form_slot_spec.rb
    * write tests spec/model/paradigm_form_spec.rb
    * switch all views to using ParadigmForm instead of Paradigm

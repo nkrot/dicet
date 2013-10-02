@@ -117,19 +117,30 @@ class ParadigmsController < ApplicationController
 
     @current_word = Word.find(params[:word_id])
     @current_task = @current_word.task
-#    @paradigm = Paradigm.find(params[:id])
-#    @idx = 1
+    @idx = 1
     @page_section_id = params[:page_section_id]
 
-#    @paradigm = ParadigmForm.xxx(params[:pdg])
+    @paradigm_form = ParadigmForm.new(params)
+    src_words = @paradigm_form.new_words.select {|w| w && !w.text.empty? }
+    trg_words = @paradigm_form.new_words.select {|w| w &&  w.text.empty? }
 
-    # conversions
-    # get all filled in words -> src_words
-    # get all empty slots (except deleted) -> trg_words
-    # fill in all trg_words with Inflector
+    puts "***** BEFORE *****"
+    puts src_words.inspect
+    puts trg_words.inspect
 
+    # can be refactored to class methods
+    Inflector.new.convert(src_words, trg_words)
 
-    render nothing: true
+    puts "***** AFTER *****"
+    puts src_words.inspect
+    puts trg_words.inspect
+
+    @paradigm = @paradigm_form.paradigm
+
+    puts @paradigm_form.inspect
+
+    # TODO: render this paradigm_form w/o extracting paradigm
+    render action: 'new_paradigm_of_type'
   end
 
   private

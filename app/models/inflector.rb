@@ -10,7 +10,7 @@ class Inflector
   def convert(src_words, trg_words)
     src_words.each do |sw|
       trg_words.each do |tw|
-        next  if tw.text
+        next  unless tw.text.empty?
         tw.text = convert_ll(sw.text, sw.tag.name, tw.tag.name)
       end
     end
