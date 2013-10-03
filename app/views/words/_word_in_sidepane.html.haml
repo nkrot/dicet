@@ -1,16 +1,10 @@
-- @show_link_to_self ||= false
-
 - is_current = word.same?(@current_word)
 - img_name = is_current ? 'bullet_star.png' : 'bullet_blue.png'
 
 %div.word{class: ('active' if is_current) }
   = image_tag "#{img_name}"
 
-  -# show link to self in #edit page and do not show on #new page
-  - if is_current && ! @show_link_to_self
-    = word.text
-  - else          
-    = link_to word.text, new_paradigm_path(:word_id => word)
+  = link_to word.text, new_paradigm_path(:word_id => word)
 
   -# list of tags
   - if word.paradigm_id
