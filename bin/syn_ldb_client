@@ -7,7 +7,7 @@
 
 require 'socket'
 
-host = 'localhost'
+host = '10.165.64.112' # syn-proc2
 port = 3001
 
 server = TCPSocket.open(host, port)
