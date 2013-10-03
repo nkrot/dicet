@@ -255,9 +255,9 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 1. INPROGRESS: a new model Inflector serves to convert given word with the given tag to the given tags
 	* DONE: Inflector#convert
 	* DONE: how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
-	* DISMISSED: run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
-	* NEXT: any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
-	* NEXT: fix letter case of words returned from prosao1 syn_ldb if necessary
+	* DONE: run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
+	* DONE: Let Inflector discover syn_ldb from the environment or as tcp server
+	* DONE: any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
 
 2. INPROGRESS: implement converting words in paradigm#edit
 	* DONE: add button (<) for inserting current word into the desired word box
@@ -265,7 +265,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* DONE: use ajax to serve conversion procedure.
 	* BUG: try CONVERT on an existing paradigm and a newly opened one
 	* DONE: double clicking on (<) button should trigger conversion procedure. TODO: double click does not prevent two single clicks from happening. it does not harm however
-	* DONE: do not submit the form if there are no empty slots
+	* DONE: do not submit the form to CONVERT if there are no empty slots
 
 3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
    * DONE: create it from params
@@ -283,6 +283,10 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 5. BUG: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
 
 6. refactor paradigm_for_form view to replace @paradigm with @paradigm_form or get rid of explicitly passing @paradigm
+
+7. Ensure that all changed word forms (including those that were before CONVERT was pressed) are highlighted as changed
+
+8. Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
 
 == README
 
