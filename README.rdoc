@@ -32,6 +32,9 @@
     * create an Other paradigm for loose. save
     * see loose_JJ from the JJ-paradigm being deleted, while the rest of the paradigm persists!
 
+
+9. Try interactive plots with http://nvd3.org/
+
 == TODO for creating/editing paradigms
 
 1. DONE: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
@@ -214,13 +217,19 @@
 
 3. DONE: in tasks#index, once a task has been taken, the table of tasks should be updated to contain the correct number of items. -- fixed by rerendering the whole page via take.js.haml
 
-4. FIXED: pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
+4. DONE: (fixed) pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
   * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
   * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
 
 5. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
 
-6. assign task statuses, more particularly, READY, and hide READY tasks by default
+6. assign task statuses, more particularly, READY, and hide READY tasks by default. display user tasks in three categories (and with count stats):
+	* done tasks (not displayed by default)
+	* tasks in progress (having words done by this user). if a task has a word that is also in another user's task, this task should not be classified as 'in progress'
+	* not started tasks.
+	* allow sorting tasks by last modification date
+
+&&&
 
 7. sort tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
@@ -234,6 +243,7 @@
 
 9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
+11. for each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs)
 
 == TODO for words
 
@@ -250,9 +260,12 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 4. find words from other tasks that have been touched when editing another word. for example, when editing 'loose' we have added a looser_JJR. find other occurrences of 'looser' and complement this word with other paradigms.
 
+5. allow sorting words done by the user by the modification time
+	* additionally with all added words (the whole paradigm)
+
 == TODO for conversions
 
-1. INPROGRESS: a new model Inflector serves to convert given word with the given tag to the given tags
+1. DONE: a new model Inflector serves to convert given word with the given tag to the given tags
 	* DONE: Inflector#convert
 	* DONE: how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
 	* DONE: run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
@@ -264,7 +277,8 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* DONE: add button (convert) for triggering conversion procedure
 	* DONE: use ajax to serve conversion procedure.
 	* BUG: try CONVERT on an existing paradigm and a newly opened one
-	* DONE: double clicking on (<) button should trigger conversion procedure. TODO: double click does not prevent two single clicks from happening. it does not harm however
+	* DONE: double clicking on (<) button should trigger conversion procedure.
+	* TODO: double click does not prevent two single clicks from happening. it does not harm however
 	* DONE: do not submit the form to CONVERT if there are no empty slots
 
 3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
@@ -284,7 +298,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 6. refactor paradigm_for_form view to replace @paradigm with @paradigm_form or get rid of explicitly passing @paradigm
 
-7. Ensure that all changed word forms (including those that were before CONVERT was pressed) are highlighted as changed
+7. INPROGRESS: Ensure that all changed word forms (including those that were before CONVERT was pressed) are highlighted as changed. Ensure that all other events still work.
 
 8. Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
 
