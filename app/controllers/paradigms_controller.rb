@@ -43,8 +43,8 @@ class ParadigmsController < ApplicationController
 #    pdg_id = save_paradigms params
 #    @paradigm = Paradigm.find(pdg_id)
     @paradigm = ParadigmForm.new(params)
-    puts "**** BEFORE SAVED ****"
-    puts @paradigm.inspect
+#    puts "**** BEFORE SAVED ****"
+#    puts @paradigm.inspect
 
     @paradigm.save
 

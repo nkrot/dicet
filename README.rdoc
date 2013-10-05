@@ -271,7 +271,8 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
 	* run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
 	* Let Inflector discover syn_ldb from the environment or as tcp server
-	* any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
+	* TODO: any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
+	* TODO: depending on response time, may need to ensure that syn_ldb from the environment is started only once
 
 2. DONE: implement converting words in paradigm#edit
 	* add button (<) for inserting current word into the desired word box
