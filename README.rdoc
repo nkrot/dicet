@@ -320,11 +320,12 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* press CONVERT
 	* check if the changed tag is still there
 
-12. BUG: start creating a new paradigm
+12. DONE: BUG fixed: start creating a new paradigm
 	* add an unusual tag to the paradigm
 	* press CONVERT
 	* the added tag is gone
 	* however, if the unsual tag was the result of replacing the old tag, it is kept
+	* it is the issue caused by sanitize, fixed together with bug described in 6 in this section.
 
 == README
 
