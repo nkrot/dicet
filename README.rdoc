@@ -298,7 +298,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
    * Expected behaviour: rename a tag, press CONVERT, the original tag (that was renamed) does not appear.
    * BUG fixed: paradigm of type rb has incorrect order of tags (RBT-RBR-RB), although there ordering in paradigm_tags is correct
 
-6. INPROGRESS BUG: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
+6. DONE: BUG fixed: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
 
 7. DONE: After CONVERT fired, ensure all changed word forms (including those that were added before CONVERT was pressed but excluding words that were originally in the paradigm) are highlighted as 'changed'. 
 

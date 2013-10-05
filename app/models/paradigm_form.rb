@@ -43,7 +43,9 @@ class ParadigmForm
       end
     end
 
-    sanitize
+    # we do not want to delete duplicate tag just because it is empty:
+    # it may be the intention of the user to obtain a conversion for that tag
+#    sanitize
   end
 
   def old_words
