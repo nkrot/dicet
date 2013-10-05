@@ -118,6 +118,7 @@
   * newly created slots should always be highlighted until saved
   * highlight if the comment has changed
   * highlight if the checked values of the radio box has changed
+  * click_to_copy should trigger highlighting
   * TODO: styling: the user adds a new pdg slot (assiged: .changed) and then presses (-) to delete it (assigned: .deleted). How to combine .changed and .deleted? Maybe just hide the slot, pretend it was not created?
 
 25. DONE: fixed bug: click_to_copy should fill in empty elements only, it should not overwrite existing words
@@ -229,8 +230,6 @@
 	* not started tasks.
 	* allow sorting tasks by last modification date
 
-&&&
-
 7. sort tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
 8. DONE: api for uploading new words to the server
@@ -266,41 +265,50 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 == TODO for conversions
 
 1. DONE: a new model Inflector serves to convert given word with the given tag to the given tags
-	* DONE: Inflector#convert
-	* DONE: how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
-	* DONE: run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
-	* DONE: Let Inflector discover syn_ldb from the environment or as tcp server
-	* DONE: any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
+	* Inflector#convert
+	* how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
+	* run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
+	* Let Inflector discover syn_ldb from the environment or as tcp server
+	* any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
 
-2. INPROGRESS: implement converting words in paradigm#edit
-	* DONE: add button (<) for inserting current word into the desired word box
-	* DONE: add button (convert) for triggering conversion procedure
-	* DONE: use ajax to serve conversion procedure.
-	* BUG: try CONVERT on an existing paradigm and a newly opened one
-	* DONE: double clicking on (<) button should trigger conversion procedure.
+2. DONE: implement converting words in paradigm#edit
+	* add button (<) for inserting current word into the desired word box
+	* add button (convert) for triggering conversion procedure
+	* use ajax to serve conversion procedure.
+	* double clicking on (<) button should trigger conversion procedure.
 	* TODO: double click does not prevent two single clicks from happening. it does not harm however
-	* DONE: do not submit the form to CONVERT if there are no empty slots
+	* do not submit the form to CONVERT if there are no empty slots
 
-3. INPROGRESS: Implement ParadigmForm to hold both the old and the new state
-   * DONE: create it from params
-   * DONE: create it from Paradigm object
-   * write tests spec/model/paradigm_form_slot_spec.rb
-   * write tests spec/model/paradigm_form_spec.rb
-   * DONE: switch all views to using ParadigmForm instead of Paradigm
-   * DONE: implement save_paradigm and update_paradigm using ParadigmForm#save
-   * remove original code for save_paradigm and update_paradigm
-   * write cool tests for ParadigmForm#save
-   * DONE: use ParadigmForm in CONVERT
+3. DONE: Implement ParadigmForm to hold both the old and the new state
+   * create it from params
+   * create it from Paradigm object
+   * switch all views to using ParadigmForm instead of Paradigm
+   * implement save_paradigm and update_paradigm using ParadigmForm#save
+   * use ParadigmForm in CONVERT
+   * TODO: remove original code for save_paradigm and update_paradigm
 
-4. DONE. Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
+4. write tests for ParadigmForm and its components
+   * spec/model/paradigm_form_slot_spec.rb
+   * spec/model/paradigm_form_spec.rb
+   * ParadigmForm#save
 
-5. BUG: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
+5. DONE. Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
 
-6. refactor paradigm_for_form view to replace @paradigm with @paradigm_form or get rid of explicitly passing @paradigm
+6. BUG: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
 
 7. INPROGRESS: Ensure that all changed word forms (including those that were before CONVERT was pressed) are highlighted as changed. Ensure that all other events still work.
 
 8. Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
+   * or better fix it in syn_ldb
+
+9. refactor paradigm_for_form view to replace @paradigm with @paradigm_form or get rid of explicitly passing @paradigm
+
+10. BUG: scenario
+	* create a paradigm, save
+	* create another paradigm, save
+	* delete the first paradigm
+	* mark for deletion a slot in the remaining oaradigm, press SAVE
+	* JS ERROR: POST http://localhost:3000/paradigms/ID 404 (Not Found). due to ActiveRecord::RecordNotFound (Couldn't find Word with id=176). The cause of this bug is that when the word with task_id is deleted, it is not deleted but relinked, but the ids that are in the form (word.id=176) is still the old one. fix ParadigmForm to detect such situation and try finding the right word.
 
 == README
 

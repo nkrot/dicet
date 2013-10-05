@@ -55,6 +55,13 @@ function do_on_document_ready() {
 
 //	alert('document ready!');
 
+	/*
+	  NOTE: unbinding before binding using the following pattern does not work
+	    xxx.off('click', function_name).on('click', function_name)
+	  when do_on_document_ready() is run the second, third, so on times
+	  Seems that function_name IDs have changed and .off() no longer recognizes the function
+	 */
+
 	$("a").on('click', function (ev) {
 		if ( $(this).attr('disabled') == 'disabled' ) {
 			ev.preventDefault();
@@ -62,13 +69,13 @@ function do_on_document_ready() {
 		}
 	});
 
-	$(".btn_dismiss").on("click", function () {
+	$(".btn_dismiss").off('click').on("click", function () {
 		var section = $(this).attr("data-page-section-id");
 		$("#" + section).remove();
 		return false;
 	});
 
-	$(".btn_pdg_creator").on("click", function () {
+	$(".btn_pdg_creator").off('click').on("click", function () {
 		// keep the orignal value of href in old-href
 		if (! $(this).attr("old-href")) {
 			$(this).attr("old-href", $(this).attr("href"))
@@ -89,19 +96,18 @@ function do_on_document_ready() {
 	});
 
 	// TODO: rewrite using set_click_to_copy.
-	$(".click_to_copy").on("click", function () {
-		parent = $(this).closest(".paradigm");
-		parent.find("input.word[type='text']").each(function () {
+	$(".click_to_copy").off('click').on('click', function () {
+		$(this).closest(".paradigm").find("input.word[type='text']").each(function () {
 			if ( ! $(this).val() ) {
-				$(this).attr('value', $("#current_word").text());
+				$(this).val($("#current_word").text());
 			}
-		});
+		}).trigger('keyup');
 	});
 
 	// this works incorrectly for tables with dinamically disappearing rows
 //	$(".table_of_tasks tbody tr:odd").css('background-color', 'beige');
 
-	$(".btn_add_pdg_slot").on("click", function () {
+	$(".btn_add_pdg_slot").off("click").on("click", function () {
 		this_slot = $(this).closest(".pdg_slot"); 
 		new_slot = this_slot.clone(true); // true tells to copy events as well
 
@@ -141,7 +147,7 @@ function do_on_document_ready() {
 		return false;
 	});
 
-	$(".btn_convert").on("click", function () {
+	$(".btn_convert").off('click').on("click", function () {
 		var fields = $(this).closest("form").find("input[type='text']").filter(".word");
 		var c_empty = fields.filter(function () { return this.value === '' }).length;
 
@@ -181,7 +187,7 @@ function do_on_document_ready() {
 	});
 */
 
-	$(".btn_delete_pdg_slot").on("click", function () {
+	$(".btn_delete_pdg_slot").off("click").on("click", function () {
 		// grey out the row
 		this_slot = $(this).closest(".pdg_slot"); 
 		this_slot.toggleClass('deleted');
@@ -190,35 +196,38 @@ function do_on_document_ready() {
 		return false;
 	});
 
-	$(".btn_fill_with_word").on("click", function () {
-//		console.log("clicked: " + $(this).attr('class'))
+	$(".btn_fill_with_word").off("click").on("click", function () {
 		$(this).closest(".pdg_slot").find("input.word[type='text']").each(function () {
 			// overwrite any existing value
 			$(this).val($("#current_word").text()).trigger("keyup");
-			// console.log(".attr(value)=" + $(this).attr("value"));
-			// console.log(".val()=" + $(this).val());
 		});
 		return false
 	});
 
-	$(".btn_fill_with_word").on("dblclick", function (e) {
+	$(".btn_fill_with_word").off("dblclick").on("dblclick", function (e) {
 //		$(this).trigger("click"); // unnecessary as double click does not prevent single click
 		$(this).closest(".paradigm").find(".btn_convert").trigger("click");
 //		e.preventDefault() // has no effect?
 	});
 
-	$(".paradigm input[type='text']").on('keyup', function (evt) {
-		if ($(this).attr('value') == $(this).val() && !$(this).hasClass('new')) {
+	// when text inputted in paradigm fields (tags or words) changes and is not
+	// equal to the original text the element should be marked as 'changed'
+	$(".paradigm input[type='text']").off('keyup').on('keyup', function (evt) {
+		if (!$(this).hasClass('new')
+			&& ($(this).attr('value') == $(this).val()
+				|| !$(this).attr('value') && ! $(this).val()))
+		{
 			// slots marked as class=new should never be unhighlighted
 			$(this).removeClass('changed')
 		} else {
 			$(this).addClass('changed')
 		}
-
 		navigation_with_arrows(this, evt);
 	});
 
-	$(".paradigm input[type='radio']").on('change', function () {
+	// when a different button of the radiobutton is selected the element should
+	// be marked as 'changed'
+	$(".paradigm input[type='radio']").off('change').on('change', function () {
 		target = $(this).parents(".radioset")
 		if ($(this).is(":checked") && $(this).attr('checked') == 'checked') {
 			target.removeClass('changed')
@@ -226,7 +235,6 @@ function do_on_document_ready() {
 			target.addClass('changed')
 		}
 	});
-
 };
 
 $(document).on('ready', function() {
