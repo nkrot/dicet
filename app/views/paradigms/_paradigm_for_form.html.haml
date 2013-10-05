@@ -11,9 +11,6 @@
 
 %div{id: @page_section_id}
 
-  -# the old implementation used to produce this:
-  -# <form accept-charset="UTF-8" action="/paradigms/6" class="edit_paradigm" data-remote="true" id="edit_paradigm_6" method="post">
-
   = form_for pdgform.paradigm, remote: true do |f|
     %span.notice &nbsp;
 
@@ -53,13 +50,14 @@
             %td.tag.has_balloon
               - tag = new_word.tag || old_word.tag 
               = text_field_tag  "#{basename}[tag]", "#{tag.name}", |
-                                class: "tag" #, readonly: tag.readonly_html?
+                                class: ["tag", changed_tag?(old_word, new_word)]
               %span.balloon= tag.description
 
             %td.word
               - word = new_word.nonempty? ? new_word : old_word
               = text_field_tag "#{basename}[#{old_word.id_or_label}]", |
-                                word.text, class: "word"
+                                word.text, |
+                                class: ["word", changed_text?(old_word, new_word)]
 
             %td.has_button
               = link_to "&lt;".html_safe, "#", class:'btn btn_small btn_fill_with_word'

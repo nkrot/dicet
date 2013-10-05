@@ -54,7 +54,7 @@
    * see bug#5 (deleting an unsaved paradigm) -- not reproducible
    * check other scenarios
 
-5. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm.
+5. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm. This may happen of the form actually contained literal duplicates tag+word
 
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
 
@@ -292,11 +292,12 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
    * spec/model/paradigm_form_spec.rb
    * ParadigmForm#save
 
-5. DONE. Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
+5. DONE: Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
+   * Expected behaviour: rename a tag, press CONVERT, the original tag (that was renamed) does not appear.
 
 6. BUG: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
 
-7. INPROGRESS: Ensure that all changed word forms (including those that were before CONVERT was pressed) are highlighted as changed. Ensure that all other events still work.
+7. DONE: After CONVERT fired, ensure all changed word forms (including those that were added before CONVERT was pressed but excluding words that were originally in the paradigm) are highlighted as 'changed'. 
 
 8. Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
    * or better fix it in syn_ldb
@@ -309,6 +310,18 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* delete the first paradigm
 	* mark for deletion a slot in the remaining oaradigm, press SAVE
 	* JS ERROR: POST http://localhost:3000/paradigms/ID 404 (Not Found). due to ActiveRecord::RecordNotFound (Couldn't find Word with id=176). The cause of this bug is that when the word with task_id is deleted, it is not deleted but relinked, but the ids that are in the form (word.id=176) is still the old one. fix ParadigmForm to detect such situation and try finding the right word.
+
+11. check this scenario:
+	* open a partial paradigm
+	* change a tag of an existing form, w/o saving
+	* press CONVERT
+	* check if the changed tag is still there
+
+12. BUG: start creating a new paradigm
+	* add an unusual tag to the paradigm
+	* press CONVERT
+	* the added tag is gone
+	* however, if the unsual tag was the result of replacing the old tag, it is kept
 
 == README
 

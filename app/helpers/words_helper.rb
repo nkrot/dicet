@@ -30,4 +30,17 @@ module WordsHelper
       'bullet_green.png'
     end
   end
+
+  def changed_text?(w1, w2)
+    if w2.nonempty? && w1.text != w2.text
+      'changed' # html element class
+    end
+  end
+
+  def changed_tag?(w1, w2)
+    if w2.tag && w1.tag != w2.tag
+      'changed' # html element class
+    end
+  end
+
 end
