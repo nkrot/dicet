@@ -1,6 +1,7 @@
 class Inflector
   
   @@host = '10.165.64.112' # syn-proc2
+#  @@host = 'localhost'
   @@port = 3001 # this value is hardcoded into bin/syn_ldb_server
 
   def self.tcp_socket_available?
@@ -8,7 +9,7 @@ class Inflector
     puts "Checking tcp server"
     begin
       server = TCPSocket.open(@@host, @@port)
-    rescue Errno::ECONNREFUSED => e
+    rescue Errno::ETIMEDOUT, Errno::ECONNREFUSED => e
       puts "No server for syn_ldb discovered at #{@@host}:#{@@port}"
       puts "Exception caught: #{e}"
     else
