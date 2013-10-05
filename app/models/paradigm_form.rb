@@ -219,7 +219,7 @@ class ParadigmForm
     @slots.sort_by! do |s|
       # compute a number that represents the tag position based on
       # 1. the order of the tag in this paradigm
-      pdg_tag = s.tag.paradigm_tags.first 
+      pdg_tag = s.tag.paradigm_tags.where(paradigm_type: @paradigm.paradigm_type).first
       n = pdg_tag ? pdg_tag.order : s.tag.id
       # 2. if the tag is not in this paradigm, order the tag by its global id
       #    and add 1000 to push this tag to the end of the ordered sequence
