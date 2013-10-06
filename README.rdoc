@@ -231,6 +231,7 @@
    * DONE: on the User's page, display user unfinished (inprogress, review and hascomment) tasks first and then not-started tasks.
    * additional page for ready tasks
    * paginate not started tasks (status new). Do not show unfinished tasks on the second and firther pages of new-tasks display.
+   * in the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 
 7. allow sorting tasks by modification time (allows finding most recently done tasks or tasks in progress)
 

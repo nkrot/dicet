@@ -5,14 +5,14 @@
 %tr{id: "task_#{task.id}"}
   %td.center= task.id
   %td.center= task.priority
-  %td.center= task.status
+  %td.status.center= task.status
   %td= render partial: "words/word_in_task", collection: task.words, as: :word
   - url_params = { controller: 'tasks', action: btn_action, id: task }
   -# necessary to ensure will_paginate works
   - if params[:page]
     - url_params[:page] = params[:page]
 
-  %td.center= link_to btn_label, |
+  %td.has_button.center= link_to btn_label, |
        url_for(url_params), |
        remote: true, method: :put, |
        class: "btn_#{btn_action}_task" |

@@ -356,7 +356,17 @@ table.radioset {
   }
 
   th.fixed_width, td.fixed_width {
-    width: 60px;
+    width: 50px;
+  }
+
+  th.has_button, td.has_button {
+    width: 80px;
+//    vertical-align: top; //oops
+  }
+
+  th.status, td.status {
+    width: 70px;
+    text-align: center;    
   }
 
   th.words {
