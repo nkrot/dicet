@@ -2,11 +2,10 @@ class TasksController < ApplicationController
 
   def index
     @title = "All dictionary tasks"
-    @tasks = Task.where(user_id: nil).paginate(page:     params[:page],
-                                               per_page: TASKS_PER_PAGE,
-                                               order:    'priority DESC')
-
-    @user_tasks = Task.where(user_id: current_user)
+    @tasks = Task.unassigned.paginate(page:     params[:page],
+                                      per_page: TASKS_PER_PAGE,
+                                      order:    'priority DESC')
+    @user_tasks = Task.assigned_to(current_user)
   end
 
   def update
@@ -25,14 +24,11 @@ class TasksController < ApplicationController
     @task.user = current_user
     @task.save
 
-#    @tasks = Task.where(user_id: nil) # all unassigned tasks
-#    @user_tasks = @task.user.tasks
-
     # TODO: same as in #index
-    @tasks = Task.where(user_id: nil).paginate(page:     params[:page],
-                                               per_page: TASKS_PER_PAGE,
-                                               order:    'priority DESC')
-    @user_tasks = Task.where(user_id: current_user)
+    @tasks = Task.unassigned.paginate(page:     params[:page],
+                                      per_page: TASKS_PER_PAGE,
+                                      order:    'priority DESC')
+    @user_tasks = Task.assigned_to(current_user)
   end
 
   def drop
@@ -45,10 +41,10 @@ class TasksController < ApplicationController
     @task.save
 
     # TODO: as in users_controller#show
-    @tasks = @user.tasks.paginate(page: params[:page],
-                                        per_page: TASKS_PER_PAGE,
-                                        order:    'priority DESC')
-
+    @unfinished_tasks = @user.unfinished_tasks
+    @new_tasks = @user.new_tasks.paginate(page:     params[:page],
+                                          per_page: TASKS_PER_PAGE,
+                                          order:    'priority DESC')
   end
 
   private
@@ -58,7 +54,7 @@ class TasksController < ApplicationController
     params[:tasks].keys.each do |task_id|
       # TODO: what if the task has already been taken? -- report that the task
       # could not be assigned to the current user.
-      task = Task.find_by(id: task_id, user_id: nil)
+      task = Task.where(id: task_id, user_id: nil).first
       saved = task.update_attributes(user_id: current_user.id) && saved
     end
     saved

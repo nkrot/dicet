@@ -34,7 +34,7 @@ module WordsHelper
   def select_bullet_image_for_word word
     homonyms = word.homonyms
     if ! word.paradigm
-      'bullet_black.png'
+      'bullet_blue.png'
     elsif word.has_paradigms_to_review?
       'bullet_red.png'
     elsif word.has_paradigms_with_comment?

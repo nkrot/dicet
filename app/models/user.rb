@@ -1,6 +1,12 @@
 class User < ActiveRecord::Base
   has_many :tasks
 
+  has_many :new_tasks,        -> { where status: ['new', nil, ''] }, class_name: 'Task'
+  has_many :ready_tasks,      -> { where status: 'ready'          }, class_name: 'Task'
+  has_many :inprogress_tasks, -> { where status: 'inprogress'     }, class_name: 'Task'
+  has_many :unfinished_tasks, -> { where status: ['inprogress', 'review', 'hascomment'] },
+                              class_name: 'Task'
+
   validates :login, presence: true, length: { maximum: 50 },
                     uniqueness: { case_sensitive: false }
 
