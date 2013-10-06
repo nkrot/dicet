@@ -21,10 +21,23 @@ module WordsHelper
     links
   end
 
-  def select_bullet_image word
+  def select_bullet_image_for_tag word
     if word.paradigm.review?
       'bullet_red.png'
     elsif word.paradigm.has_comment?
+      'bullet_yellow.png'
+    else
+      'bullet_green.png'
+    end
+  end
+
+  def select_bullet_image_for_word word
+    homonyms = word.homonyms
+    if ! word.paradigm
+      'bullet_black.png'
+    elsif word.has_paradigms_to_review?
+      'bullet_red.png'
+    elsif word.has_paradigms_with_comment?
       'bullet_yellow.png'
     else
       'bullet_green.png'

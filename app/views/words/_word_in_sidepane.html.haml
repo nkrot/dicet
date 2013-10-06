@@ -10,5 +10,5 @@
   - if word.paradigm_id
     - each_word_with_link_to_paradigm_edit(word) do |wd, lnk|
       %div.tag
-        = image_tag "#{select_bullet_image(wd)}"
+        = image_tag "#{select_bullet_image_for_tag(wd)}"
         != lnk

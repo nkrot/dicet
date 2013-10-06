@@ -1,8 +1,8 @@
 %div
+  = image_tag "#{select_bullet_image_for_word(word)}"
   - if word.paradigm_id
     = link_to word.text, new_paradigm_path(:word_id => word)
-    [in
-    != links_to_paradigm_edit(word).join(', ')
-    ]
+    in
+    != links_to_paradigm_edit(word).join(',')
   - else
     = link_to word.text, new_paradigm_path(:word_id => word)

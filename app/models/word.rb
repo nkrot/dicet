@@ -15,6 +15,14 @@ class Word < ActiveRecord::Base
     Word.where(text: self.text).sort_by(&:paradigm_id)
   end
 
+  def has_paradigms_to_review?
+    self.paradigm && Word.where(text: self.text).any? {|w| w.paradigm.review? }
+  end
+
+  def has_paradigms_with_comment?
+    self.paradigm && Word.where(text: self.text).any? {|w| w.paradigm.has_comment? }
+  end
+
   def tagname
     self.tag ? self.tag.name : ""
   end
