@@ -23,7 +23,7 @@ describe ParadigmForm do
 #    puts @pdgt_nn.paradigm_tags.inspect
 
     @pdgt_vb = ParadigmType.create!(name: "vb")
-    [@vb, @vbz, @vbg, @vbd, @vbn].each do |tag, idx|
+    [@vb, @vbz, @vbg, @vbd, @vbn].each_with_index do |tag, idx|
       @pdgt_vb.paradigm_tags << ParadigmTag.create! do |pt|
         pt.paradigm_type = @pdgt_vb
         pt.tag           = tag
@@ -139,7 +139,7 @@ describe ParadigmForm do
 
       pdg_form.slots.each do |sl|
         expect( sl.old_word ).to be_kind_of Word
-        expect( sl.new_word ).to be_nil
+        expect( sl.new_word ).to be_kind_of Word
       end
     end
 
