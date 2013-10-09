@@ -224,7 +224,10 @@
   * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
   * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
 
-5. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
+5. INPROGRESS: Add task_id to Paradigm. this will help computing task statuses
+   * DONE: add the field to the Paradigm model.
+   * DONE: add logic for linking paradigms to tasks -- added ParadigmForm.save
+   * add tests to paradigm_form_spec.rb
 
 6. INPROGRESS: assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
    * compute task statuses and save them in Task.status. this should happem on every paradigm save/delete
@@ -253,8 +256,10 @@
 	* write tests
 
 14. Show unfinished tasks and new tasks in the sidepane as well. 
-	* When clicking on a task there, the Current Task pane should switch to it.
+  	* When clicking on a task there, the Current Task pane should switch to it.
 	* Use colors to distinguish task statuses.
+
+15. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
 
 == TODO for words
 

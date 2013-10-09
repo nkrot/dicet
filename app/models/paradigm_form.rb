@@ -1,11 +1,14 @@
 class ParadigmForm
   attr_accessor :slots, :paradigm
   attr_reader :comment, :status, :paradigm_type_id
+  attr_reader :current_word
 
   def initialize(obj=nil)
     @slots = []
     @paradigm = nil
-    @comment = @status = @paradigm_type_id = nil
+    @comment = @status = nil
+    @paradigm_type_id = nil
+    @current_word = nil
 
     if obj.is_a? Hash
       parse_params obj
@@ -19,6 +22,10 @@ class ParadigmForm
   #
   def parse_params(params)
     debug = false
+
+    if params['word_id']
+      @current_word = Word.find(params['word_id'])
+    end
 
     params["pdg"].each do |num, pdgtid_data|
       pdgtid_data.each do |pdg_type_id, slots|
@@ -43,7 +50,7 @@ class ParadigmForm
       end
     end
 
-    # we do not want to delete duplicate tag just because it is empty:
+    # we do not want to delete a duplicate tag just because it is empty:
     # it may be the intention of the user to obtain a conversion for that tag
 #    sanitize
   end
@@ -160,6 +167,8 @@ class ParadigmForm
     @paradigm.update_attributes(attrs) # this also calls @paradigm.save which is important
     @slots.each {|slot| slot.save}
 
+    assign_task # and save
+
     sanitize
   end
 
@@ -185,6 +194,31 @@ class ParadigmForm
   end
 
   private
+
+  # Rules for assigning a paradigm to a task
+  # Goal: the paradigm can be assigned to a task iff it contains a word
+  #       that belongs to this task as well.
+  # TODO: instead of resetting, assign task from another word in the paradigm?
+  def assign_task
+    puts "paradigm.task_id before: #{@paradigm.task_id}"
+    if @paradigm.task
+      puts "Paradigm word: #{@paradigm.words.inspect}"
+#      if @paradigm.words.where(task: @paradigm.task).empty? # TODO: add homonyms as well
+      if @paradigm.words.all? {|word| Word.where(text: word.text, task: @paradigm.task).empty?}
+        # the current value of task_id is no longer valid
+        @paradigm.update_attributes(task: nil)
+        puts "  resetting 1"
+      end
+    elsif @current_word && ! @paradigm.words.where(text: @current_word.text).empty?
+      @paradigm.update_attributes(task: @current_word.task)
+      puts "  setting to #{@current_word.task_id}"
+    else
+      @paradigm.update_attributes(task: nil)
+      puts "  resetting 2"
+    end
+    puts "paradigm.task_id after: #{@paradigm.task_id}"
+#    @paradigm.save
+  end
 
   def sanitize
 

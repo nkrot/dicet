@@ -4,6 +4,7 @@ class Paradigm < ActiveRecord::Base
   has_many   :words
 #  has_many   :tags, :through => :paradigm_type # TODO: try this
   belongs_to :paradigm_type
+  belongs_to :task
 #  validates_associated :words # TODO: what does it mean?
 
   validates :status, inclusion: { in: STATUSES, 

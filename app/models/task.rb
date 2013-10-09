@@ -1,6 +1,7 @@
 class Task < ActiveRecord::Base
   belongs_to :user
   has_many :words
+  has_many :paradigms
 
   # valid statuses
   # new, ready, inprogress

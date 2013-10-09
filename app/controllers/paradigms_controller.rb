@@ -63,15 +63,15 @@ class ParadigmsController < ApplicationController
   def new_paradigm_of_type
     puts "(in paradigms/new_paradigm_of_type) #{params.inspect}"
 
-    @paradigm = Paradigm.new(paradigm_type_id: params[:id])
-    @paradigm = ParadigmForm.new(@paradigm)
-
 #    puts @paradigm.inspect
 
     @idx = 1
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
     @current_task = @current_word.task
+
+    @paradigm = Paradigm.new(paradigm_type_id: params[:id]) #, task: @current_task)
+    @paradigm = ParadigmForm.new(@paradigm)
   end
 
   def edit
@@ -204,6 +204,7 @@ class ParadigmsController < ApplicationController
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
 
+  # &&&
   def update_paradigm params
     debug = false
     puts params.inspect  if debug

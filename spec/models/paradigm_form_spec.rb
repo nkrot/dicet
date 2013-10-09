@@ -9,6 +9,9 @@ describe ParadigmForm do
     @vbg = Tag.create!(name: "VBG")
     @vbd = Tag.create!(name: "VBD")
     @vbn = Tag.create!(name: "VBN")
+    @rb  = Tag.create!(name: "RB")
+    @rbr = Tag.create!(name: "RBR")
+    @rbt = Tag.create!(name: "RBT")
 
     @pdgt_nn = ParadigmType.create!(name: "nn")
     [@nn, @nns].each_with_index do |tag, idx|
@@ -33,6 +36,15 @@ describe ParadigmForm do
     @pdgt_vb.save
 #    puts @pdgt_vb.inspect
 #    puts @pdgt_vb.paradigm_tags.inspect
+
+    @pdgt_rb = ParadigmType.create!(name: "rb")
+    [@rb, @rbr, @rbt].each_with_index do |tag, idx|
+      @pdgt_rb.paradigm_tags << ParadigmTag.create! do |pt|
+        pt.paradigm_type = @pdgt_rb
+        pt.tag           = tag
+        pt.order         = idx
+      end
+    end
 
     @pdgs = {
       "palabras" => {
@@ -76,7 +88,7 @@ describe ParadigmForm do
 
       @params = {
         "page_section_id"=>"paradigm_data_0",
-        "word_id"=>"7",
+        "word_id"=>"#{@words["run"]["NN"].id}", # must exist
         "pdg"=>{
           "0"=>{
             "#{@paradigm_type_id}"=>{ # ex: "3" stands for nn-type paradigm
@@ -171,7 +183,7 @@ describe ParadigmForm do
       @params = {}
 
       @params['mosquito'] = {
-        "page_section_id" => "paradigm_data_0", "word_id" => "7",
+        "page_section_id" => "paradigm_data_0", #"word_id" => "7",
         "pdg" => {
           "0" => {
             "#{@pdgt_nn.id}" => {
@@ -248,6 +260,25 @@ describe ParadigmForm do
         expect( pdgf.comment ).to eq 'double NNS'
         expect( pdgf.status  ).to eq 'ready'
       end
+
+      it "should set paradigm.task_id from the current word" do
+
+        task = Task.create!
+        mosquito_notag = Word.create!(text: 'mosquito', task: task)
+
+        # point the current word (params[word_id]) to the real word
+        params = @params['mosquito'].merge({'word_id' => mosquito_notag.id})
+
+        pdgf = ParadigmForm.new params
+
+        # the newly created paradigm is not assigned to a task
+        expect( pdgf.paradigm.task_id ).to be_nil
+
+        pdgf.save
+
+        expect( pdgf.paradigm.task_id ).to eq mosquito_notag.task_id
+      end
+
     end
 
     describe "that is in DB (we are editing an existing paradigm)" do
@@ -488,7 +519,7 @@ describe ParadigmForm do
       it "word.text can be changed, delete the old word" do
         # initially we have in DB
         # - Word time_nn
-        # - Word times_nns
+        # - Word tempora_nns
         # - Paradigm that groups time_nn, tempora_nns
         # then we
         # - replace tempora_nns with times_nns
@@ -540,7 +571,7 @@ describe ParadigmForm do
       it "word.text and word.tag can be changed at once"
 
 
-      it "should update comment and status fields of the underlying paradigm", focus: true do
+      it "should update comment and status fields of the underlying paradigm" do
 
         pdg_vb_read = Paradigm.create!(paradigm_type: @pdgt_vb, status: 'review', comment: 'initial comment')
         read_vb     = Word.create!(text: 'read',  tag: @vb,  paradigm: pdg_vb_read)
@@ -598,6 +629,204 @@ describe ParadigmForm do
         # + once saved, comment and status fields of the underlying paradigm are updated
         expect( pdgf.paradigm.comment ).to eq 'updated comment'
         expect( pdgf.paradigm.status  ).to eq 'ready'
+      end
+
+      describe "should reset paradigm.task_id if" do
+
+        it "the originator word is no longer in the paradigm" do
+          # initially we have in DB
+          # - Word time_nn
+          # - Word tempora_nns having task_id -- originator word
+          # - Paradigm that groups time_nn, tempora_nns with task_id from times_nns
+          # then we
+          # - replace tempora_nns with times_nns
+
+          task = Task.create!
+          pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review', task: task)
+          time_nn     = Word.create!(text: 'time',    tag: @nn,  paradigm: pdg_nn_time)
+          tempora_nns = Word.create!(text: 'tempora', tag: @nns, paradigm: pdg_nn_time, task: task)
+          times_notag = Word.create!(text: 'times')
+
+          params = {
+            "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+            "word_id" => "#{tempora_nns.task_id}",
+            "pdg" => {
+              "0" => {
+                "#{@pdgt_nn.id}" => {
+                  "#{@nn.id}" => {
+                    "0" => {"tag"=>"NN", "#{time_nn.id}"=>"#{time_nn.text}", "deleted"=>"false"}
+                  },
+                  "#{@nns.id}" => {
+                    "1" => {"tag"=>"NNS", "#{tempora_nns.id}"=>"#{times_notag.text}", "deleted"=>""},
+                  },
+                  "extras"=>{"comment"=>"tempora_nns->times_nns", "status"=>"ready"}
+                }
+              }
+            }
+          }
+          
+          pdgf = ParadigmForm.new params
+
+          # expectations:
+          # the paradigm is linked to the same task as the originator word
+          expect( pdgf.paradigm.task ).to eq tempora_nns.task
+
+          pdgf.save
+
+          # expectations:
+          # once the word originator has been removed from the paradigm,
+          # the paradigm can no longer be linked to that task: the task is reset
+          expect( pdgf.paradigm.task ).to be_nil
+        end
+
+        it "the the homonyms of word-originator are no longer in the paradigm" do
+          # initially we have in DB
+          # - Word time_nn
+          # - Word tempora_vbz linked to a task
+          # - Word tempora_nns that is a homonym of tempora_vbz
+          # - Paradigm that groups time_nn, tempora_nns with task_id from tempora_vbz
+          # then we
+          # - replace tempora_nns with times_nns
+
+          task = Task.create!
+          pdg_vb_tempora = Paradigm.create!(paradigm_type: @pdgt_vb, status: 'ready', task: task)
+          tempora_vbz    = Word.create!(text: 'tempora', tag: @vbz, paradigm: pdg_vb_tempora, task: task)
+
+          pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review', task: task)
+          time_nn     = Word.create!(text: 'time',    tag: @nn,  paradigm: pdg_nn_time)
+          tempora_nns = Word.create!(text: 'tempora', tag: @nns, paradigm: pdg_nn_time)
+          times_notag = Word.create!(text: 'times')
+
+          params = {
+            "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+            "word_id" => "#{tempora_vbz.task_id}",
+            "pdg" => {
+              "0" => {
+                "#{@pdgt_nn.id}" => {
+                  "#{@nn.id}" => {
+                    "0" => {"tag"=>"NN", "#{time_nn.id}"=>"#{time_nn.text}", "deleted"=>"false"}
+                  },
+                  "#{@nns.id}" => {
+                    "1" => {"tag"=>"NNS", "#{tempora_nns.id}"=>"#{times_notag.text}", "deleted"=>""},
+                  },
+                  "extras"=>{"comment"=>"tempora_nns->times_nns", "status"=>"ready"}
+                }
+              }
+            }
+          }
+
+          pdgf = ParadigmForm.new params
+
+          # expectations:
+          # the paradigm is linked to the same task as the homonym of the originator word
+          expect( pdgf.paradigm.task ).to eq tempora_vbz.task
+
+          pdgf.save
+
+          # expectations:
+          # once the word originator homonym has been removed from the paradigm,
+          # the paradigm can no longer be linked to that task: the task is reset
+          expect( pdgf.paradigm.task ).to be_nil
+        end
+      end
+
+
+      describe "should keep paradigm.task_id if" do
+        # NOTE: setting paradigm.task_id is tested elsewhere
+
+        it "the originator word is in the paradigm" do
+          # initially we have in DB
+          # - Word time_nn having task_id -- originator word
+          # - Word times_nns
+          # - Paradigm that groups time_nn, times_nns with task_id from time_nn
+          # then we
+          # - add tempora_nns
+
+          task = Task.create!
+          pdg_nn_time   = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review', task: task)
+          time_nn       = Word.create!(text: 'time',  tag: @nn,  paradigm: pdg_nn_time, task: task)
+          times_nns     = Word.create!(text: 'times', tag: @nns, paradigm: pdg_nn_time)
+          tempora_notag = Word.create!(text: 'tempora')
+
+          params = {
+            "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+            "word_id" => "#{time_nn.task_id}",
+            "pdg" => {
+              "0" => {
+                "#{@pdgt_nn.id}" => {
+                  "#{@nn.id}" => {
+                    "0" => {"tag"=>"NN", "#{time_nn.id}"=>"#{time_nn.text}", "deleted"=>"false"}
+                  },
+                  "#{@nns.id}" => {
+                    "1" => {"tag"=>"NNS", "#{times_nns.id}"=>"#{times_nns.text}", "deleted"=>""},
+                    "2" => {"tag"=>"NNS", "word"=>"#{tempora_notag.text}", "deleted"=>""},
+                  },
+                  "extras"=>{"comment"=>"tempora_nns->times_nns", "status"=>"ready"}
+                }
+              }
+            }
+          }
+
+          pdgf = ParadigmForm.new params
+
+          expect( pdgf.paradigm.task ).to eq time_nn.task
+
+          pdgf.save
+
+          expect( pdgf.paradigm.task ).to eq time_nn.task
+        end
+
+        it "a homonym of the originator word is in the paradigm" do
+          # initially we have in DB
+          # - Word time_nn
+          # - Word times_vbz linked to a task
+          # - Word times_rb, noise
+          # - Word times_nns that is a homonym of times_vbz
+          # - Paradigm that groups time_nn, times_nns with task_id from times_vbz
+          # - Paradigm with times_rb, noise
+          # then we
+          # - remove times_nn
+
+          task = Task.create!
+
+          pdg_vb_times = Paradigm.create!(paradigm_type: @pdgt_vb, status: 'ready',     task: task)
+          times_vbz    = Word.create!(text: 'times', tag: @vbz, paradigm: pdg_vb_times, task: task)
+
+          pdg_rb_times = Paradigm.create!(paradigm_type: @pdgt_rb, status: 'ready', task: task)
+          times_rb     = Word.create!(text: 'times', tag: @rb, paradigm: pdg_rb_times)
+
+          pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'review', task: task)
+          time_nn     = Word.create!(text: 'time',  tag: @nn,  paradigm: pdg_nn_time)
+          times_nns   = Word.create!(text: 'times', tag: @nns, paradigm: pdg_nn_time)
+
+          params = {
+            "id" => "#{pdg_nn_time.id}", # this is mandatory when editing an existing paradigm
+            "word_id" => "#{times_vbz.task_id}",
+            "pdg" => {
+              "0" => {
+                "#{@pdgt_nn.id}" => {
+                  "#{@nn.id}" => {
+                    "0" => {"tag"=>"NN", "#{time_nn.id}"=>"#{time_nn.text}", "deleted"=>"true"}
+                  },
+                  "#{@nns.id}" => {
+                    "1" => {"tag"=>"NNS", "#{times_nns.id}"=>"#{times_nns.text}", "deleted"=>""},
+                  },
+                  "extras"=>{"comment"=>"delete time_NN", "status"=>"ready"}
+                }
+              }
+            }
+          }
+
+          pdgf = ParadigmForm.new params
+
+          expect( pdgf.paradigm.task ).to eq times_vbz.task
+
+          pdgf.save
+
+          expect( pdgf.paradigm.task ).to eq times_vbz.task
+
+        end
+
       end
 
     end
