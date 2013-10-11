@@ -295,7 +295,7 @@ class ParadigmForm
     end
 
     def save
-      debug = !false
+      debug = false
       # TODO: take logic from paradigms_controller#{save,update}_paradigm
       puts "Compare: #{@old_word.inspect} vs. #{@new_word.inspect}"  if debug
       

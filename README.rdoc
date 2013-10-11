@@ -224,9 +224,9 @@
   * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
   * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
 
-5. INPROGRESS: Add task_id to Paradigm. this will help computing task statuses
-   * DONE: add the field to the Paradigm model.
-   * DONE: add logic for linking paradigms to tasks -- added ParadigmForm.save
+5. DONE: Add task_id to Paradigm. this will help computing task statuses
+   * add the field to the Paradigm model.
+   * add logic for linking paradigms to tasks -- added ParadigmForm.save
    * add tests to paradigm_form_spec.rb
 
 6. INPROGRESS: assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
