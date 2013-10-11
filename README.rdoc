@@ -230,11 +230,7 @@
    * add tests to paradigm_form_spec.rb
 
 6. INPROGRESS: assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
-   * compute task statuses and save them in Task.status. this should happem on every paradigm save/delete
-   * DONE: on the User's page, display user unfinished (inprogress, review and hascomment) tasks first and then not-started tasks.
-   * additional page for ready tasks
-   * paginate not started tasks (status new). Do not show unfinished tasks on the second and firther pages of new-tasks display.
-   * in the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
+   * compute task statuses and save them in Task.status. this should happen on every paradigm save/delete. use callbacks after_save and around_destroy? update_attributes also calls after_save -> computing task status will be performed too often.
 
 7. allow sorting tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
@@ -248,7 +244,7 @@
 
 9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
-11. for each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
+11. For each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
 
 12. DONE: similarly to words in sidepane, use differnt colors to mark words that have paradigms to review or comments in paradigms
 
@@ -260,6 +256,14 @@
 	* Use colors to distinguish task statuses.
 
 15. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
+
+16. DONE: on the user's page show unfinished tasks and not-started tasks separately
+   * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
+   * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
+
+17. Show ready tasks on an additional page
+
+18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 
 == TODO for words
 
