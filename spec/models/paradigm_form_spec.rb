@@ -279,6 +279,43 @@ describe ParadigmForm do
         expect( pdgf.paradigm.task_id ).to eq mosquito_notag.task_id
       end
 
+      it "should set paradigm.task_id if a homonym of the current word is available in the paradigm" do
+        # initially we have
+        # - Word time_nn
+        # - Word time_nns that is the originator word
+        # - Paradigm that groups time_nn and times_nns
+        # then we
+        # - create another Paradigm with time_vb and times_vbz
+        task = Task.create!
+        pdg_nn_time = Paradigm.create!(paradigm_type: @pdgt_nn, status: 'ready', task: task)
+        time_nn     = Word.create!(text: 'time',  tag: @nn,  paradigm: pdg_nn_time)
+        times_nns   = Word.create!(text: 'times', tag: @nns, paradigm: pdg_nn_time, task: task)
+
+        params = {
+          "word_id" => "#{times_nns.id}",
+          "pdg" => {
+            "0" => {
+              "#{@pdgt_vb.id}" => {
+                "#{@vb.id}" => {
+                  "0" => {"tag"=>"VB",  "word"=>"time",  "deleted"=>""}
+                },
+                "#{@vbz.id}" => {
+                  "1" => {"tag"=>"VBZ", "word"=>"times", "deleted"=>""},
+                },
+                "extras"=>{"comment"=>"new paradigm times_vb", "status"=>"review"}
+              }
+            }
+          }
+        }
+        
+        pdgf = ParadigmForm.new params
+        
+        expect( pdgf.paradigm.task ).to be_nil
+        
+        expect{ pdgf.save }.to change { Paradigm.count }.by 1
+        
+        expect( pdgf.paradigm.task ).to eq times_nns.task
+      end
     end
 
     describe "that is in DB (we are editing an existing paradigm)" do
@@ -824,7 +861,6 @@ describe ParadigmForm do
           pdgf.save
 
           expect( pdgf.paradigm.task ).to eq times_vbz.task
-
         end
 
       end

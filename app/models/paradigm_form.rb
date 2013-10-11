@@ -200,24 +200,18 @@ class ParadigmForm
   #       that belongs to this task as well.
   # TODO: instead of resetting, assign task from another word in the paradigm?
   def assign_task
-    puts "paradigm.task_id before: #{@paradigm.task_id}"
     if @paradigm.task
-      puts "Paradigm word: #{@paradigm.words.inspect}"
-#      if @paradigm.words.where(task: @paradigm.task).empty? # TODO: add homonyms as well
-      if @paradigm.words.all? {|word| Word.where(text: word.text, task: @paradigm.task).empty?}
+      if @paradigm.has_word_linked_to_task? @paradigm.task
         # the current value of task_id is no longer valid
         @paradigm.update_attributes(task: nil)
-        puts "  resetting 1"
       end
-    elsif @current_word && ! @paradigm.words.where(text: @current_word.text).empty?
+
+    elsif @current_word && @paradigm.has_word_or_homonym_of(@current_word)
       @paradigm.update_attributes(task: @current_word.task)
-      puts "  setting to #{@current_word.task_id}"
+
     else
       @paradigm.update_attributes(task: nil)
-      puts "  resetting 2"
     end
-    puts "paradigm.task_id after: #{@paradigm.task_id}"
-#    @paradigm.save
   end
 
   def sanitize

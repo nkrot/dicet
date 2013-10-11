@@ -21,7 +21,7 @@ class Paradigm < ActiveRecord::Base
   def tags
     tags_from_words = []
     if self.id
-      tags_from_words = Word.where({paradigm_id: self.id}).map {|w| w.tag}
+      tags_from_words = Word.where(paradigm_id: self.id).map {|w| w.tag}
 #      puts "Tag associated with the current paradigm (#{tags_from_words.length}): #{tags_from_words.inspect}"
     end
 
@@ -71,6 +71,14 @@ class Paradigm < ActiveRecord::Base
 
     self.words.each { |word| word.suicide }
     self.destroy
+  end
+
+  def has_word_or_homonym_of word
+    self.words.any? {|wd| ! Word.where(text: word.text).empty? }
+  end
+
+  def has_word_linked_to_task? task
+    self.words.all? {|word| Word.where(text: word.text, task: task).empty?}
   end
 
   # not used yet
