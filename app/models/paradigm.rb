@@ -3,12 +3,27 @@ class Paradigm < ActiveRecord::Base
 
   has_many   :words
 #  has_many   :tags, :through => :paradigm_type # TODO: try this
+#  validates_associated :words # TODO: what does it mean?
   belongs_to :paradigm_type
   belongs_to :task
-#  validates_associated :words # TODO: what does it mean?
 
   validates :status, inclusion: { in: STATUSES, 
     message: "%{value} is not a valid status, should be one of #{STATUSES.join(" ")}"}
+
+  before_save :fix_empty_fields
+  after_save :update_task_status
+
+  def self.to_review
+    where(status: 'review')
+  end
+
+  def self.ready
+    where(status: 'ready')
+  end
+
+  def self.with_comment
+    where("paradigms.comment is not NULL and paradigms.comment <> ''")
+  end
 
   # Here we return union of:
   #  a) tags associated with the paradigm type to which the paradigm belongs
@@ -73,7 +88,7 @@ class Paradigm < ActiveRecord::Base
     self.destroy
   end
 
-  def has_word_or_homonym_of word
+  def has_word_or_homonym_of? word
     self.words.any? {|wd| ! Word.where(text: word.text).empty? }
   end
 
@@ -86,5 +101,32 @@ class Paradigm < ActiveRecord::Base
 #    self.status.to_s.downcase == "dumped"
 #  end
 
+  def update_task_status
+    puts "Recomputing task status of the task #{task.inspect}"
+    if task # ideally this should not happen but...
+      new_status = if task.paradigms.empty?
+                     'new'
+                   elsif ! task.paradigms.to_review.empty?
+                     'review'
+                   elsif ! task.paradigms.with_comment.empty?
+                     'hascomment'
+                   elsif ! task.paradigms.ready.empty?
+                     # TODO: bad! need to check that all words have been done
+                     'ready'
+                   else
+                     'inprogress'
+                   end
+      task.update_attributes(status: new_status)
+      puts "new value of task.status=#{task.status}"
+    end
+  end
 
+  private
+
+  #http://stackoverflow.com/questions/7202319/rails-force-empty-string-to-null-in-the-database
+  def fix_empty_fields
+    if self.comment.instance_of?(String) && self.comment =~ /^\s*$/
+      self.comment = nil
+    end
+  end
 end

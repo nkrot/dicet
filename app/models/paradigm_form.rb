@@ -206,7 +206,7 @@ class ParadigmForm
         @paradigm.update_attributes(task: nil)
       end
 
-    elsif @current_word && @paradigm.has_word_or_homonym_of(@current_word)
+    elsif @current_word && @paradigm.has_word_or_homonym_of?(@current_word)
       @paradigm.update_attributes(task: @current_word.task)
 
     else

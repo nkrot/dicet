@@ -5,8 +5,8 @@ class Task < ActiveRecord::Base
 
   # valid statuses
   # new, ready, inprogress
-  # review  -- if the task has a word with a paradigm marked to review
-  # withcomment -- if the task has a word with a paradigm having a comment
+  # review  -- if the task has a paradigm marked to review
+  # hascomment -- if the task has a paradigm having a comment
 
   # defaults
   NUMWORDS = 5 # default size of the task - number of words in the task
