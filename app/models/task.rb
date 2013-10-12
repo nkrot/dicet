@@ -26,6 +26,10 @@ class Task < ActiveRecord::Base
     status.to_s.empty? || status == 'new'
   end
 
+  def has_new_words?
+    ! words.where(paradigm_id: nil).empty?
+  end
+
   private
 
   def fix_status

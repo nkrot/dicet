@@ -234,7 +234,6 @@
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
    * use color to signal the status of the current task in the sidepane
-   * now 'ready' is computed incorrectly - it fails to check all words linked to the task have paradigms
 
 7. allow sorting tasks by modification time (allows finding most recently done tasks or tasks in progress)
 
@@ -265,7 +264,9 @@
    * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
    * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
 
-17. Show ready tasks on an additional page
+17. Show ready tasks
+	* on an additional page
+	* most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
 
 18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 

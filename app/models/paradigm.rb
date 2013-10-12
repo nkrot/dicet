@@ -102,7 +102,6 @@ class Paradigm < ActiveRecord::Base
 #  end
 
   def update_task_status
-    puts "Recomputing task status of the task #{task.inspect}"
     if task # ideally this should not happen but...
       new_status = if task.paradigms.empty?
                      'new'
@@ -110,14 +109,12 @@ class Paradigm < ActiveRecord::Base
                      'review'
                    elsif ! task.paradigms.with_comment.empty?
                      'hascomment'
-                   elsif ! task.paradigms.ready.empty?
-                     # TODO: bad! need to check that all words have been done
+                   elsif ! task.has_new_words?
                      'ready'
                    else
                      'inprogress'
                    end
       task.update_attributes(status: new_status)
-      puts "new value of task.status=#{task.status}"
     end
   end
 
