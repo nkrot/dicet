@@ -3,7 +3,7 @@
 #task_in_sp
 
   - if task
-    .title Current task ##{task.id}
+    .task_title{class: "task_#{task.status}"} Current task #{task.id}
 
     %div.words
       = render partial: 'words/word_in_sidepane', collection: task.words, as: :word
