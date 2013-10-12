@@ -377,6 +377,7 @@ table.radioset {
 // task displayed in side pane
 #task_in_sp {
 //  background: $layoutPanes;
+  background: #ededed;
 //  border: solid 1px #4479BA;
   border: solid 2px $layoutPanes;
   -webkit-border-radius: 10px;
@@ -384,11 +385,42 @@ table.radioset {
   border-radius: 10px;
   
   height: 100%;
-  padding-top: 0.3em;
+  padding-top: 0; //0.3em;
 
-  .title {
+  .task_title {
     text-align: center;
-    margin-bottom: 10px;
+    margin: 4px 4px 10px 4px;    
+//    margin-bottom: 10px;
+    padding-top: 3px;    
+    padding-bottom: 3px;    
+    color: #000;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+  }
+
+  .task_ready {
+    background: #28D328; // green
+    color: #802014; // brown
+  }
+
+  .task_hascomment {
+    background: #ECCE18; // yellow
+    color: #0C9123;
+  }
+
+  .task_review {
+    background: #F81B07; // red
+    color: yellow;
+  }
+
+  .task_inprogress {
+    background: #1540FF; //#5750D8; // blue
+    color: yellow;
+  }
+
+  .task_new {
+    // keep uncolored
   }
 
   .word {
@@ -404,6 +436,8 @@ table.radioset {
     -moz-border-radius: 6px;
     border-radius: 6px;
 
+   margin-left: 4px;
+   margin-right: 4px;
 //    color: gold;
   }
 
