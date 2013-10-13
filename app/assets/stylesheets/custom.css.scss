@@ -35,7 +35,9 @@ html, body {
 }
 
 .footer, .header {
-  background: $layoutPanes;
+//  background: $layoutPanes;
+  background: #ededed;
+  border-bottom: solid 1px $layoutPanes;  
   padding-left: 1em;
 }
 
@@ -335,7 +337,7 @@ table.radioset {
   }
 
   thead {
-    background-color: #99cccc;;
+    background-color: $layoutPanes; // #99cccc;;
     
     th {
       padding: 10px;
