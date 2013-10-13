@@ -32,8 +32,9 @@
     * create an Other paradigm for loose. save
     * see loose_JJ from the JJ-paradigm being deleted, while the rest of the paradigm persists!
 
-
 9. Try interactive plots with http://nvd3.org/
+
+10. BUG: on the user's page, after dropping a current task, the page is redisplayed without unfinished tasks.
 
 == TODO for creating/editing paradigms
 
@@ -230,11 +231,14 @@
    * add tests to paradigm_form_spec.rb
 
 6. INPROGRESS: assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
-   * compute task statuses and save them in Task.status. this should happen on every paradigm save/delete. use callbacks after_save and around_destroy? --
+   * DONE: compute task statuses and save them in Task.status. Tis should happen on every paradigm save/delete. use callbacks after_save and around_destroy?
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
 
-7. allow sorting tasks by modification time (allows finding most recently done tasks or tasks in progress)
+7. Show ready tasks
+   * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
+   * ??? show the most recently modified task on the user page?
+   * INPROGRESS: may be most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
 
 8. DONE: api for uploading new words to the server
   * http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
@@ -263,9 +267,7 @@
    * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
    * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
 
-17. Show ready tasks
-	* on an additional page
-	* INPROGRESS: most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
+17. Refactor: this user's page should be http://localhost:3000/users/1/tasks instead of http://localhost:3000/users/1
 
 18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 

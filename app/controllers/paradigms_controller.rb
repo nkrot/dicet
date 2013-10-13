@@ -101,14 +101,12 @@ class ParadigmsController < ApplicationController
   end
 
   def destroy
-#    puts "(DESTROY): #{params}"
+    pdg = Paradigm.find(params[:id])
+    pdg.suicide
 
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
     @current_task = @current_word.task
-
-    pdg = Paradigm.find(params[:id])
-    pdg.suicide
   end
 
   def peek

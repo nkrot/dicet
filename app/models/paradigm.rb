@@ -12,6 +12,7 @@ class Paradigm < ActiveRecord::Base
 
   before_save :fix_empty_fields
   after_save :update_task_status
+  after_destroy :update_task_status
 
   def self.to_review
     where(status: 'review')
