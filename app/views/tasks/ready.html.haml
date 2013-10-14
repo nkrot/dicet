@@ -1,0 +1,27 @@
+%h2= @title
+
+
+- if @users
+  %table{border:1}
+    %thead
+      %tr
+        %th.center User name
+        %th.center Number completed tasks
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.login
+          %td.center= user.ready_tasks.count
+      %tr
+        %td TOTAL
+        %td.center= @tasks.count
+- else
+  %p Total number of completed tasks: #{@tasks.count}
+
+- will_paginate_params = { params: {action: 'ready', user: @user} }
+= will_paginate @tasks, will_paginate_params
+
+= render partial: "tasks/tasks_in_table", |
+         locals: {btn_action: 'drop', btn_label: 'Drop', col_label: 'Drop task'}
+
+= will_paginate @tasks, will_paginate_params

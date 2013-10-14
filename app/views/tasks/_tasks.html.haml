@@ -3,7 +3,9 @@
   %span.count_of_tasks= pluralize(@tasks.count, "unassigned task")
   , and you have
   %span.count_of_user_tasks= pluralize(@user_tasks.count, "task")
-  assigned to you.
+  =link_to "assigned to you.", user_tasks_path(current_user)
+  For viewing all completed tasks go 
+  =link_to "here", ready_tasks_path
 
 -# additional params are necessary to ensure the correct links are
 -# generated both when #index and #take controllers work  

@@ -17,7 +17,8 @@
 
 %h4 Useful links
 
-= link_to "My tasks", user_tasks_path(current_user)
-
+%ul
+  %li= link_to "My active tasks", user_tasks_path(current_user)
+  %li= link_to "My completed tasks", ready_user_tasks_path(current_user)
 
 

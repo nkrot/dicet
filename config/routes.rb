@@ -23,11 +23,19 @@ Dicet::Application.routes.draw do
   match '/help',  to: 'welcome#help',  via: 'get'
 
   resources :users do
-    resources :tasks, only: :index
+    resources :tasks, only: :index do
+      collection do
+        match :ready, via: :get
+      end
+    end
   end
   match '/signup', to: 'users#new', via: 'get'
 
-  resources :tasks, only: :index
+  resources :tasks, only: :index do
+    collection do
+      match :ready, via: :get
+    end
+  end
   match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
   match '/tasks/take/:id', to: 'tasks#take', via: 'put'
 

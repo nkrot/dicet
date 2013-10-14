@@ -22,6 +22,10 @@ class Task < ActiveRecord::Base
     where(user: user)
   end
 
+  def self.ready
+    where(status: 'ready')
+  end
+
   def new?
     status.to_s.empty? || status == 'new'
   end

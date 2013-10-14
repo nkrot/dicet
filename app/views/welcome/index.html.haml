@@ -1,9 +1,16 @@
 %h2 Welcome to Dicet - DICtionary Enrichment Tool
-%p More text is still to come
 
-%p= link_to "My page",        user_path(current_user)
-%p= link_to "View all tasks", tasks_path
-%p= link_to "View all words", words_path
-%p= link_to "View tagset",    tags_path
+%p More text is still to come. Ask somebody to write it.
+
+%h4 Useful links
+
+%ul
+  %li= link_to "My page", user_path(current_user)
+  %li= link_to "View all unassigned tasks", tasks_path
+  %li= link_to "View all completed tasks", ready_tasks_path
+  %li= link_to "View all words", words_path
+  %li= link_to "View tagset",    tags_path
+  %li= link_to "Have fun", "http://fishki.net"
+  %li= link_to "Study with coursera", "http://www.coursera.org"
 
 

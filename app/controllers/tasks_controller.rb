@@ -6,7 +6,7 @@ class TasksController < ApplicationController
       set_user_tasks_data
       render 'user_tasks'
     else
-      @title = "All dictionary tasks"
+      @title = "All unassigned dictionary tasks"
       @tasks = Task.unassigned.paginate(page:     params[:page],
                                         per_page: TASKS_PER_PAGE,
                                         order:    'priority DESC')
@@ -43,6 +43,22 @@ class TasksController < ApplicationController
     # will need to remove remote => true from drop buttons?
     # this allows merging tasks/user_tasks and tasks/_user_tasks templates
     # render 'user_tasks'
+  end
+
+  def ready
+    if params[:user_id]
+      @title = "Completed tasks"
+      @user = User.find(params[:user_id])
+      @tasks = @user.ready_tasks.paginate(page:     params[:page],
+                                          per_page: TASKS_PER_PAGE,
+                                          order:    'updated_at DESC')
+    else
+      @title = "Completed tasks by all users"
+      @users = User.all
+      @tasks = Task.ready.paginate(page:     params[:page],
+                                   per_page: TASKS_PER_PAGE,
+                                   order:    'updated_at DESC')
+    end
   end
 
   private

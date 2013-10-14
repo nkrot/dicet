@@ -5,7 +5,8 @@
   %p
     You currently have
     %span.count_of_tasks= pluralize(@new_tasks.count + @unfinished_tasks.count, "task")
-    assigned to you
+    assigned to you. For viewing completed tasks go
+    =link_to "here", ready_user_tasks_path(@user)
 
   - if @show_unfinished_tasks
     %h4 Unfinished tasks
