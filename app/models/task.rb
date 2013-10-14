@@ -3,6 +3,11 @@ class Task < ActiveRecord::Base
   has_many :words
   has_many :paradigms
 
+  scope :today,        -> { where "DATE(updated_at) = ?",  Date.today }
+  scope :during_week,  -> { where "DATE(updated_at) >= DATE(?)", 1.week.ago }
+  scope :during_month, -> { where "DATE(updated_at) >= DATE(?)", 1.month.ago }
+  scope :except_ready, -> { where "status <> ?", 'ready' }
+
   # valid statuses
   # new, ready, inprogress
   # review  -- if the task has a paradigm marked to review

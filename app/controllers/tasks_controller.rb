@@ -10,7 +10,7 @@ class TasksController < ApplicationController
       @tasks = Task.unassigned.paginate(page:     params[:page],
                                         per_page: TASKS_PER_PAGE,
                                         order:    'priority DESC')
-      @user_tasks = Task.assigned_to(current_user)
+      @user_tasks = Task.assigned_to(current_user).except_ready
       render 'index'
     end
   end
@@ -26,7 +26,7 @@ class TasksController < ApplicationController
     @tasks = Task.unassigned.paginate(page:     params[:page],
                                       per_page: TASKS_PER_PAGE,
                                       order:    'priority DESC')
-    @user_tasks = Task.assigned_to(current_user)
+    @user_tasks = Task.assigned_to(current_user).except_ready
 
   end
 

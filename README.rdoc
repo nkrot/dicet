@@ -238,7 +238,8 @@
 7. INPROGRESS: Show completed tasks (having status 'ready')
    * DONE: on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
    * DONE: completed by all users. The path is /tasks/ready 
-   * DONE: add counts of completed tasks
+   * DONE: add total counts of completed tasks
+   * DONE: add counts of tasks completed today, since one week ago and since one month ago
    * When showing tasks by all users, include the doer in the table.
    * Get rid of Drop button in the table
    * Include time in the table

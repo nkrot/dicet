@@ -454,6 +454,51 @@ table.radioset {
 
 /********************************************************************\
  *
+ * table showing completed tasks
+ *
+\********************************************************************/
+
+#ready_tasks_stats {
+  th {
+    color: #A21100;
+    background: $layoutPanes; // #ededed;
+    border-top: 1px solid black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-left: dotted 1px black;
+    border-bottom: dotted 1px black;
+  }
+
+  td, th {
+    text-align: center;
+    border-right: dotted 1px black;
+    padding-left: 5px;
+    padding-right: 5px;    
+    width: 80px; 
+  }
+
+  .login {
+    text-align: left;
+    border-left: dotted 1px black;
+    width: 150px;    
+  }
+
+  .total { // applies both to tr and td
+    background: #ededed;
+  }
+
+  tr.total {
+    border-top: 1px dotted black;
+    border-bottom: 1px dotted black;
+  }
+
+  tr.last {
+    border-bottom: 1px dotted black;
+  }  
+}
+
+/********************************************************************\
+ *
  * buttons in various contexts
  *
 \********************************************************************/
