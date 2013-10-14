@@ -1,13 +1,12 @@
 %h2= @title
 
-
 %table#ready_tasks_stats
   %thead
     %tr
       %th User name
       %th Today
       %th Weeklong
-      %th Monthlong
+      -# %th Monthlong
       %th All so far
   %tbody
     - if @users
@@ -16,20 +15,20 @@
           %td.login= user.login
           %td= user.ready_tasks.today.count
           %td= user.ready_tasks.during_week.count
-          %td= user.ready_tasks.during_month.count
+          -# %td= user.ready_tasks.during_month.count
           %td.total= user.ready_tasks.count
       %tr.total
         %td.login TOTAL
         %td= @tasks.ready.today.count
         %td= @tasks.ready.during_week.count
-        %td= @tasks.ready.during_month.count
+        -# %td= @tasks.ready.during_month.count
         %td.total= @tasks.ready.count
     - else
       %tr.last
         %td.login= @user.login
         %td= @user.ready_tasks.today.count
         %td= @user.ready_tasks.during_week.count
-        %td= @user.ready_tasks.during_month.count
+        -# %td= @user.ready_tasks.during_month.count
         %td.total= @user.ready_tasks.count
 
 %p &nbsp;
@@ -39,7 +38,16 @@
 - will_paginate_params = { params: {action: 'ready', user: @user} }
 = will_paginate @tasks, will_paginate_params
 
-= render partial: "tasks/tasks_in_table", |
-         locals: {btn_action: 'drop', btn_label: 'Drop', col_label: 'Drop task'}
+%table.table_of_tasks
+  %thead
+    %tr
+      %th.login User name
+      %th ID
+      %th Priority
+      %th.words Words
+      %th Last updated
+    %tbody
+      = render partial: "tasks/ready_task", collection: @tasks, as: :task
+
 
 = will_paginate @tasks, will_paginate_params
