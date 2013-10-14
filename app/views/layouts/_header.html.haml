@@ -4,7 +4,9 @@
   |
   = link_to "My page", user_path(current_user)
   |
-  = link_to "All Tasks", tasks_path
+  = link_to "My tasks", user_tasks_path(current_user)
+  |
+  = link_to "All tasks", tasks_path
   |
   = link_to "Help", help_path
   |

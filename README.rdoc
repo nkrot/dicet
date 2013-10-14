@@ -34,7 +34,7 @@
 
 9. Try interactive plots with http://nvd3.org/
 
-10. BUG: on the user's page, after dropping a current task, the page is redisplayed without unfinished tasks.
+10. DONE: BUG fixed: on the user's page, after dropping a current task, the page is redisplayed without unfinished tasks.
 
 == TODO for creating/editing paradigms
 
@@ -235,7 +235,7 @@
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
 
-7. Show ready tasks
+7. INPROGRESS: Show completed tasks (having status 'ready')
    * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
    * ??? show the most recently modified task on the user page?
    * INPROGRESS: may be most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
@@ -254,20 +254,20 @@
 
 12. DONE: similarly to words in sidepane, use differnt colors to mark words that have paradigms to review or comments in paradigms
 
-13. move tasks_controller#update_user_tasks into the model
-	* write tests
-
 14. Show unfinished tasks and new tasks in the sidepane as well. 
   	* When clicking on a task there, the Current Task pane should switch to it.
 	* Use colors to distinguish task statuses.
 
-15. refactor so as to get rid of duplication in users_controller#show and tasks_controller#drop
+15. DONE: refactor so as to get rid of duplication in tasks_controller#index and tasks_controller#drop
 
 16. DONE: on the user's page show unfinished tasks and not-started tasks separately
    * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
    * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
 
-17. Refactor: this user's page should be http://localhost:3000/users/1/tasks instead of http://localhost:3000/users/1
+17. DONE: Refactor: the user's task page should be http://localhost:3000/users/1/tasks instead of http://localhost:3000/users/1
+	* /users/1/tasks -- shows user's tasks
+	* /tasks -- shows all unassigned tasks
+	* check that taking/dropping works -- yes
 
 18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 

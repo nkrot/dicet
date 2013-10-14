@@ -1,39 +1,42 @@
 - @show_unfinished_tasks ||= false
 
-%h2 Your dictionary tasks
+%div#tasks
 
-%p
-  You currently have
-  %span.count_of_tasks= pluralize(@new_tasks.count + @unfinished_tasks.count, "task")
-  assigned to you
+  %p
+    You currently have
+    %span.count_of_tasks= pluralize(@new_tasks.count + @unfinished_tasks.count, "task")
+    assigned to you
 
-- if @show_unfinished_tasks
-  %h4 Unfinished tasks
+  - if @show_unfinished_tasks
+    %h4 Unfinished tasks
 
-  - if @unfinished_tasks.empty?
-    %p You have no runnings tasks
-  - else
-    %p You've been doing #{pluralize(@unfinished_tasks.count, "task")}
+    - if @unfinished_tasks.empty?
+      %p You have no runnings tasks
+    - else
+      %p You've been doing #{pluralize(@unfinished_tasks.count, "task")}
 
-    = render partial: "tasks/tasks_in_table", |
-    locals: {tasks: @unfinished_tasks, btn_action: 'drop', |
-             btn_label: 'Drop', col_label: 'Drop task'}
+      = render partial: "tasks/tasks_in_table", |
+      locals: {tasks: @unfinished_tasks, btn_action: 'drop', |
+               btn_label: 'Drop', col_label: 'Drop task'}
 
-%h4 Not started tasks
+  %h4 Not started tasks
 
-- msg = "are other #{@new_tasks.count} tasks"
-- if @new_tasks.count == 1
-  - msg = "is another task (wow, only one)"
-  
-%p There #{msg} that await your attention
+  - msg = "are other #{@new_tasks.count} tasks"
+  - if @new_tasks.count == 1
+    - msg = "is another task (wow, only one)"
 
--# additional params are necessary to ensure that the button links are generated
--# correctly both in users_controller#show and tasks_controller#drop
-- will_paginate_params = { params: {controller: 'users', action: 'show', id: @user.id} }
+  %p There #{msg} that await your attention
 
-= will_paginate @new_tasks, will_paginate_params
+  -# additional params are necessary to ensure that the links are
+  -# generated correctly in both tasks_controller#{index,drop}
+  - will_paginate_params = { params: {action: 'index', user_id: @user.id} }
 
-= render partial: "tasks/tasks_in_table", |
-         locals: {tasks: @new_tasks, btn_action: 'drop', btn_label: 'Drop', col_label: 'Drop task'}
+  = will_paginate @new_tasks, will_paginate_params
 
-= will_paginate @new_tasks, will_paginate_params
+  = render partial: "tasks/tasks_in_table", |
+           locals: {tasks: @new_tasks, btn_action: 'drop', |
+                    btn_label: 'Drop', col_label: 'Drop task'}
+
+  = will_paginate @new_tasks, will_paginate_params
+
+  %p &nbsp;

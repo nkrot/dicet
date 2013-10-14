@@ -7,14 +7,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @title = @user.login
-
-    @unfinished_tasks = @user.unfinished_tasks
-    @new_tasks = @user.new_tasks.paginate(page:     params[:page],
-                                          per_page: TASKS_PER_PAGE,
-                                          order:    'priority DESC')
-    # only on the first page
-    @show_unfinished_tasks = params[:page].to_i-1 < 1
+    @title = "Homepage of #{@user.login}"
   end
 
   def new

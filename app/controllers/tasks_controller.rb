@@ -1,20 +1,18 @@
 class TasksController < ApplicationController
 
   def index
-    @title = "All dictionary tasks"
-    @tasks = Task.unassigned.paginate(page:     params[:page],
-                                      per_page: TASKS_PER_PAGE,
-                                      order:    'priority DESC')
-    @user_tasks = Task.assigned_to(current_user)
-  end
-
-  def update
-    if update_user_tasks(params)
-      flash[:success] = "Selected tasks have been added to your task set"
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+      set_user_tasks_data
+      render 'user_tasks'
     else
-      flash[:error] = "Failed to add selected tasks to your task set"
+      @title = "All dictionary tasks"
+      @tasks = Task.unassigned.paginate(page:     params[:page],
+                                        per_page: TASKS_PER_PAGE,
+                                        order:    'priority DESC')
+      @user_tasks = Task.assigned_to(current_user)
+      render 'index'
     end
-    redirect_to user_path(current_user)
   end
 
   def take
@@ -29,34 +27,35 @@ class TasksController < ApplicationController
                                       per_page: TASKS_PER_PAGE,
                                       order:    'priority DESC')
     @user_tasks = Task.assigned_to(current_user)
+
   end
 
   def drop
     @task = Task.find(params[:id])
-
-    # TODO: as in users_controller#show
     @user = @task.user
-
     @task.user = nil
     @task.save
 
-    # TODO: as in users_controller#show
-    @unfinished_tasks = @user.unfinished_tasks
-    @new_tasks = @user.new_tasks.paginate(page:     params[:page],
-                                          per_page: TASKS_PER_PAGE,
-                                          order:    'priority DESC')
+    set_user_tasks_data
+
+    # TODO:
+    # get rid of drop.js.haml and just render 'user_tasks' here.
+    # will need to remove remote => true from drop buttons?
+    # this allows merging tasks/user_tasks and tasks/_user_tasks templates
+    # render 'user_tasks'
   end
 
   private
 
-  def update_user_tasks(params)
-    saved = true
-    params[:tasks].keys.each do |task_id|
-      # TODO: what if the task has already been taken? -- report that the task
-      # could not be assigned to the current user.
-      task = Task.where(id: task_id, user_id: nil).first
-      saved = task.update_attributes(user_id: current_user.id) && saved
-    end
-    saved
+  # all variables necessary to render user tasks
+  def set_user_tasks_data
+    @title = "Tasks for #{@user.login}"
+
+    @unfinished_tasks = @user.unfinished_tasks
+    @new_tasks = @user.new_tasks.paginate(page:     params[:page],
+                                          per_page: TASKS_PER_PAGE,
+                                          order:    'priority DESC')
+    # only on the first page
+    @show_unfinished_tasks = params[:page].to_i-1 < 1
   end
 end

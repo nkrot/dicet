@@ -1,7 +1,7 @@
 
--#%h3 Showing dossier on user #{@user.login}
+%h3 Showing dossier on user #{@user.login}
 
--#%table{border:1}
+%table{border:1}
   %thead
     %tr
       %th ID
@@ -15,9 +15,9 @@
       %th= @user.email
       %th= @user.password
 
-%div#tasks
+%h4 Useful links
 
-  =render partial: 'tasks/user_tasks'
+= link_to "My tasks", user_tasks_path(current_user)
 
-%p &nbsp;
+
 

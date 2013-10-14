@@ -22,8 +22,14 @@ Dicet::Application.routes.draw do
   match '/about', to: 'welcome#about', via: 'get'
   match '/help',  to: 'welcome#help',  via: 'get'
 
-  resources :users
+  resources :users do
+    resources :tasks, only: :index
+  end
   match '/signup', to: 'users#new', via: 'get'
+
+  resources :tasks, only: :index
+  match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
+  match '/tasks/take/:id', to: 'tasks#take', via: 'put'
 
   match '/words/upload', to: 'words#upload', via: 'post'
   resources :words
@@ -34,10 +40,6 @@ Dicet::Application.routes.draw do
   match '/paradigms/new_paradigm_of_type/:id', to: 'paradigms#new_paradigm_of_type', via: 'get'
   match '/paradigms/add_conversions', to: 'paradigms#add_conversions', via: ['patch', 'post']
   resources :paradigms
-
-  resources :tasks, only: [:index, :update]
-  match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
-  match '/tasks/take/:id', to: 'tasks#take', via: 'put'
 
   resources :sessions, only: [:new, :create, :destroy]
   match '/signin',  to: 'sessions#new',     via: 'get'
