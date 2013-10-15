@@ -42,10 +42,10 @@
   %thead
     %tr
       %th.login User name
-      %th ID
-      %th Priority
+      %th.task_id ID
+      %th.priority Priority
       %th.words Words
-      %th Last updated
+      %th.time Last updated
     %tbody
       = render partial: "tasks/ready_task", collection: @tasks, as: :task
 

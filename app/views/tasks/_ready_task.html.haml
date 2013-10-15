@@ -1,7 +1,7 @@
 
 %tr
-  %td= task.user.login
-  %td= task.id
-  %td= task.priority
-  %td= render partial: "words/word_in_task", collection: task.words, as: :word
-  %td= task.updated_at
+  %td.login= task.user.login
+  %td.task_id= task.id
+  %td.priority= task.priority
+  %td.words= render partial: "words/word_in_task", collection: task.words, as: :word
+  %td.time= task.updated_at

@@ -230,7 +230,7 @@
    * add logic for linking paradigms to tasks -- added ParadigmForm.save
    * add tests to paradigm_form_spec.rb
 
-6. INPROGRESS: assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
+6. assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
    * DONE: compute task statuses and save them in Task.status. This should happen on every paradigm save/delete. use callbacks after_save and around_destroy?
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
@@ -240,10 +240,11 @@
    * DONE: completed by all users. The path is /tasks/ready 
    * DONE: add total counts of completed tasks
    * DONE: add counts of tasks completed today, since one week ago and since one month ago
-   * When showing tasks by all users, include the doer in the table.
-   * Get rid of Drop button in the table
-   * Include time in the table
-   * Allow sorting by time, by doer, and maybe other fields
+   * DONE: When showing tasks by all users, include the doer in the table.
+   * DONE: Get rid of Drop button in the table
+   * DONE: Include time in the table
+   * TODO: Allow sorting by time, by doer, and maybe other fields
+   * do not show all-users-stats on 2+pages
 
 8. DONE: api for uploading new words to the server
   * http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
@@ -283,6 +284,8 @@
 18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
 
 19. DONE: use colors to signal the status of the current task in the sidepane
+
+20. When a completed task is modified, should it's timestamp change? For example, a new paradigm was added to one of the task words. Now the status is not changed (ready->ready) and the timestamp is not updated.
 
 == TODO for words
 

@@ -344,6 +344,7 @@ table.radioset {
       color: #A21100;
       border-top: solid 1px black;      
       border-right: dotted 1px black;
+      text-align: center;      
     }
 
     th.last {
@@ -374,6 +375,19 @@ table.radioset {
   th.words {
     width: 400px;
   }  
+
+  .task_id, .priority {
+    width: 50px;
+  }
+
+  td.task_id, td.priority {
+    text-align: center;
+  }
+
+  .time {
+    width: 90px;
+    text-align: center;  
+  }
 }
 
 // task displayed in side pane
