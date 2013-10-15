@@ -374,6 +374,31 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* however, if the unsual tag was the result of replacing the old tag, it is kept
 	* it is the issue caused by sanitize, fixed together with bug described in 6 in this section.
 
+== TODO for showing sentences
+
+1. INPROGRESS: Schema for storing sentences will include:
+  * DONE: tokens: id, text, upcased_text;;; add index on text and upcased_text
+  * DONE: document: id, title
+  * DONE: sentences: id, document_id (has_many tokens through sentence_tokens)
+  * sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
+
+2. Load sentences. Keep the text titles when possible.
+  * use utf-8 as internal encoding in DB
+  * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
+
+
+3. Add a separate page for searching sentences by word(s). a-la corpus search
+  * case-insensitive search
+  * highlight requested word in the text
+  * allow randomized display of retrieved sentences
+
+4. Add possibility to search examples to the paradigm new/edit page.
+  * all words from the paradigm at once?
+
+5. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
+  * in a frame?
+  * in a new page
+
 == README
 
 This README would normally document whatever steps are necessary to get the

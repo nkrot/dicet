@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131008132834) do
+ActiveRecord::Schema.define(version: 20131015155454) do
+
+  create_table "documents", force: true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "paradigm_tags", force: true do |t|
     t.integer  "paradigm_type_id"
@@ -44,6 +50,12 @@ ActiveRecord::Schema.define(version: 20131008132834) do
   add_index "paradigms", ["paradigm_type_id"], name: "index_paradigms_on_paradigm_type_id"
   add_index "paradigms", ["task_id"], name: "index_paradigms_on_task_id"
 
+  create_table "sentences", force: true do |t|
+    t.integer  "document_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tags", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -64,6 +76,16 @@ ActiveRecord::Schema.define(version: 20131008132834) do
   add_index "tasks", ["priority"], name: "index_tasks_on_priority"
   add_index "tasks", ["user_id", "priority"], name: "index_tasks_on_user_id_and_priority"
   add_index "tasks", ["user_id"], name: "index_tasks_on_user_id"
+
+  create_table "tokens", force: true do |t|
+    t.string   "text"
+    t.string   "upcased_text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tokens", ["text"], name: "index_tokens_on_text"
+  add_index "tokens", ["upcased_text"], name: "index_tokens_on_upcased_text"
 
   create_table "users", force: true do |t|
     t.string   "login"
