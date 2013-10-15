@@ -59,6 +59,8 @@ class TasksController < ApplicationController
                                    per_page: TASKS_PER_PAGE,
                                    order:    'updated_at DESC')
     end
+    # we want general stats on the first page only
+    @show_stats_table = params[:page].to_i-1 < 1
   end
 
   private

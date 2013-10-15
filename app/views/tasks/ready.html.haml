@@ -1,42 +1,13 @@
+- @show_stats_table ||= false
+
 %h2= @title
 
-%table#ready_tasks_stats
-  %thead
-    %tr
-      %th User name
-      %th Today
-      %th Weeklong
-      -# %th Monthlong
-      %th All so far
-  %tbody
-    - if @users
-      - @users.each do |user|
-        %tr
-          %td.login= user.login
-          %td= user.ready_tasks.today.count
-          %td= user.ready_tasks.during_week.count
-          -# %td= user.ready_tasks.during_month.count
-          %td.total= user.ready_tasks.count
-      %tr.total
-        %td.login TOTAL
-        %td= @tasks.ready.today.count
-        %td= @tasks.ready.during_week.count
-        -# %td= @tasks.ready.during_month.count
-        %td.total= @tasks.ready.count
-    - else
-      %tr.last
-        %td.login= @user.login
-        %td= @user.ready_tasks.today.count
-        %td= @user.ready_tasks.during_week.count
-        -# %td= @user.ready_tasks.during_month.count
-        %td.total= @user.ready_tasks.count
-
-%p &nbsp;
+- if @show_stats_table
+  = render partial: 'ready_tasks_stats'
 
 %h4 The reference of the completed tasks starting with the most recently updated.
 
-- will_paginate_params = { params: {action: 'ready', user: @user} }
-= will_paginate @tasks, will_paginate_params
+= will_paginate @tasks
 
 %table.table_of_tasks
   %thead
@@ -50,4 +21,4 @@
       = render partial: "tasks/ready_task", collection: @tasks, as: :task
 
 
-= will_paginate @tasks, will_paginate_params
+= will_paginate @tasks

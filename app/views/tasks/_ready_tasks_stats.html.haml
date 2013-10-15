@@ -1,0 +1,32 @@
+%table#ready_tasks_stats
+  %thead
+    %tr
+      %th User name
+      %th Today
+      %th Weeklong
+      -# %th Monthlong
+      %th All so far
+  %tbody
+    - if @users
+      - @users.each do |user|
+        %tr
+          %td.login= user.login
+          %td= user.ready_tasks.today.count
+          %td= user.ready_tasks.during_week.count
+          -# %td= user.ready_tasks.during_month.count
+          %td.total= user.ready_tasks.count
+      %tr.total
+        %td.login TOTAL
+        %td= @tasks.ready.today.count
+        %td= @tasks.ready.during_week.count
+        -# %td= @tasks.ready.during_month.count
+        %td.total= @tasks.ready.count
+    - else
+      %tr.last
+        %td.login= @user.login
+        %td= @user.ready_tasks.today.count
+        %td= @user.ready_tasks.during_week.count
+        -# %td= @user.ready_tasks.during_month.count
+        %td.total= @user.ready_tasks.count
+
+%p &nbsp;

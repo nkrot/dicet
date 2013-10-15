@@ -235,16 +235,17 @@
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
 
-7. INPROGRESS: Show completed tasks (having status 'ready')
-   * DONE: on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
-   * DONE: completed by all users. The path is /tasks/ready 
-   * DONE: add total counts of completed tasks
-   * DONE: add counts of tasks completed today, since one week ago and since one month ago
-   * DONE: When showing tasks by all users, include the doer in the table.
-   * DONE: Get rid of Drop button in the table
-   * DONE: Include time in the table
-   * TODO: Allow sorting by time, by doer, and maybe other fields
+7. Show completed tasks (having status 'ready')
+   * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
+   * completed by all users. The path is /tasks/ready 
+   * add total counts of completed tasks
+   * add counts of tasks completed today, since one week ago and since one month ago
+   * When showing tasks by all users, include the doer in the table.
+   * Get rid of Drop button in the table
+   * Include time in the table
    * do not show all-users-stats on 2+pages
+   * TODO: Allow sorting by time, by doer, and maybe other fields
+   * TODO: allow selecting tasks by specific day (add calendar).
 
 8. DONE: api for uploading new words to the server
   * http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
@@ -257,7 +258,7 @@
 9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
 10. NEXT: Showing most recently modified tasks
-   * ??? show the most recently modified task on the user page?
+   * ??? show the most recently modified task on the user page? or all todays tasks?
    * may be most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
 
 11. For each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
