@@ -257,8 +257,9 @@
 
 9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
-10. NEXT: Showing most recently modified tasks
-   * ??? show the most recently modified task on the user page? or all todays tasks?
+10. Showing most recently modified tasks
+   * ??? show the most recently modified task on the user page? or all todays tasks? It can be done as a list of task IDs, clicking a list should open the task (paradigm.new for the first word in the task or the most recently edited paradigm)
+        [ 10 | 18 | 90 | 122 | 3 ]
    * may be most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
 
 11. For each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
