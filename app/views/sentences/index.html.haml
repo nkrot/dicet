@@ -1,4 +1,4 @@
-%h2 All sentences available in DB
+%h2= @title
 
 %p Want to find a specific word?
 
@@ -11,12 +11,12 @@
 %table#sentences
   %thead
     %tr
-      %th ID
-      %th Sentence
+      %th.id ID
+      %th.sentence Sentence
   %tbody
     - @sentences.each do |sent|
       %tr
-        %td= sent.id
-        %td!= to_html(sent, @found_tokens)
+        %td.id= sent.id
+        %td.sentence!= to_html(sent, @found_tokens)
 
 = will_paginate @sentences
