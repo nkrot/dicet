@@ -1,6 +1,10 @@
 %h2 All sentences available in DB
 
-%p There are #{@sentences.count} sentences in DB containing in total #{@tokens.count} words.
+%p Want to find a specific word?
+
+= render partial: 'search_sentences_form'
+
+%p There are #{@sentences.count} sentences.
 
 = will_paginate @sentences
 
@@ -13,6 +17,6 @@
     - @sentences.each do |sent|
       %tr
         %td= sent.id
-        %td= sent.to_text
+        %td!= to_html(sent, @found_tokens)
 
 = will_paginate @sentences

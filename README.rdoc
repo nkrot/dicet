@@ -385,14 +385,16 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 2. Load sentences. Keep the text titles when possible.
   * INPROGRESS: uploading sentences via sentences#upload. How to set document_id?
   * DocumentController#upload that sets Document.title
-  * use utf-8 as internal encoding in DB
+  * DONE: use utf-8 as internal encoding when loading sentences
   * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
   * what stats to show in upload report?
 
-3. Add a separate page for searching sentences by word(s). a-la corpus search
-  * case-insensitive search
-  * highlight requested word in the text
+3. INRPOGRESS: Add a separate page for searching sentences by word(s). a-la corpus search
+  * DONE: case-insensitive search
+  * highlight requested word in the text.
+  * escape html special entities
   * allow randomized display of retrieved sentences
+  * DONE: dont output duplicates (search 'computer')
 
 4. Add possibility to search examples to the paradigm new/edit page.
   * all words from the paradigm at once?
@@ -400,6 +402,9 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 5. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
   * in a frame?
   * in a new page
+
+6. make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
+	* fix all uploaders to assume utf-8
 
 == README
 

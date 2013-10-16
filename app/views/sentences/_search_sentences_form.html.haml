@@ -1,0 +1,9 @@
+
+= form_for :sentence_search, url: sentences_search_path, method: 'get' do |f|
+  = f.label :word
+  = f.text_field :word
+
+  = f.label :casesensitive, "Case sensitive"
+  = f.check_box :casesensitive
+
+  = f.submit "Search"

@@ -60,7 +60,7 @@ Dicet::Application.routes.draw do
   resources :paradigm_types, only: [:index]
 
   match '/sentences/upload', to: 'sentences#upload', via: 'post'
-#  match '/sentences/search', to: 'sentences#search', via: 'post'
+  match '/sentences/search', to: 'sentences#search', via: 'get'
   resources :sentences, only: [:index]
 
 #  namespace :api, defaults: { format: :text } do
