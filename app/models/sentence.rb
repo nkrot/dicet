@@ -8,9 +8,13 @@ class Sentence < ActiveRecord::Base
 
   def self.search params
     if params[:casesensitive] == '1'
-      tokens_params = { text: params[:word].strip }
+      tokens_params = {
+        text: params[:word].split
+      }
     else
-      tokens_params = { upcased_text: params[:word].strip.mb_chars.upcase }
+      tokens_params = {
+        upcased_text: params[:word].split.map {|w| w.mb_chars.upcase}
+      }
     end
     sentences = Sentence.with_words(tokens_params)
     tokens = Token.where(tokens_params)

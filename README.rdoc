@@ -396,8 +396,9 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * do not output duplicates (search 'computer')
   * simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah&casesensitive=1
 
-4. NEXT: Allow searching more than one word
-  * Example of input: is are
+4. DONE: Allow searching more than one word
+  * Example of the query: is are were be
+  * TODO: highlight each distinct word with its own color?
 
 5. Add possibility to search sentences from the paradigm new/edit pages.
   * all words from the paradigm at once? add a button for this
@@ -410,8 +411,8 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 7. DONE: In the search form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place. Alternatively, use Ajax? -- no ajax, the solution was trivial
 
 8. add counts of search results
-  * how many sentences were found
-  * how many occurrences of each search word in each letter case variant
+  * how many sentences were found, total of seqrch word occurrences
+  * list all words from the query with the number of occurrences
 
 9. allow randomized display of retrieved sentences
 

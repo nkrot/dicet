@@ -1,10 +1,10 @@
-- @placeholder ||= "Mithridatism"
+- @placeholder ||= "A word or several words separated by a space"
 
 = form_for :search, url: sentences_search_path, method: 'get' do |f|
   %table#search_form
     %thead
       %tr
-        %th Find word:
+        %th Find word(s):
         %th Case sensitive
         %th &nbsp;
     %tbody
