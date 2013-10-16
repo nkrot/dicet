@@ -389,28 +389,36 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
   * what stats to show in upload report?
 
-3. INRPOGRESS: Add a separate page for searching sentences by word(s). a-la corpus search
-  * DONE: case-insensitive search
-  * DONE: highlight requested word in the text.
-  * DONE: escape html special entities
-  * allow randomized display of retrieved sentences
-  * DONE: dont output duplicates (search 'computer')
-  * simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah
+3. DONE Add a separate page for searching sentences by word(s). a-la corpus search
+  * case-insensitive search
+  * highlight requested word in the text.
+  * escape html special entities
+  * dont output duplicates (search 'computer')
+  * simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah&casesensitive=1
 
-4. Add possibility to search examples to the paradigm new/edit page.
+4. NEXT: Allow searching more than one word
+  * Example of input: is || are
+
+5. Add possibility to search sentences from the paradigm new/edit pages.
   * all words from the paradigm at once? add a button for this
   * individual word -- add a button for this
 
-5. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
+6. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
   * in a frame?
   * in a new page
 
-6. make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
-	* fix all uploaders to assume utf-8
+7. In the search form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place. Alternatively, use Ajax?
 
-7. add counts of search results
+8. add counts of search results
   * how many sentences were found
   * how many occurrences of each search word in each letter case variant
+
+
+9. allow randomized display of retrieved sentences
+
+10. make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
+  * fix all uploaders to assume utf-8
+  * add a note to the HELP page  
 
 == README
 

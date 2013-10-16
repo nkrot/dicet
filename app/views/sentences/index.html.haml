@@ -1,10 +1,8 @@
 %h2= @title
 
-%p Want to find a specific word?
-
 = render partial: 'search_sentences_form'
 
-%p There are #{@sentences.count} sentences.
+%p Found #{@sentences.count} sentences.
 
 = will_paginate @sentences
 

@@ -565,6 +565,31 @@ table.radioset {
  * Sentences/searching in sentences
 \********************************************************************/
 
+#search_form {
+  thead {
+//    background-color: green;
+  }
+
+  th {
+    font-size: smaller;
+    text-align: left;    
+  }
+
+  .word {
+    width: 300px;
+  }
+
+  .has_chb {
+    text-align: center;
+    vectical-align: middle;    
+  }
+
+  .chb {
+    background: red;
+    margin-bottom: 20px;
+  }
+}
+
 #sentences {
   width: 100%;
 

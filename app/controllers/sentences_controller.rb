@@ -28,6 +28,6 @@ class SentencesController < ApplicationController
   private
 
   def search_params
-    params.require(:sentence_search).permit(:word, :casesensitive)
+    params.permit(:word, :casesensitive)
   end
 end

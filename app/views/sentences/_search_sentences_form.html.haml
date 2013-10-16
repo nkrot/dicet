@@ -1,9 +1,14 @@
+- @placeholder ||= "Mithridatism"
 
-= form_for :sentence_search, url: sentences_search_path, method: 'get' do |f|
-  = f.label :word
-  = f.text_field :word
-
-  = f.label :casesensitive, "Case sensitive"
-  = f.check_box :casesensitive
-
-  = f.submit "Search", class: 'btn'
+= form_for :search, url: sentences_search_path, method: 'get' do |f|
+  %table#search_form
+    %thead
+      %tr
+        %th Find word:
+        %th Case sensitive
+        %th &nbsp;
+    %tbody
+      %tr
+        %td= text_field_tag "word", "", placeholder: @placeholder, class: 'word'
+        %td.has_chb= check_box_tag "casesensitive", nil, false, class: 'chb'
+        %td= f.submit "Search", accesskey: "s" #, class: 'btn'
