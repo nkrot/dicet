@@ -9,6 +9,6 @@
         %th &nbsp;
     %tbody
       %tr
-        %td= text_field_tag "word", "", placeholder: @placeholder, class: 'word'
-        %td.has_chb= check_box_tag "casesensitive", nil, false, class: 'chb'
+        %td= text_field_tag "word", params["word"], placeholder: @placeholder, class: 'word'
+        %td.has_chb= check_box_tag "casesensitive", 1, casesensitive_checked?, class: 'chb'
         %td= f.submit "Search", accesskey: "s" #, class: 'btn'

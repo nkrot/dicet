@@ -393,11 +393,11 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * case-insensitive search
   * highlight requested word in the text.
   * escape html special entities
-  * dont output duplicates (search 'computer')
+  * do not output duplicates (search 'computer')
   * simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah&casesensitive=1
 
 4. NEXT: Allow searching more than one word
-  * Example of input: is || are
+  * Example of input: is are
 
 5. Add possibility to search sentences from the paradigm new/edit pages.
   * all words from the paradigm at once? add a button for this
@@ -407,18 +407,21 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * in a frame?
   * in a new page
 
-7. In the search form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place. Alternatively, use Ajax?
+7. DONE: In the search form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place. Alternatively, use Ajax? -- no ajax, the solution was trivial
 
 8. add counts of search results
   * how many sentences were found
   * how many occurrences of each search word in each letter case variant
-
 
 9. allow randomized display of retrieved sentences
 
 10. make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
   * fix all uploaders to assume utf-8
   * add a note to the HELP page  
+
+11. Misc styling fixes
+  * restyle SEARCH button
+  * the columns in the table that shows sentences, when there are no sentences to display, are resized ugly. control the width of the ID column
 
 == README
 

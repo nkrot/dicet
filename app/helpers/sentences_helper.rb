@@ -14,4 +14,8 @@ module SentencesHelper
   def hi_found str
     "<span class='found_word'>#{str}</span>"
   end
+
+  def casesensitive_checked?
+    params['casesensitive'] == '1'
+  end
 end
