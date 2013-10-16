@@ -1,0 +1,18 @@
+%h2 All sentences available in DB
+
+%p There are #{@sentences.count} sentences in DB containing in total #{@tokens.count} words.
+
+= will_paginate @sentences
+
+%table#sentences
+  %thead
+    %tr
+      %th ID
+      %th Sentence
+  %tbody
+    - @sentences.each do |sent|
+      %tr
+        %td= sent.id
+        %td= sent.to_text
+
+= will_paginate @sentences

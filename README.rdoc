@@ -376,16 +376,18 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 
 == TODO for showing sentences
 
-1. INPROGRESS: Schema for storing sentences will include:
-  * DONE: tokens: id, text, upcased_text;;; add index on text and upcased_text
-  * DONE: document: id, title
-  * DONE: sentences: id, document_id (has_many tokens through sentence_tokens)
+1. DONE: Schema for storing sentences will include:
+  * tokens: id, text, upcased_text;;; add index on text and upcased_text
+  * document: id, title
+  * sentences: id, document_id (has_many tokens through sentence_tokens)
   * sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
 
 2. Load sentences. Keep the text titles when possible.
+  * INPROGRESS: uploading sentences via sentences#upload. How to set document_id?
+  * DocumentController#upload that sets Document.title
   * use utf-8 as internal encoding in DB
   * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
-
+  * what stats to show in upload report?
 
 3. Add a separate page for searching sentences by word(s). a-la corpus search
   * case-insensitive search

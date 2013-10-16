@@ -96,6 +96,12 @@
   You can download this file
   = link_to "here", "newwords.txt"
 
+%h2 How to add more sentences
+
+%code curl -F "sentences[file]=@tmp/sentences.txt" http://krot:3000/sentences/upload
+
+%p NOTE: duplicate sentences will be added if present in the source data file.
+
 %h2 How to retrieve ready words
 
 %code curl http://server:3000/paradigms/peek/ready

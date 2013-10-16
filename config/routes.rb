@@ -59,6 +59,10 @@ Dicet::Application.routes.draw do
   match '/paradigm_types/upload', to: 'paradigm_types#upload', via: 'post'
   resources :paradigm_types, only: [:index]
 
+  match '/sentences/upload', to: 'sentences#upload', via: 'post'
+#  match '/sentences/search', to: 'sentences#search', via: 'post'
+  resources :sentences, only: [:index]
+
 #  namespace :api, defaults: { format: :text } do
 #    resources :paradigms, only: [:index]
 #  end

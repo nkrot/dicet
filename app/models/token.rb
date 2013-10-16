@@ -1,3 +1,7 @@
 class Token < ActiveRecord::Base
-  belongs_to :sentence
+  has_many :sentences, :through => :sentence_tokens
+
+  validates :text, presence: true, uniqueness: true
+  validates :upcased_text, presence: true
+
 end

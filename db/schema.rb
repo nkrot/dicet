@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131015155454) do
+ActiveRecord::Schema.define(version: 20131015214419) do
 
   create_table "documents", force: true do |t|
     t.string   "title"
@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(version: 20131015155454) do
   add_index "paradigms", ["dumped"], name: "index_paradigms_on_dumped"
   add_index "paradigms", ["paradigm_type_id"], name: "index_paradigms_on_paradigm_type_id"
   add_index "paradigms", ["task_id"], name: "index_paradigms_on_task_id"
+
+  create_table "sentence_tokens", force: true do |t|
+    t.integer  "sentence_id"
+    t.integer  "token_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sentence_tokens", ["sentence_id"], name: "index_sentence_tokens_on_sentence_id"
+  add_index "sentence_tokens", ["token_id"], name: "index_sentence_tokens_on_token_id"
 
   create_table "sentences", force: true do |t|
     t.integer  "document_id"
