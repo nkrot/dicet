@@ -22,22 +22,28 @@
 
   %h4 Not started tasks
 
-  - msg = "are other #{@new_tasks.count} tasks"
-  - if @new_tasks.count == 1
-    - msg = "is another task (wow, only one)"
+  - if @new_tasks.empty?
+    %p
+      You have no new tasks in the backlog.
+      Would you mind #{link_to("taking some", tasks_path)}?
 
-  %p There #{msg} that await your attention
+  - else
+    - msg = "are other #{@new_tasks.count} tasks"
+    - if @new_tasks.count == 1
+      - msg = "is another task (wow, only one)"
 
-  -# additional params are necessary to ensure that the links are
-  -# generated correctly in both tasks_controller#{index,drop}
-  - will_paginate_params = { params: {action: 'index', user_id: @user.id} }
+    %p There #{msg} that await your attention
 
-  = will_paginate @new_tasks, will_paginate_params
+    -# additional params are necessary to ensure that the links are
+    -# generated correctly in both tasks_controller#{index,drop}
+    - will_paginate_params = { params: {action: 'index', user_id: @user.id} }
 
-  = render partial: "tasks/tasks_in_table", |
-           locals: {tasks: @new_tasks, btn_action: 'drop', |
-                    btn_label: 'Drop', col_label: 'Drop task'}
+    = will_paginate @new_tasks, will_paginate_params
 
-  = will_paginate @new_tasks, will_paginate_params
+    = render partial: "tasks/tasks_in_table", |
+             locals: {tasks: @new_tasks, btn_action: 'drop', |
+                      btn_label: 'Drop', col_label: 'Drop task'}
+
+    = will_paginate @new_tasks, will_paginate_params
 
   %p &nbsp;

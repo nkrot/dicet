@@ -21,7 +21,8 @@ class SentencesController < ApplicationController
 
   def upload
     fname = params["sentences"]["file"]
-    @infos = Sentence.add_file_data(fname.read.force_encoding('utf-8'))
+    bname = File.basename(fname.original_filename)
+    @infos = Sentence.add_file_data(fname.read.force_encoding('utf-8'), bname)
     render 'upload_report.text.haml'
   end
 

@@ -235,7 +235,7 @@
    * add tests
    * add tests for scopes with_comment, to_review, fix_empty_fields.
 
-7. Show completed tasks (having status 'ready')
+7. DONE: Show completed tasks (having status 'ready')
    * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
    * completed by all users. The path is /tasks/ready 
    * add total counts of completed tasks
@@ -277,6 +277,7 @@
 16. DONE: on the user's page show unfinished tasks and not-started tasks separately
    * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
    * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
+   * INPROGRESS: if the list of the non-started tasks is empty, do not show the empty table. Show the link to All tasks page instead
 
 17. DONE: Refactor: the user's task page should be http://localhost:3000/users/1/tasks instead of http://localhost:3000/users/1
 	* /users/1/tasks -- shows user's tasks
@@ -388,6 +389,7 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * DONE: use utf-8 as internal encoding when loading sentences
   * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
   * what stats to show in upload report?
+  * Loading taks very long time.. Investigate how direct table loading works? see http://stackoverflow.com/questions/697004/bulk-load-data-into-sqlite and http://infolab.stanford.edu/~widom/cs145/sqlite/SQLiteLoad.html
 
 3. DONE Add a separate page for searching sentences by word(s). a-la corpus search
   * case-insensitive search
