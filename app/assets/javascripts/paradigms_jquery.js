@@ -181,14 +181,13 @@ function do_on_document_ready() {
 		return false;
 	});
 
-	$(".btn_search_word").off('click').on("click", function () {
+	$(".btn_search_word").off('click').on("click", function (e) {
 		if (! $(this).attr("old-href")) {
 			$(this).attr("old-href", $(this).attr("href"))
-			console.log('old-href set to=' + $(this).attr("old-href"))
 		}
 
 		var word = $(this).closest(".pdg_slot").find("input.word[type='text']").val();
-		console.log("word='" + word + "'");
+//		console.log("word='" + word + "'");
 
 		$(this).attr("href", function () {
 			var sep = "&";
@@ -196,16 +195,41 @@ function do_on_document_ready() {
 				sep = '?'
 			}
 			var newhref = $(this).attr('old-href') + sep + 'word=' + word;
-			console.log("new href: " + newhref);
-			$(this).attr('target', '_blank'); // open in a new window
-			return newhref;
+//			console.log("new href: " + newhref);
+			window.open(newhref);
 		});
 
-		return true;
+		e.preventDefault; // but works w/o it
+		return false;
 	});
 
-//	$(".btn_search_all_words").off('click').on("click", function () {
-//	});
+	$(".btn_search_all_words").off('click').on("click", function (e) {
+		if (! $(this).attr("old-href")) {
+			$(this).attr("old-href", $(this).attr("href"))
+		}
+
+		var word = $(this).closest(".paradigm")
+			.find("input.word[type='text']").map(function () {
+				return this.value === '' ? null : this.value
+			}).get().join(' ');
+
+		if (word === '') {
+			alert('Nothing to search for: no word specified in this paradigm');
+		} else {
+			$(this).attr("href", function () {
+				var sep = "&";
+				if ($(this).attr('old-href').indexOf('?') == -1) {
+					sep = '?'
+				}
+				var newhref = $(this).attr('old-href') + sep + 'word=' + word;
+				window.open(newhref);
+				return false;
+			});
+		}
+
+		e.preventDefault; // but works w/o it
+		return false;
+	});
 
 /*
 	$("form").on("submit", function () {
