@@ -181,6 +181,32 @@ function do_on_document_ready() {
 		return false;
 	});
 
+	$(".btn_search_word").off('click').on("click", function () {
+		if (! $(this).attr("old-href")) {
+			$(this).attr("old-href", $(this).attr("href"))
+			console.log('old-href set to=' + $(this).attr("old-href"))
+		}
+
+		var word = $(this).closest(".pdg_slot").find("input.word[type='text']").val();
+		console.log("word='" + word + "'");
+
+		$(this).attr("href", function () {
+			var sep = "&";
+			if ($(this).attr('old-href').indexOf('?') == -1) {
+				sep = '?'
+			}
+			var newhref = $(this).attr('old-href') + sep + 'word=' + word;
+			console.log("new href: " + newhref);
+			$(this).attr('target', '_blank'); // open in a new window
+			return newhref;
+		});
+
+		return true;
+	});
+
+//	$(".btn_search_all_words").off('click').on("click", function () {
+//	});
+
 /*
 	$("form").on("submit", function () {
 		console.log("Form " + $(this).attr("id") + " submitted to action " + $(this).attr('action'));

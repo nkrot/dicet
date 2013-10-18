@@ -402,9 +402,13 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
   * Example of the query: is are were be
   * TODO: highlight each distinct word with its own color?
 
-5. Add possibility to search sentences from the paradigm new/edit pages.
+5. INPROGRESS: Add possibility to search sentences from the paradigm new/edit pages.
   * all words from the paradigm at once? add a button for this
   * individual word -- add a button for this
+  * DONE: add buttons to the form
+  * add JQuery. handle spaces
+  * add another button for case-sensitive search? (Ss) for case insensitive and (S) for case-sensitive
+  * how to make that the browser does now switch to the new page immediatelly? instead, stay on the page and add counts how many stuff was found
 
 6. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
   * in a frame?

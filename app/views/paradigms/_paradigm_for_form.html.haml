@@ -30,6 +30,10 @@
             %a.click_to_copy Word
           %th.has_button.has_convert_button{colspan:2}
             = link_to "convert", paradigms_add_conversions_path, class: 'btn_convert'
+          %th.has_button
+            = link_to "Ss", sentences_search_path(casesensitive: 0), class: 'btn_search_all_words'
+          %th.has_button
+            = link_to "SS", sentences_search_path(casesensitive: 1), class: 'btn_search_all_words'
       %tbody
         -# paradigm.each_word_with_tag do |word, tag|
         - pdgform.each_pair_of_words do |old_word, new_word|
@@ -66,14 +70,20 @@
               = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
               = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
 
+            %td.has_button
+              = link_to "Ss", sentences_search_path(casesensitive: 0), class: 'btn btn_small btn_search_word'
+
+            %td.has_button
+              = link_to "SS", sentences_search_path(casesensitive: 1), class: 'btn btn_small btn_search_word'
+
         -# extras: comment area
         %tr.comment
           %td{colspan:2}= label_tag      "pdg[#{idx}][#{pdgid}][extras][comment]", "Comment"
-          %td{colspan:3}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", pdgform.comment
+          %td{colspan:5}= text_field_tag "pdg[#{idx}][#{pdgid}][extras][comment]", pdgform.comment
 
         -# extras: radio boxes for statuses
         %tr.last
-          %td{colspan:5}
+          %td{colspan:7}
             = render partial: 'radioset_status', locals: { paradigm: pdgform, idx: idx }
 
     -# SAVE | DELETE
