@@ -4,4 +4,4 @@
   %td.task_id= task.id
   %td.priority= task.priority
   %td.words= render partial: "words/word_in_task", collection: task.words, as: :word
-  %td.time= task.updated_at
+  %td.time= task.updated_at.localtime.to_s(:human)

@@ -239,11 +239,11 @@
    * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
    * completed by all users. The path is /tasks/ready 
    * add total counts of completed tasks
-   * add counts of tasks completed today, since one week ago and since one month ago
+   * TODO: add counts of tasks completed today, since one week ago and since one month ago. BUG today's tasks not computed
    * When showing tasks by all users, include the doer in the table.
    * Get rid of Drop button in the table
-   * Include time in the table
-   * do not show all-users-stats on 2+pages
+   * Include time in the table. convert it to local zone.
+   * do not show all-users-stats on 2+th pages
    * TODO: Allow sorting by time, by doer, and maybe other fields
    * TODO: allow selecting tasks by specific day (add calendar).
 
