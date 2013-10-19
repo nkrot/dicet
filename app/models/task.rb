@@ -3,7 +3,7 @@ class Task < ActiveRecord::Base
   has_many :words
   has_many :paradigms
 
-  scope :today,        -> { where "DATE(updated_at) = ?",  Date.today }
+  scope :today,        -> { where "DATE(updated_at) = ?",  Date.today.to_s(:db) }
   scope :during_week,  -> { where "DATE(updated_at) >= DATE(?)", 1.week.ago }
   scope :during_month, -> { where "DATE(updated_at) >= DATE(?)", 1.month.ago }
   scope :except_ready, -> { where "status <> ?", 'ready' }

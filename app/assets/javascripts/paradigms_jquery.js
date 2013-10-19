@@ -195,8 +195,7 @@ function do_on_document_ready() {
 				sep = '?'
 			}
 			var newhref = $(this).attr('old-href') + sep + 'word=' + word;
-//			console.log("new href: " + newhref);
-			window.open(newhref);
+			window.open(newhref, '_blank');
 		});
 
 		e.preventDefault; // but works w/o it

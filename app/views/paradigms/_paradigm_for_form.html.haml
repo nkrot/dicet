@@ -30,9 +30,9 @@
             %a.click_to_copy Word
           %th.has_button.has_convert_button{colspan:2}
             = link_to "convert", paradigms_add_conversions_path, class: 'btn_convert'
-          %th.has_button
+          %th.has_button.has_search_all_words_button
             = link_to "Ss", sentences_search_path(casesensitive: 0), class: 'btn_search_all_words'
-          %th.has_button
+          %th.has_button.has_search_all_words_button
             = link_to "SS", sentences_search_path(casesensitive: 1), class: 'btn_search_all_words'
       %tbody
         -# paradigm.each_word_with_tag do |word, tag|
@@ -64,14 +64,14 @@
                                 class: ["word", changed_text?(old_word, new_word)]
 
             %td.has_button
-              = link_to "&lt;".html_safe, "#", class:'btn btn_small btn_fill_with_word'
+              = link_to "&lt;".html_safe, "#", class: ['btn', 'btn_small', 'btn_fill_with_word']
 
             %td.has_button
-              = link_to "&ndash;".html_safe, "#", class:'btn btn_small btn_delete_pdg_slot'
+              = link_to "&ndash;".html_safe, "#", class: ['btn', 'btn_small', 'btn_delete_pdg_slot']
               = hidden_field_tag "#{basename}[deleted]", "false", class: 'hdn_deleted'
 
             %td.has_button
-              = link_to "Ss", sentences_search_path(casesensitive: 0), class: 'btn btn_small btn_search_word'
+              = link_to "Ss", sentences_search_path(casesensitive: 0), class: ['btn', 'btn_small', 'btn_search_word']
 
             %td.has_button
               = link_to "SS", sentences_search_path(casesensitive: 1), class: 'btn btn_small btn_search_word'
@@ -108,11 +108,11 @@
                       url_for(controller: 'paradigms', action: 'destroy', id: pdgform.id, |
                               params: url_params ), |
                       remote: true, method: :delete, data: {confirm: "Are you sure?"}, |
-                      class: 'btn btn_delete'
+                      class: ['btn', 'btn_delete']
             %span.balloon Will delete the whole paradigm immediately                
         - else
           -# if pdg is unknown (not in DB) the DISMISS button is applicable
           %td.has_balloon
-            = link_to "Dismiss", "#", class: 'btn btn_dismiss', |
+            = link_to "Dismiss", "#", class: ['btn', 'btn_dismiss'], |
                       'data-page-section-id' => "#{@page_section_id}"
             %span.balloon Will remove this form
