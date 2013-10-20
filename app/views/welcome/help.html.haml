@@ -96,7 +96,33 @@
   You can download this file
   = link_to "here", "newwords.txt"
 
-%h2 How to add more sentences
+%h2 How to add sentences
+
+%p Initial import should be performed from CSV data. Steps to take
+
+%ol
+  %li Tokenize text files using prosao tools. Keep ==DOC-SEPARATOR== markers. And preferably keep the original file names (they will be also added to the DB).
+  %li Convert data to utf-8
+  %li Use bin/text2csv.rb script to convert data to tab-separated CSV files. This script should be run for all CSV files at once.
+  %li
+    Prepare the database. You may have already done it if you had run
+    %code rake db:migrate
+    previously.
+  %li
+    Import all CSV files.
+    %ol
+      %li
+        %code cd
+        to the directory where all CSV files are located
+      %li
+        Run the command:
+        %code sqlite3 path/to/db/production.sqlite3 < path/to/bin/import_csv.sql
+
+%p
+  As a result of the above, the tables Documents, Sentences, Tokens and Sentence_Tokens will first be purged and subsequently repopulated with data from CSV files. You can read more in
+  %code bin/import_csv.sql
+
+%p Incremental additions should be accomplished using the procedure described below. This is a slow process but for small amounts of data it will complete in acceptable time.
 
 %code curl -F "sentences[file]=@tmp/sentences.txt" http://krot:3000/sentences/upload
 

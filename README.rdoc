@@ -96,32 +96,6 @@
 
 32. Show somehow (with highlighting or explanation) when the paradigm is a new one or an existing one is being edited. Presently the SAVE button tooltips are different, but this is to scarce, be more explicit.
 
-== TODO for retrieving paradigms
-
-1. DONE: Possibility to get paradigms in text format using a console command
-   * curl http://localhost:3000/paradigms/peek   -- get paradigms
-   * curl http://localhost:3000/paradigms/dump   -- get paradigms and mark them as dumped
-
-2. DONE: in paradigms#{peek,dump}, allow filtering
-   * get only paradigms with status=ready or status=review, with different dumped value.
-   * can filtering be accomplished using url format like this: paradigms/dump/all or paradigms/dump/ready -- yes. also works with urls in conventional form: paradigms/dump?status=ready
-   * what should be the default? dumping only ready paradigms? or dumping all paradigms -- dumping all not dumped paradigms, regardless of the ready/review status
-
-3. DONE: in paradigms#dump, mark paradigms that have already been dumped
-   * set dumped=true
-   * set dumped_at to the time when dumping occured
-
-4. DONE: paradigms that have already been dumped should be visibly different from other paradigms.
-   * greyed out in #edit
-   * greyed out background in tasks
-   * TODO: should such paradigms be editable?
-
-5. Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication. Or switch off authenticity token for some actions
-  * http://stackoverflow.com/questions/8943861/how-can-i-upload-a-file-to-my-ruby-on-rails-app-using-curl-cli
-
-6. when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
-
-7. Allow #peeking and #dumping individual/selected paradigms. I dont know when it could be necessary.
 
 == TODO for paradigms
 

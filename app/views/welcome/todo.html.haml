@@ -242,6 +242,45 @@
         %li reuse saving method in db/seeds.rb
         %li add a note on the help page
 
+  %h4.subtitle TODO for retrieving ready paradigms (words)
+
+  %ol
+
+    %li.done
+      Possibility to get paradigms in text format using a console command
+      %ul
+        %li.done curl http://localhost:3000/paradigms/peek -- get paradigms
+        %li.done curl http://localhost:3000/paradigms/dump -- get paradigms and mark them as dumped
+
+    %li.done
+      In paradigms#peek/#dump, allow filtering
+      %ul
+        %li.done get only paradigms with status=ready or status=review, with different dumped value.
+        %li.done can filtering be accomplished using url format like this: paradigms/dump/all or paradigms/dump/ready -- yes. also works with urls in conventional form: paradigms/dump?status=ready
+        %li.done what should be the default? dumping only ready paradigms? or dumping all paradigms -- dumping all not dumped paradigms, regardless of the ready/review status
+
+    %li.done
+      In paradigms#dump, mark paradigms that have already been dumped
+      %ul
+        %li.done set dumped=true
+        %li.done set dumped_at to the time when dumping occured
+
+    %li.done
+      paradigms that have already been dumped should be visibly different from other paradigms.
+      %ul
+        %li.done greyed out in #edit
+        %li.done greyed out background in tasks
+        %li.todo should such paradigms be editable?
+
+    %li
+      Now dumping paradigms does not require authentication. Implement one for it? consider Basic HTTP Authentication. Or switch off authenticity token for some actions
+      %ul
+        %li http://stackoverflow.com/questions/8943861/how-can-i-upload-a-file-to-my-ruby-on-rails-app-using-curl-cli
+
+    %li when showing individual words (with tags), how to treat comments, info on typo (see other fields of Word)? Should typos be filtered out somehow in dumping or leave it to postprocessing?
+
+    %li Allow #peeking and #dumping individual/selected paradigms. I dont know when it could be necessary.
+
   %h4.subtitle TODO for Sentences: loading, displaying, searching
 
   %ol
@@ -259,14 +298,13 @@
         %li.done uploading sentences via sentences#upload. -- This takes quite a long time and should not be used for populating the DB with initial data. However, this the right method of incrementally adding new documents to database
         %li.done documents#upload that also populates Document model and sets Document.title
         %li.done use utf-8 as internal encoding when loading sentences. Source data is expected to be in UTF-8
-        %li.todo add description of how to import data to the help page
-        %li.todo how to avoid adding duplicate sentences? for example, when the same text is loaded twice
+        %li.done add description of how to import data to the help page
+        %li.maybe how to avoid adding duplicate sentences? for example, when the same text is loaded twice
         %li.todo what stats to show in upload report?
-        %li.done Implement direct loading of data into the tables, for example, importing from prebuilt tables in CSV format --  Use bin/text_to_csv.rb script.
-        %li.todo Ensure that created_at and updated_at fields carry time in the proper format in text_to_csv.rb. However, this is not important at all, since these columns are never used.
-        %li.todo are indices created when data is imported from CSV files?
-        %li.todo add description of importing from CSV to help page
-        %li.todo why importing from import_csv.sql does not work at home computer (SQLite 3.7.13)
+        %li.done Implement direct loading of data into the tables, for example, importing from prebuilt tables in CSV format -- Use bin/text2csv.rb script.
+        %li.maybe Ensure that created_at and updated_at fields carry time in the proper format in text2csv.rb. However, this is not important at all, since these columns are never used.
+        %li.todo Are indices created when data is imported from CSV files?
+        %li.todo Why importing from import_csv.sql does not work at my home computer (SQLite 3.7.13)
 
     %li.done      
       Add a separate page for searching sentences by word(s). a-la corpus search

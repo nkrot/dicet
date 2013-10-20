@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # # #
 # 
@@ -12,7 +12,28 @@ Encoding::default_internal = "UTF-8"
 Encoding::default_external = "UTF-8"
 
 OptionParser.new do |opts|
-  opts.banner = "Hello. no help yet"
+  opts.banner = "
+  This script generates CSV files for importing into corresponding tables.
+The following files will be generated (the file names are hardcoded):
+  documents.csv, sentences.csv, tokens.csv, sentence_tokens.csv
+Input data is expected to be in UTF-8 encoding.
+This script should be run for all necessary files at once in order to correctly
+compute primary keys for the table data.
+USAGE: #{File.basename($0)} [OPTIONS] text_file(s)
+OPTIONS:"
+
+  opts.on('-h', '--help', 'display this message and exit') do
+    puts opts
+    exit 0
+  end
+
+  opts.separator "Details:"
+  opts.separator "==DOC-SEPARATOR== markers are used to determine the boundaries of individual"
+  opts.separator "subdocuments in the file. Subdocuments will be named according to the following"
+  opts.separator "scheme text_file_name::NUMBER where NUMBER is computed by counting the current"
+  opts.separator "occurrence of DOC-SEPARATOR."
+
+  opts.separator " "
 end.parse!
 
 ######################################################################
