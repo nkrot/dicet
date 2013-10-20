@@ -11,6 +11,7 @@ class Token < ActiveRecord::Base
   #    regexp:       [w1, w2, ...]}
   # instead of arrays, single value can be given
   def self.find_by_literal_or_regexp(options)
+#    puts conditions.inspect
     template = []
     args = {}
     [:text, :upcased_text].each do |column|
@@ -21,10 +22,14 @@ class Token < ActiveRecord::Base
     end
     if options.key?(:regexp)
       options[:regexp].each do |re|
-        template << "tokens.text REGEXP \"#{re}\""
+        template << "tokens.text REGEXP \'#{re}\'"
       end
     end
     template = template.join(" OR ")
-    Token.where(template, args).distinct
+    if args.empty?
+      Token.where(template).distinct
+    else
+      Token.where(template, args).distinct
+    end
   end
 end

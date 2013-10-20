@@ -1,10 +1,10 @@
-- @placeholder ||= "A word or several words separated by a space"
+- @placeholder ||= "e.g.: wings legs /tails?$/"
 
 = form_for :search, url: sentences_search_path, method: 'get' do |f|
   %table#search_form
     %thead
       %tr
-        %th Find word(s):
+        %th OR-Search word(s) literally or by /REGEXP/:
         %th Case sensitive
         %th &nbsp;
     %tbody
