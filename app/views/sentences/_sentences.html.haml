@@ -1,0 +1,22 @@
+- @found_tokens ||= []
+- @document ||= nil
+
+= will_paginate @sentences
+
+%table#sentences
+  %thead
+    %tr
+      %th.id ID
+      %th.sentence Sentence
+  %tbody
+    - @sentences.each do |sent|
+      %tr
+        - if @document
+          %td.id= sent.id
+        - else
+          %td.id= link_to sent.id, document_path(sent.document_id)
+        %td.sentence!= to_html(sent, @found_tokens)
+
+= will_paginate @sentences
+
+%p &nbsp;

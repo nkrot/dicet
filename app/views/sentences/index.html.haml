@@ -4,19 +4,5 @@
 
 %p Found #{@sentences.count} sentences.
 
-= will_paginate @sentences
+= render partial: 'sentences'
 
-%table#sentences
-  %thead
-    %tr
-      %th.id ID
-      %th.sentence Sentence
-  %tbody
-    - @sentences.each do |sent|
-      %tr
-        %td.id= sent.id
-        %td.sentence!= to_html(sent, @found_tokens)
-
-= will_paginate @sentences
-
-%p &nbsp;
