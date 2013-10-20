@@ -1,0 +1,9 @@
+
+%h4= @title
+
+%p Document title: #{@document.title}
+
+%p The document contains #{@sentences.count} sentences.
+
+= render partial: 'sentences/sentences'
+

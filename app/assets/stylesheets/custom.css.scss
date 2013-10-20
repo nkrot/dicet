@@ -610,7 +610,7 @@ table.radioset {
   }
 
   th.id, td.id {
-    width: 30px; /* fit-content is CSS3 but not supported */
+    width: 20px; /* fit-content is CSS3 but not supported */
     text-align: center;
     border-left: dotted 1px black;
     border-right: dotted 1px black;

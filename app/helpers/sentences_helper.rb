@@ -1,6 +1,6 @@
 module SentencesHelper
 
-  def to_html sent, tokens
+  def to_html sent, tokens=[]
     sent.tokens.map do |tok|
       if tokens.include?(tok)
         hi_found(escape_once(tok.text))
