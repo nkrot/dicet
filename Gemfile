@@ -41,6 +41,9 @@ gem 'bootstrap-will_paginate', '0.0.9'
 
 gem 'rspec-rails', '2.14.0'
 
+# support for REGEXP operator in SQLite
+gem 'sqlite3_ar_regexp', '~> 2.0'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

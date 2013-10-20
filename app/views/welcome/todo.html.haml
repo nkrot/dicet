@@ -292,7 +292,7 @@
         %li.done search all words from the paradigm at once. add a button for this
         %li.done search individual word from a single paradigm slot. add a button for this
         %li.done add another set of buttons for case-sensitive search? (Ss) for case insensitive and (S) for case-sensitive
-        %li NOT A PROBLEM: handle spaces
+        %li.done handle spaces -- NOT A PROBLEM, the browser takes care of them
         %li.todo how to enforce that the browser does now switch to the new page immediatelly? instead, stay on the page and add counts how many stuff was found
         %li.todo style buttons. Now they are ugly and the interface appears overloaded
 
@@ -325,9 +325,12 @@
     %li
       Search by regular expression
       %ul
-        %li recognize /REGEXP/ syntax in the query
-        %li allow mixing literal and regexp search in multi search
-        %li see http://stackoverflow.com/questions/5071601/how-do-i-use-regex-in-a-sqlite-query
+        %li.done see http://stackoverflow.com/questions/5071601/how-do-i-use-regex-in-a-sqlite-query
+        %li.done recognize /REGEXP/ syntax in the query
+        %li.done allow mixing literal and regexp search in multi search -- Token.find_by_literal_or_regexp
+        %li add tests for Token.find_by_literal_or_regexp
+        %li.todo regexp search does not work for UTF-8 chars. Now to have to use 'd..terminant' to 'déterminant', because 'é' char has two bytes in UTF-8
+        %li.todo pagination is very slow when searching with regexp. increase number of items per page?
 
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 

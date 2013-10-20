@@ -3,22 +3,27 @@ class Sentence < ActiveRecord::Base
   has_many :tokens, :through => :sentence_tokens
   belongs_to :document
 
-  def self.with_words tokens_params
-    joins(:tokens).where(:tokens => tokens_params).distinct
+  def self.with_words tokens
+    joins(:tokens).where("tokens.id" => tokens).distinct
   end
 
   def self.search params
-    if params[:casesensitive] == '1'
-      tokens_params = {
-        text: params[:word].split
-      }
-    else
-      tokens_params = {
-        upcased_text: params[:word].split.map {|w| w.mb_chars.upcase}
-      }
+    conditions = Hash.new {|h,k| h[k] = []}
+
+    params[:word].split.each do |w|
+      if w =~ /^\/.+\/$/
+        # recognize /REGEXP/ syntax
+        conditions[:regexp] << w[1..-2]
+      elsif params[:casesensitive] == '1'
+        conditions[:text] << w
+      else
+        conditions[:upcased_text] << w.mb_chars.upcase
+      end
     end
-    sentences = Sentence.with_words(tokens_params)
-    tokens = Token.where(tokens_params)
+
+    tokens = Token.find_by_literal_or_regexp(conditions)
+    sentences = Sentence.with_words(tokens)
+
     return sentences, tokens
   end
 
