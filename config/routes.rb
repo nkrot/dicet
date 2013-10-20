@@ -21,6 +21,7 @@ Dicet::Application.routes.draw do
   # static pages
   match '/about', to: 'welcome#about', via: 'get'
   match '/help',  to: 'welcome#help',  via: 'get'
+  match '/todo',  to: 'welcome#todo',  via: 'get'
 
   resources :users do
     resources :tasks, only: :index do

@@ -644,4 +644,41 @@ table.radioset {
   }
 }
 
+/********************************************************************\
+ * Secret TODO page at /todo
+\********************************************************************/
+
+.todos {
+  .subtitle {
+    border-top: 1px dotted black;
+    border-left: 1px dotted black;
+    padding-top: 10px;
+    padding-left: 10px;
+  }
+
+  .inprogress {
+    background: $changedData;
+  }
+
+  .done {
+    color: green;
+  }
+
+  .maybe {
+    color: grey;
+  }
+
+  ul li.todo {
+    color: black;    
+  }  
+
+  ul li.done {
+    background: #fff;
+    color: green;
+  }  
+
+  li.done ul li.todo {
+    color: red; /* partially done */
+  }
+}
 

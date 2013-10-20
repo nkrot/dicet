@@ -1,42 +1,7 @@
-== TODO
-
-1. DONE: Paginate tasks and sort them by priority in user tasks page.
-
-2. DONE: Add tooltips that explain tags (use tag.description) when the mouse hovers over
-
-4. FIXED: jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R). -- Answer: this behaviour was due to turbolinks. I have switched it off, however, there are ways to fix it using turbolinks as well.
-
-5. FIXED. BUG: in paradigms_controller#save_paradigms. Scenario:
-  start creating jj-type paradigm for the word 'success'
-  press Word to copy words to all slots
-  press (-) to remove JJR and JJT
-  press SAVE.
-  => error concerning nil.paradigm=
-
-6. BUG: scenario
-  start creating a new paradigm
-  press a button to open an empty paradigm, leave it empty
-  press a button to open a new empty paradigm, fill it in, press SAVE
-  => two instances of the paradigm are shown
-  !!! somehow remove the empty paradigm. or add a button to close it (DELETE with a different logic). or fix page_section_id
-
-7. TODO: check if the following scenario works:
-  go to #new
-  create a nn paradigm. do not save
-  create a vb paradigm. save.
-  save nn paradigm
-
-8. BUG: creating a paradigm of type Other destroys one of the other paradigm. scenario:
-	* create a JJ paradigm for loose. save
-	* create a VB paradigm for loose. save
-    * create an Other paradigm for loose. save
-    * see loose_JJ from the JJ-paradigm being deleted, while the rest of the paradigm persists!
-
-9. Try interactive plots with http://nvd3.org/
-
-10. DONE: BUG fixed: on the user's page, after dropping a current task, the page is redisplayed without unfinished tasks.
 
 == TODO for creating/editing paradigms
+
+2. DONE: Add tooltips that explain tags (use tag.description) when the mouse hovers over
 
 1. DONE: On paradigms#new, do not show *all* empty paradigms. Instead, add buttons such that pressing a button should open an empty paradigm.
    * reimplement using ajax
@@ -58,14 +23,6 @@
 5. In paradigms#edit, do not save duplicate word+tag pairs in the same paradigm. This may happen of the form actually contained literal duplicates tag+word
 
 6. How to create more that one paradigm with the same noun (Band: Bänder/Bande)? -- this stopped (?) working when pdg creation buttons were reimplemented using ajax
-
-7. DONE: Implement navigation through the words of the current task in a side pane
-  * show the current task content in #new
-  * highlight the current word
-  * update changed word dynamically
-  * use bullets of different colors to show whether the paradigm has comments or has review status
-  * add the side pane to the #edit view
-  * TODO: @show_link_to_self gets lost after deleting of a paradigm (history is lost that we come either from #new or #edit). Use sessions for storing its value?
 
 8. Refactoring: use sessions for passing around @current_task and @current_word rather than carry it through links?
 
@@ -179,117 +136,6 @@
 
 4. delete paradigms from paradigm table if it has no words associated with it.
 
-== TODO for loading initial data (users, tagset, paradigm types)
-
-1. Allow adding tags via web interface
-
-2. DONE: Allow adding tags in bulk via console API and seeds
-   * db/seeds/tagset_eng.txt
-   * curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
-   * seed.rb calls the same procedure for parsing the file
-   * add a description to help page
-
-3. Allow editing tags via web interface?
-
-4. Allow adding new paradigm types via web interface. This would be very useful
-   * add validations of tag correctness: via ajax or on the client side?
-
-5. DONE: Allow adding new paradigm types via console api and seeds
-   * db/seeds/pdg_types_eng.txt
-   * paradigm_types#upload
-   * reuse saving method in db/seeds.rb
-
-6. DONE: (refactoring) move xxx_controller.add_file_data to corresponding models!
-   * tags_controller.rb -> tag.rb
-   * words_controller.rb -> word.rb
-   * paradigm_types_controller.rb -> paradigm_type.rb
-   * users_controller.rb -> user.rb
-
-7. in Model#add_file_data access DB errors in <object>.errors.full_messages and display them in the generated report.
-
-== TODO for user input validation
-
-1. do not allow sending if the form contains NOTAG or empty tag???
-
-2. check that all tags are valid -- use Ajax or client side JS?
-
-== TODO for tasks
-
-1. DONE: Users should be able of dropping the tasks. Dropped tasks are returned to the common task pull. Implement using ajax.
-
-2. DONE: Taking over tasks: reimplement using ajax.
-
-3. DONE: in tasks#index, once a task has been taken, the table of tasks should be updated to contain the correct number of items. -- fixed by rerendering the whole page via take.js.haml
-
-4. DONE: (fixed) pagination sucks in the following scenario: user drops a (number of) task(s), pagination does not update the number of displayed tasks (until page is reloaded); when switching to a different page, some tasks are skipped, because they are now seen as belonging to the previous page
-  * http://stackoverflow.com/questions/9550605/rails-render-pages-of-will-paginate-through-ajax-jquery
-  * fixed by re-rendering the the relevant part of the page via tasks/drop.js.haml
-
-5. DONE: Add task_id to Paradigm. this will help computing task statuses
-   * add the field to the Paradigm model.
-   * add logic for linking paradigms to tasks -- added ParadigmForm.save
-   * add tests to paradigm_form_spec.rb
-
-6. assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
-   * DONE: compute task statuses and save them in Task.status. This should happen on every paradigm save/delete. use callbacks after_save and around_destroy?
-   * add tests
-   * add tests for scopes with_comment, to_review, fix_empty_fields.
-
-7. DONE: Show completed tasks (having status 'ready')
-   * on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
-   * completed by all users. The path is /tasks/ready 
-   * add total counts of completed tasks
-   * TODO: add counts of tasks completed today, since one week ago and since one month ago. BUG today's tasks not computed
-   * When showing tasks by all users, include the doer in the table.
-   * Get rid of Drop button in the table
-   * Include time in the table. convert it to local zone.
-   * do not show all-users-stats on 2+th pages
-   * TODO: Allow sorting by time, by doer, and maybe other fields
-   * TODO: allow selecting tasks by specific day (add calendar).
-
-8. DONE: api for uploading new words to the server
-  * http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
-  * priority can be specified in the file in the 2nd field. if absent, the default is assumed
-  * special keyword `priority=NUM` is recognized in the file that specifies the default priority for the words for which it is not given explicitly in the 2nd field
-  * special keyword `tasksize=NUM` is recognized that allows specifying how many individual words will be added to a single task.
-  * TODO: allow specifying grouping into tasks?
-  * TODO: allow specifying assignee?
-
-9. when new words are added to the system, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
-
-10. Showing most recently modified tasks
-   * ??? show the most recently modified task on the user page? or all todays tasks? It can be done as a list of task IDs, clicking a list should open the task (paradigm.new for the first word in the task or the most recently edited paradigm)
-        [ 10 | 18 | 90 | 122 | 3 ]
-   * may be most recently done tasks should be shown on the user page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' and the task has been hidden. The user may want to be able to review this task.
-
-11. For each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
-
-12. DONE: similarly to words in sidepane, use differnt colors to mark words that have paradigms to review or comments in paradigms
-
-13. Only the owner of the task can drop it. Deactivate the Drop button if the user who is viewwing the page is not the current user or the admin
-
-14. Show unfinished tasks and new tasks in the sidepane as well. 
-  	* When clicking on a task there, the Current Task pane should switch to it.
-	* Use colors to distinguish task statuses.
-
-15. DONE: refactor so as to get rid of duplication in tasks_controller#index and tasks_controller#drop
-
-16. DONE: on the user's page show unfinished tasks and not-started tasks separately
-   * unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
-   * paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
-   * if the list of the non-started tasks is empty, do not show the empty table. Show the link to All tasks page instead
-
-17. DONE: Refactor: the user's task page should be http://localhost:3000/users/1/tasks instead of http://localhost:3000/users/1
-	* /users/1/tasks -- shows user's tasks
-	* /tasks -- shows all unassigned tasks
-	* check that taking/dropping works -- yes
-
-18. In the table that displays tasks, in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
-
-19. DONE: use colors to signal the status of the current task in the sidepane
-
-20. When a completed task is modified, should it's timestamp change? For example, a new paradigm was added to one of the task words. Now the status is not changed (ready->ready) and the timestamp is not updated.
-
 == TODO for words
 
 1. Find a word or all words matching given regexp pattern
@@ -308,26 +154,8 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 5. allow sorting words done by the user by the modification time
 	* additionally with all added words (the whole paradigm)
 
-6. allow showing all comments, provide links to corresponding paradigms.
-   * allow filtering by user (should be the default, unless 'all' is requested)
 
-== TODO for conversions
-
-1. DONE: a new model Inflector serves to convert given word with the given tag to the given tags
-	* Inflector#convert
-	* how to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
-	* run syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
-	* Let Inflector discover syn_ldb from the environment or as tcp server
-	* TODO: any encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
-	* TODO: depending on response time, may need to ensure that syn_ldb from the environment is started only once
-
-2. DONE: implement converting words in paradigm#edit
-	* add button (<) for inserting current word into the desired word box
-	* add button (convert) for triggering conversion procedure
-	* use ajax to serve conversion procedure.
-	* double clicking on (<) button should trigger conversion procedure.
-	* TODO: double click does not prevent two single clicks from happening. it does not harm however
-	* do not submit the form to CONVERT if there are no empty slots
+== TODO for ParadigmForm
 
 3. DONE: Implement ParadigmForm to hold both the old and the new state
    * create it from params
@@ -345,13 +173,6 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 5. DONE: Ensure that ParadigmForm contains all tags that the paradigm of the given type must have plus user-added tags. And in the correct order!
    * Expected behaviour: rename a tag, press CONVERT, the original tag (that was renamed) does not appear.
    * BUG fixed: paradigm of type rb has incorrect order of tags (RBT-RBR-RB), although there ordering in paradigm_tags is correct
-
-6. DONE: BUG fixed: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
-
-7. DONE: After CONVERT fired, ensure all changed word forms (including those that were added before CONVERT was pressed but excluding words that were originally in the paradigm) are highlighted as 'changed'. 
-
-8. Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
-   * or better fix it in syn_ldb
 
 9. refactor paradigm_for_form view to replace @paradigm with @paradigm_form or get rid of explicitly passing @paradigm
 
@@ -375,62 +196,12 @@ Why: suppose the user added a word when creating a paradigm. Now there is no cha
 	* however, if the unsual tag was the result of replacing the old tag, it is kept
 	* it is the issue caused by sanitize, fixed together with bug described in 6 in this section.
 
-== TODO for showing sentences
+6. allow showing all comments, provide links to corresponding paradigms.
+   * allow filtering by user (should be the default, unless 'all' is requested)
 
-1. DONE: Schema for storing sentences will include:
-  * tokens: id, text, upcased_text;;; add index on text and upcased_text
-  * document: id, title
-  * sentences: id, document_id (has_many tokens through sentence_tokens)
-  * sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
+1. do not allow sending the paradigm form if the form contains NOTAG or empty tag???
 
-2. Load sentences. Keep the text titles when possible.
-  * DONE: uploading sentences via sentences#upload.
-  * DocumentController#upload that sets Document.title
-  * DONE: use utf-8 as internal encoding when loading sentences
-  * how to avoid adding duplicate sentences? for example, when the same text is loaded twice
-  * what stats to show in upload report?
-  * Loading taks very long time.. Investigate how direct table loading works? see http://stackoverflow.com/questions/697004/bulk-load-data-into-sqlite and http://infolab.stanford.edu/~widom/cs145/sqlite/SQLiteLoad.html --  bin/text_to_csv.rb. Adjust time to be in expected format
-  * add description to help page
-
-3. DONE Add a separate page for searching sentences by word(s). a-la corpus search
-  * case-insensitive search
-  * highlight requested word in the text.
-  * escape html special entities
-  * do not output duplicates (search 'computer')
-  * simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah&casesensitive=1
-
-4. DONE: Allow searching more than one word
-  * Example of the query: is are were be
-  * TODO: highlight each distinct word with its own color?
-
-5. INPROGRESS: Add possibility to search sentences from the paradigm new/edit pages.
-  * all words from the paradigm at once? add a button for this
-  * individual word -- add a button for this
-  * add another set of buttons for case-sensitive search? (Ss) for case insensitive and (S) for case-sensitive
-  * DONE: add buttons to the form
-  * DONE: add JQuery. 
-  * NOT A PROBLEM: handle spaces
-  * how to enforce that the browser does now switch to the new page immediatelly? instead, stay on the page and add counts how many stuff was found
-
-6. How to display the results found should be displayed when the search is triggered on the paradigm new/edit page?
-  * in a frame?
-  * in a new page
-
-7. DONE: In the search form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place. Alternatively, use Ajax? -- no ajax, the solution was trivial
-
-8. add counts of search results
-  * how many sentences were found, total of seqrch word occurrences
-  * list all words from the query with the number of occurrences
-
-9. allow randomized display of retrieved sentences
-
-10. make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
-  * fix all uploaders to assume utf-8
-  * add a note to the HELP page  
-
-11. Misc styling fixes
-  * restyle SEARCH button
-  * the columns in the table that shows sentences, when there are no sentences to display, are resized ugly. control the width of the ID column
+2. check that all tags in the paradigm form are valid -- use Ajax or client side JS?
 
 == README
 

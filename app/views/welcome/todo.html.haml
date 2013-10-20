@@ -1,0 +1,334 @@
+%h2= @title
+
+%p WARNING. This is a secret page. If you happen to have come here, you must leave immediately.
+
+%div.todos
+
+  %h4.subtitle Unclassified issues and bugs
+
+  %ol
+    %li.done FIXED. jquery does not work (pressing on buttons that create empty pdgs) until page is reloaded (Ctrl+R). -- Answer: this behaviour was due to turbolinks. I have switched it off, however, there are ways to fix it using turbolinks as well.
+
+    %li.done
+      FIXED. BUG: in paradigms_controller#save_paradigms. Scenario:
+      %ul
+        %li start creating jj-type paradigm for the word 'success'
+        %li press Word to copy words to all slots
+        %li press (-) to remove JJR and JJT
+        %li press SAVE.
+        %li => enjoy error concerning nil.paradigm=
+
+    %li.todo
+      BUG: scenario
+      %ul
+        %li start creating a new paradigm
+        %li press a button to open an empty paradigm, leave it empty
+        %li press a button to open a new empty paradigm, fill it in, press SAVE
+        %li => two instances of the paradigm are shown
+        %li !!! somehow remove the empty paradigm. or add a button to close it (DELETE with a different logic). or fix page_section_id
+
+    %li.todo
+      check if the following scenario works:
+      %ul
+        %li go to #new
+        %li create a nn paradigm. do not save
+        %li create a vb paradigm. save.
+        %li save nn paradigm
+
+    %li.todo
+      creating a paradigm of type Other destroys one of the other paradigm. scenario:
+      %ul
+        %li create a JJ paradigm for loose. save
+        %li create a VB paradigm for loose. save
+        %li create an Other paradigm for loose. save
+        %li see loose_JJ from the JJ-paradigm being deleted, while the rest of the paradigm persists!
+
+    %li.todo Try interactive plots with http://nvd3.org/
+
+    %li
+      Make everything utf-8: http://craiccomputing.blogspot.com/2011/02/rails-utf-8-and-heroku.html
+      %ul
+        %li fix all uploaders to assume utf-8
+        %li add a note to the HELP page  
+
+    %li.inprogress More all notes from README.rdoc into app/views/welcome/todo
+
+    %li.todo BUG: (2013-Oct-19) comment not saved in paradigm form
+
+    %li.done
+      (refactoring) move xxx_controller.add_file_data to corresponding models!
+      %ul
+        %li.done tags_controller.rb -> tag.rb
+        %li.done words_controller.rb -> word.rb
+        %li.done paradigm_types_controller.rb -> paradigm_type.rb
+        %li.done users_controller.rb -> user.rb
+
+    %li in Model#add_file_data access DB errors in &lt;object&gt;.errors.full_messages and display them in the generated report.
+
+  %h4.subtitle TODO for tasks
+
+  %ol
+
+    %li.done
+      Refactor: the user's task page should be /users/1/tasks instead of /users/1
+      %ul
+        %li.done /users/1/tasks -- shows user's tasks
+        %li.done /tasks -- shows all unassigned tasks
+        %li.done check that taking/dropping works -- yes
+
+    %li.done Paginate tasks and sort them by priority.
+
+    %li.done
+      On the user's page show unfinished tasks and not-started tasks separately
+      %ul
+        %li.done unfinished (inprogress, review and hascomment) tasks go before the not-started tasks.
+        %li.done paginate not started tasks (status new). Do not show unfinished tasks on the second and further pages of new-tasks display.
+        %li.done if the list of the non-started tasks is empty, do not show the empty table. Show the link to All tasks page instead
+
+    %li.done
+      Implement navigation through the words of the current task in a side pane
+      %ul
+        %li.done show the current task content on paradigms#new page
+        %li.done highlight the current word
+        %li.done update changed word dynamically
+        %li.done use bullets of different colors to show whether the paradigm has comments or has review status
+        %li.done add the side pane to the paradigm#edit view
+        %li.done use colors to signal the status of the current task in the sidepane
+
+    %li.done
+      Users should be able to take over tasks.
+      %ul
+        %li.done Reimplement using ajax.
+        %li.done Update the table of unassigned tasks and the counts displayed.
+
+    %li.done
+      Users should be able to drop the tasks. Dropped tasks are returned to the common task pull.
+      %ul
+        %li.done implementation
+        %li.done update table of tasks and the counts using ajax
+        %li.done BUG fixed: on the user's task page, after dropping a task, the page is redisplayed without unfinished tasks.
+        %li.done refactor so as to get rid of duplication in tasks_controller#index and tasks_controller#drop
+        %li.todo only the owner of the task can drop it. Deactivate the Drop button if the user who is viewing the page is not the current user or the admin (the user is authorized to perform this action)
+
+    %li.done
+      Add task_id to Paradigm. this will help computing task statuses
+      %ul
+        %li.done add the field to the Paradigm model.
+        %li.done add logic for linking paradigms to tasks -- added ParadigmForm.save
+        %li.done add tests to paradigm_form_spec.rb
+
+    %li.done
+      Assign task statuses, more particularly, 'new', 'inprogress', 'review', 'hascomment' and 'ready'. 
+      %ul
+        %li.done compute task statuses and save them in Task.status. This should happen on every paradigm save/delete. use callbacks after_save and around_destroy?
+        %li.todo add tests
+        %li.todo add tests for scopes with_comment, to_review, fix_empty_fields.
+
+    %li
+      Table that lists tasks
+      %ul
+        %li.done use different colors/bullets to mark words that have paradigms to review or comments in paradigms
+        %li.maybe in the status column, perhaps it would be nice to have counts of words that are done, have comments and are to review? again, highlight using different colors.
+        %li.maybe for each task (and probably each word in task) show the number of words that the task groups through paradigms (unique word+tag pairs).
+
+    %li.done
+      Show completed tasks (having status 'ready')
+      %ul
+        %li.done on an additional page, most recently completed tasks first. add a link to the user's page to the additional page, the path should be: /users/1/tasks/ready
+        %li.done completed by all users. The path is /tasks/ready 
+        %li.done add total counts of completed tasks
+        %li.done add counts of tasks completed today, since one week ago and since one month ago. 
+        %li.todo BUG today's tasks not computed correctly
+        %li.done When showing tasks by all users, include the doer in the table.
+        %li.done Get rid of Drop button in the table
+        %li.done Include time in the table. convert it to local zone.
+        %li.done Do not show all-users-stats on 2+th pages
+        %li.maybe Allow sorting by time, by doer, and maybe other fields
+        %li.maybe Allow selecting tasks by specific day (add calendar).
+
+    %li.todo When a completed task is modified, should it's timestamp change? For example, a new paradigm was added to one of the task words. Now the status is not changed (ready->ready) and the timestamp is not updated. Keeping the old timestamp is good for computer user progress stats
+
+    %li.maybe      
+      Show unfinished tasks and new tasks in the sidepane as well.
+      %ul
+        %li When clicking on a task there, the Current Task pane should switch to it.
+        %li Use colors to distinguish task statuses.
+
+    %li      
+      Showing most recently modified tasks on user's task page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' (dispite more pdgs can still be added) and the task has been hidden. The user may want to be able to review this task.
+      %ul
+        %li show the most recently modified (including completed) task on the user page? or all todays tasks? It can be done as a list of task IDs, clicking a list should open the task (paradigm.new for the first word in the task or the most recently edited paradigm): [ 10 | 18 | 90 | 122 | 3 ]
+        %li instead, it could be showing the last task the user was working with
+        %li instead, on the page with user's completed tasks today's tasks could be highlighted somehow
+
+    %li.done
+      api for uploading new words (model Word) to the server
+      %ul
+        %li.done see http://www.tutorialspoint.com/ruby-on-rails/rails-file-uploading.htm
+        %li.done priority can be specified in the file in the 2nd field. if absent, the default is assumed
+        %li.done special keyword `priority=NUM` is recognized in the file that specifies the default priority for the words for which it is not given explicitly in the 2nd field
+        %li.done special keyword `tasksize=NUM` is recognized that allows specifying how many individual words will be added to a single task.
+        %li.todo allow specifying grouping into tasks?
+        %li.todo allow specifying assignee?
+        %li.todo when new words are added to the server, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
+
+    %li.todo Instead of preloading tasks, generate them from all tokens available in the DB (once all text data has been loaded into Tokens model), compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks will lesser number of words.
+
+  %h4.subtitle TODO for CONVERT feature  
+
+  %ol
+
+    %li.done
+      A new model Inflector that serves to convert given word with the given tag to the given tags
+      %ul
+        %li.done Inflector#convert
+        %li.done How to configure the external script to be used? -- syn_ldb available in the environment is used in Inflector (hardcoded)
+        %li.done Another possibility: syn_ldb as a TCP server? -- scripts are in bin/syn_ldb_server
+        %li.done Let Inflector discover syn_ldb from the environment or as tcp server
+        %li.todo Check encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
+        %li.todo Investigate whether syn_ldb from the environment is started only once
+        %li.todo In vew of the fact that the service will work for variaty of languages, how to start it for a specific language easily
+
+    %li.done
+      Add possibility to convert words to paradigm#edit
+      %ul
+        %li.done add button (<) for inserting current word into the desired (current) word box
+        %li.done add button (<CONVERT>) for triggering conversion procedure
+        %li.done use ajax to serve conversion procedure.
+        %li.done double clicking on (<) button should trigger conversion procedure.
+        %li.todo double click does not prevent two single clicks from happening. it does not harm however
+        %li.done do not run CONVERT if all paradigm slots are filled or all are empty -- in JQuery
+
+    %li.done BUG fixed: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
+
+    %li.done After CONVERT fired, ensure all changed word forms (including those that were added before CONVERT was pressed but excluding words that were originally in the paradigm) are highlighted as 'changed'. 
+
+    %li.todo
+      Fix letter case of words returned from prosao1 syn_ldb if necessary. Prosao knows only of lowercase and UPPERCASE and fails with: Lousy JJ JJR --> LousIER
+      %ul
+        %li fix it in syn_ldb
+        %li fix it in inflector or the wrappers around syn_ldb
+
+    %li.todo How to return multiple conversions from syn_ldb? Use a smart wrapper?
+
+  %h4.subtitle TODO for tags
+  
+  %ol
+
+    %li.maybe
+      Allow manipulating tags (name, description) via web interface
+      %ul
+        %li Adding
+        %li Modifiying
+    
+    %li.done
+      Allow adding tags in bulk via console API
+      %ul
+        %li.done English tagset: db/seeds/tagset_eng.txt
+        %li.done Uploading procedure: curl -F "tags[file]=@db/seeds/tagset_eng.txt" http://server:3000/tags/upload
+        %li.done Add the procedure to seeds to populate DB with initial data
+        %li.done Add a description to help page
+
+    %li.todo 
+      Allow adding new paradigm types via web interface. This would be very useful, as the need to add new paradigm types may arise at any moment while using the service
+      %ul
+        %li add validations of tag correctness: via ajax or on the client side?
+
+    %li.done
+      Allow adding new paradigm types via console api and seeds
+      %ul
+        %li db/seeds/pdg_types_eng.txt
+        %li paradigm_types#upload
+        %li reuse saving method in db/seeds.rb
+        %li add a note on the help page
+
+  %h4.subtitle TODO for Sentences: loading, displaying, searching
+
+  %ol
+    %li.done
+      Schema for storing sentences will include:
+      %ul
+        %li.done Tokens: id, text, upcased_text. Add index on text and upcased_text
+        %li.done Documents: id, title
+        %li.done Sentences: id, document_id (has_many tokens through sentence_tokens)
+        %li.done Sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
+
+    %li.inprogress
+      Load sentences. Keep the text titles when possible.
+      %ul
+        %li.done uploading sentences via sentences#upload. -- This takes quite a long time and should not be used for populating the DB with initial data. However, this the right method of incrementally adding new documents to database
+        %li.done documents#upload that also populates Document model and sets Document.title
+        %li.done use utf-8 as internal encoding when loading sentences. Source data is expected to be in UTF-8
+        %li.todo add description of how to import data to the help page
+        %li.todo how to avoid adding duplicate sentences? for example, when the same text is loaded twice
+        %li.todo what stats to show in upload report?
+        %li.done Implement direct loading of data into the tables, for example, importing from prebuilt tables in CSV format --  Use bin/text_to_csv.rb script.
+        %li.todo Ensure that created_at and updated_at fields carry time in the proper format in text_to_csv.rb. However, this is not important at all, since these columns are never used.
+        %li.todo are indices created when data is imported from CSV files?
+        %li.todo add description of importing from CSV to help page
+        %li.todo why importing from import_csv.sql does not work at home computer (SQLite 3.7.13)
+
+    %li.done      
+      Add a separate page for searching sentences by word(s). a-la corpus search
+      %ul
+        %li.done case-sensitive and case-insensitive search
+        %li.done display search results in a table
+        %li.done highlight requested word in the text found.
+        %li.done escape html special entities
+        %li.done do not output the same sentence more than once if it contains several found terms
+        %li.maybe sort by ID column?
+        %li.done simplify the form elements in order to make the link easier to read: ?word=blah-blah-blah&casesensitive=1
+
+    %li.done
+      Allow searching more than one word
+      %ul
+        %li.done Example of a multi-word query: be is are were -- a list of space separated terms
+        %li.done Multiword queries are searched as OR-search
+        %li.todo highlight each distinct word with its own color?
+
+    %li.inprogress
+      Add possibility to search sentences from the paradigm#new/edit pages.
+      %ul
+        %li.done search all words from the paradigm at once. add a button for this
+        %li.done search individual word from a single paradigm slot. add a button for this
+        %li.done add another set of buttons for case-sensitive search? (Ss) for case insensitive and (S) for case-sensitive
+        %li NOT A PROBLEM: handle spaces
+        %li.todo how to enforce that the browser does now switch to the new page immediatelly? instead, stay on the page and add counts how many stuff was found
+        %li.todo style buttons. Now they are ugly and the interface appears overloaded
+
+    %li
+      How to display the search results on the paradigm new/edit page?
+      %ul
+        %li in a frame?
+        %li in a new page?
+        %li merely show counts for each individual word and a total for the whole paradigm
+
+    %li.done In the search query form, restore inputted data/checked checkboxes on page reload. This is useful when the user is paginating: we need to keep his/her data in place.
+
+    %li
+      Additional report on the search results on the sentences/search page:
+      %ul
+        %li.done how many sentences were found
+        %li total of search word occurrences
+        %li list all words from the query with the number of occurrences for each individual term in each case variant
+
+    %li.maybe Allow randomized display of retrieved sentences. Not very necessary as the search works quicky and the user can paginate. Perhaps add a possibility to display a random page
+
+    %li
+      Styling issues:
+      %ul
+        %li restyle SEARCH button
+        %li the columns in the table that shows sentences, when there are no sentences to display, are resized ugly. control the width of the ID column
+
+    %li Clicking on id in the table of found sentences should open the whole document containing that sentence. Keep highlighting the search words?
+
+    %li
+      Search by regular expression
+      %ul
+        %li recognize /REGEXP/ syntax in the query
+        %li allow mixing literal and regexp search in multi search
+        %li see http://stackoverflow.com/questions/5071601/how-do-i-use-regex-in-a-sqlite-query
+
+%p You read the warning but chose to ignore it. Now you will die. Good bye.
+
+

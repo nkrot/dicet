@@ -12,4 +12,8 @@ class WelcomeController < ApplicationController
   def about
     @title = "About"
   end
+
+  def todo
+    @title = "Secret page: TODO items"
+  end
 end
