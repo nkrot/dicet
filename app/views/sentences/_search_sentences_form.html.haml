@@ -4,11 +4,11 @@
   %table#search_form
     %thead
       %tr
-        %th OR-Search word(s) literally or by /REGEXP/:
+        %th.lbl_word OR-Search word(s) literally or by /REGEXP/:
         %th Case sensitive
         %th &nbsp;
     %tbody
       %tr
         %td= text_field_tag "word", params["word"], placeholder: @placeholder, class: 'word'
         %td.has_chb= check_box_tag "casesensitive", 1, casesensitive_checked?, class: 'chb'
-        %td= f.submit "Search", accesskey: "s" #, class: 'btn'
+        %td= f.submit "Search", accesskey: "s", class: ['btn', 'btn_search']

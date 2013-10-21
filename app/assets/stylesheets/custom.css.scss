@@ -570,9 +570,10 @@ table.radioset {
 \********************************************************************/
 
 #search_form {
-  thead {
+//  border: 1px solid red;
+//  thead {
 //    background-color: green;
-  }
+//  }
 
   th {
     font-size: smaller;
@@ -581,16 +582,30 @@ table.radioset {
 
   .word {
     width: 400px;
+    margin-top: 10px;
+  }
+
+  .lbl_word {
+    padding-left: 0.5em;
+    padding-bottom: 0;
   }
 
   .has_chb {
     text-align: center;
-    vectical-align: middle;    
+    vectical-align: middle;
   }
 
   .chb {
-    background: red;
     margin-bottom: 20px;
+    margin-top: 18px;
+  }
+
+  .btn_search {
+    margin: 0;
+  }
+
+  tbody tr {
+    vectical-align: middle;    
   }
 }
 
