@@ -172,7 +172,14 @@
         %li.todo allow specifying assignee?
         %li.todo when new words are added to the server, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
-    %li.todo Instead of preloading tasks, generate them from all tokens available in the DB (once all text data has been loaded into Tokens model), compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks will lesser number of words.
+    %li.todo
+      Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks will lesser number of words.
+      %ul
+        %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
+        %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
+        %li (move to Paradigms todo) allow specifying that a spelling is a case variant of another spelling.
+        %li add a task_id column to Token to distinguish
+        %li access all task words via task/:id/words
 
   %h4.subtitle TODO for CONVERT feature  
 
@@ -297,6 +304,7 @@
       Load sentences. Keep the text titles when possible.
       %ul
         %li.done uploading sentences via sentences#upload. -- This takes quite a long time and should not be used for populating the DB with initial data. However, this the right method of incrementally adding new documents to database
+        %li.todo get rid of sentences#upload in favour of documents#upload. Update docs 
         %li.done documents#upload that also populates Document model and sets Document.title
         %li.done use utf-8 as internal encoding when loading sentences. Source data is expected to be in UTF-8
         %li.done add description of how to import data to the help page
@@ -391,6 +399,26 @@
         %li.done Displayed at documents/1 page in a table
         %li.done Show the number of tokens in the document
         %li.todo Keep highlighting the search words? Add unhighlight/rehighlight button (pure JS)
+
+  %h4.subtitle TODO for Token Statistics
+
+  %ol.done
+    %li
+      Store statistics on occurrences of Tokens in loaded data: corpus_freq (number of occurrences in all data), number_docs (number of documents containing the token) and the same for the uppercased variant of the token upcased_corpus_freq and upcased_number_docs, as well as cfnd (corpus_freq*number_docs).
+      %ul
+        %li.rejected add columns for holding statistics to the table Tokens. requires modifying CSV generation scripts. i would like to avoid it.
+        %li.done keep stats in a separate table Statistics. This approach helps avoid modifying CSV generation procedure -- (fukc! will have to modify it though)
+
+    %li
+      Compute statistics
+      %ul
+        %li.done add appropriate procedures to the models Statistic and Token
+        %li.done add action to the controller to generate statistics: statistics#recompute that is triggered from /statistics/recompute. Also accessible from the command line via curl http://server:3000/statistics/recompute -- turn out it runs very long for the whole data
+        %li what view is to be rendered once statistics#recompute completes?
+        %li.rejected add button 'compute statistics' to /tasks/ page that triggers unconditional recomputing all statistics. This should always be done on initial data load. -- looks like a bad idea because this will run very very long
+        %li.rejected add a Rake task for computing all statistics. To be run after initial data load. -- will it take long?
+        %li instead of computing stats inside the application, generate and load Statistics from CSV file similarly to loading Documents/Sentences/Tokens? -- seems reasonable: works faster and is performed together with uploading all data.
+        %li how to update statistics on incremental upload of documents to the service? keep track of changed tokens and then run token.recompute_statistics. For a small amount of tokens it will complete in reasonable time.
 
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 

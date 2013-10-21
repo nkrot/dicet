@@ -66,6 +66,8 @@ Dicet::Application.routes.draw do
 
   resources :documents, only: [:index, :show]
 
+  match '/statistics/recompute', to: 'statistics#recompute', via: 'get'
+
 #  namespace :api, defaults: { format: :text } do
 #    resources :paradigms, only: [:index]
 #  end
