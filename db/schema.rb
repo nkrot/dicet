@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131015214419) do
+ActiveRecord::Schema.define(version: 20131021124622) do
 
   create_table "documents", force: true do |t|
     t.string   "title"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20131015214419) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "sentences", ["document_id"], name: "index_sentences_on_document_id"
 
   create_table "tags", force: true do |t|
     t.string   "name"

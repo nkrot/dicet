@@ -291,6 +291,7 @@
         %li.done Documents: id, title
         %li.done Sentences: id, document_id (has_many tokens through sentence_tokens)
         %li.done Sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
+        %li.done add index to sentences on document_id
 
     %li.inprogress
       Load sentences. Keep the text titles when possible.
@@ -358,11 +359,6 @@
         %li restyle SEARCH button
         %li the columns in the table that shows sentences, when there are no sentences to display, are resized ugly. control the width of the ID column
 
-    %li.done
-      Clicking on id in the table of found sentences should open the whole document containing that sentence.
-      %ul
-        %li.todo Keep highlighting the search words?
-
     %li
       Search by regular expression
       %ul
@@ -380,6 +376,21 @@
             %li SUCKS in /futures?$/ expands to WHERE (tokens.text REGEXP 'futuresNULL$'))
             %li SUCKS in /futures?/  expands to WHERE (tokens.text REGEXP 'futuresNULL')
 
+  %h4.subtitle TODO for Documents
+
+  %ol
+    %li.done
+      Listing all documents at documents/ page
+      %ol
+        %li.done Add info on the quantify of tokens in the document
+
+    %li.done
+      Clicking on id in the table of found sentences should open the whole document containing that sentence.
+      %ul
+        %li.done Displayed at documents/1 page in a table
+        %li.done Show the number of tokens in the document
+        %li.todo Keep highlighting the search words? Add unhighlight/rehighlight button (pure JS)
+
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 
-
+%p &nbsp;

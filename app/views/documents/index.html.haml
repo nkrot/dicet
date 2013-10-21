@@ -1,0 +1,21 @@
+%h2= @title
+
+= will_paginate @documents
+
+%table
+  %thead
+    %tr
+      %th ID
+      %th Title
+      %th Number of sentences
+      %th Number of tokens, incl. punctuation
+  %tbody
+    - @documents.each do |document|
+      %tr
+        %td= document.id
+        %td= document.title
+        %td= document.sentences.count 
+        %td= document.tokens.count
+-# does not work: document.sentences.tokens.count
+
+= will_paginate @documents

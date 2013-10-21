@@ -3,7 +3,7 @@
 
 %p Document title: #{@document.title}
 
-%p The document contains #{@sentences.count} sentences.
+%p The document contains #{@sentences.count} sentences that together contain #{@document.tokens.count} tokens (incl. punctuation marks).
 
 = render partial: 'sentences/sentences'
 

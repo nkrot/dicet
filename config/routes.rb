@@ -64,7 +64,7 @@ Dicet::Application.routes.draw do
   match '/sentences/search', to: 'sentences#search', via: 'get'
   resources :sentences, only: [:index]
 
-  resources :documents, only: :show
+  resources :documents, only: [:index, :show]
 
 #  namespace :api, defaults: { format: :text } do
 #    resources :paradigms, only: [:index]
