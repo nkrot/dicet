@@ -690,6 +690,10 @@ table.radioset {
     color: grey;
   }
 
+  .rejected {
+    text-decoration: line-through;
+  }
+
   ul li.todo {
     color: black;    
   }  
