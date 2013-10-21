@@ -4,7 +4,7 @@ class Sentence < ActiveRecord::Base
   belongs_to :document
 
   def self.with_words tokens
-    joins(:tokens).where("tokens.id" => tokens).distinct
+    joins(:tokens).where("tokens.id" => tokens)
   end
 
   def self.search params
@@ -22,7 +22,7 @@ class Sentence < ActiveRecord::Base
     end
 
     tokens = Token.find_by_literal_or_regexp(conditions)
-    sentences = Sentence.with_words(tokens)
+    sentences = Sentence.with_words(tokens).distinct
 
     return sentences, tokens
   end
