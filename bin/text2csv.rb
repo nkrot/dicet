@@ -15,7 +15,7 @@ OptionParser.new do |opts|
   opts.banner = "
   This script generates CSV files for importing into corresponding tables.
 The following files will be generated (the file names are hardcoded):
-  documents.csv, sentences.csv, tokens.csv, sentence_tokens.csv
+  documents.csv, sentences.csv, tokens.csv, sentence_tokens.csv, statistics.csv
 Input data is expected to be in UTF-8 encoding.
 This script should be run for all necessary files at once in order to correctly
 compute primary keys for the table data.
@@ -51,7 +51,7 @@ end
 ######################################################################
 
 def upcase_utf8(str)
-  ActiveSupport::Multibyte::Chars.new(str).upcase 
+  ActiveSupport::Multibyte::Chars.new(str).upcase.to_s
 end
 
 ######################################################################
@@ -131,8 +131,6 @@ end
 
 
 def write_statistics
-  puts @token_id2uc_word.inspect
-
   @corpus_freqs.each_with_index do |cf, token_id|
     next  if token_id == 0
 
@@ -149,16 +147,10 @@ end
 
 # token_id -> [token_ids of all case variants]
 def all_case_variants token_id
-  puts "all case variants: #{@token_id2uc_word[token_id].inspect}"
-  puts @upcased_token_ids[@token_id2uc_word[token_id]]
   @upcased_token_ids[@token_id2uc_word[token_id]]
 end
 
 def sum_stats(token_ids, stats)
-  if token_ids.length > 1
-    puts "case variants: #{token_ids.inspect}"
-  end
-
   stats.values_at(*token_ids).inject(:+) || 0
 end
 
@@ -218,6 +210,10 @@ end
 
 # finish up processing the most recent document
 set_number_docs
+
+#puts @token_ids.inspect
+#puts @token_id2uc_word.inspect
+#puts @upcased_token_ids.inspect
 
 write_statistics
 

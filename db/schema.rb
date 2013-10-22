@@ -73,10 +73,10 @@ ActiveRecord::Schema.define(version: 20131021204237) do
     t.integer "token_id"
     t.integer "corpus_freq"
     t.integer "number_docs"
-    t.float   "cfnd"
+    t.integer "cfnd"
     t.integer "upcased_corpus_freq"
     t.integer "upcased_number_docs"
-    t.float   "upcased_cfnd"
+    t.integer "upcased_cfnd"
   end
 
   add_index "statistics", ["token_id"], name: "index_statistics_on_token_id"

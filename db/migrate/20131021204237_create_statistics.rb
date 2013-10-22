@@ -5,11 +5,11 @@ class CreateStatistics < ActiveRecord::Migration
 
       t.integer     :corpus_freq
       t.integer     :number_docs
-      t.float       :cfnd,  index: true
+      t.integer     :cfnd,  index: true
 
       t.integer     :upcased_corpus_freq
       t.integer     :upcased_number_docs
-      t.float       :upcased_cfnd, index: true
+      t.integer     :upcased_cfnd, index: true
 #      t.timestamps
     end
 
