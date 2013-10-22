@@ -31,23 +31,23 @@ delete from statistics;
 --  for example:
 --    .import path/to/documents.csv documents
 
-.print "Importing documents from documents.csv"
+-- .print "Importing documents from documents.csv"
 .import documents.csv documents
 select count(*) from documents;
 
-.print "Importing sentences from sentences.csv"
+-- .print "Importing sentences from sentences.csv"
 .import sentences.csv sentences
 select count(*) from sentences;
 
-.print "Importing tokens from tokens.csv"
+-- .print "Importing tokens from tokens.csv"
 .import tokens.csv tokens
 select count(*) from tokens;
 
-.print "Importing sentence_tokens from sentence_tokens.csv. This will take a while!"
+-- .print "Importing sentence_tokens from sentence_tokens.csv. This will take a while!"
 .import sentence_tokens.csv sentence_tokens
 select count(*) from sentence_tokens;
 
-.print "Importing statistics from statistics.csv"
+-- .print "Importing statistics from statistics.csv"
 .import statistics.csv statistics
 select count(*) from statistics;
 

@@ -173,7 +173,7 @@
         %li.todo when new words are added to the server, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
     %li.todo
-      Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks will lesser number of words.
+      Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks with less than required number of words.
       %ul
         %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
         %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
@@ -314,7 +314,7 @@
         %li.done Implement direct loading of data into the tables, for example, importing from prebuilt tables in CSV format -- Use bin/text2csv.rb script.
         %li.maybe Ensure that created_at and updated_at fields carry time in the proper format in text2csv.rb. However, this is not important at all, since these columns are never used.
         %li.todo Are indices created when data is imported from CSV files?
-        %li.todo Why importing from import_csv.sql does not work at my home computer (SQLite 3.7.13)
+        %li.done Why importing from import_csv.sql does not work at my home computer (SQLite 3.7.13) -- looks like C-style comment /* .. */ is not recognized. Use -- comment instead
 
     %li.done      
       Add a separate page for searching sentences by word(s). a-la corpus search
@@ -415,12 +415,12 @@
       Compute statistics
       %ul
         %li.done add appropriate procedures to the models Statistic and Token
-        %li.done add action to the controller to generate statistics: statistics#recompute that is triggered from /statistics/recompute. Also accessible from the command line via curl http://server:3000/statistics/recompute -- turn out it runs very long for the whole data
+        %li.done add action to the controller to generate statistics: statistics#recompute that is triggered from /statistics/recompute. Also accessible from the command line via curl http://server:3000/statistics/recompute -- turns out it runs very long for the whole data
         %li what view is to be rendered once statistics#recompute completes?
         %li.rejected add button 'compute statistics' to /tasks/ page that triggers unconditional recomputing all statistics. This should always be done on initial data load. -- looks like a bad idea because this will run very very long
-        %li.rejected add a Rake task for computing all statistics. To be run after initial data load. -- will it take long?
-        %li instead of computing stats inside the application, generate and load Statistics from CSV file similarly to loading Documents/Sentences/Tokens? -- seems reasonable: works faster and is performed together with uploading all data.
+        %li.done instead of computing stats inside the application, generate and load Statistics from CSV file similarly to loading Documents/Sentences/Tokens? -- seems reasonable: works faster and is performed together with uploading all data. added to bin/text2csv.rb
         %li how to update statistics on incremental upload of documents to the service? keep track of changed tokens and then run token.recompute_statistics. For a small amount of tokens it will complete in reasonable time.
+        %li refactor to be token.statistic.recompute instead of token.recompute_statistics
 
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 

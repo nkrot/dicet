@@ -38,7 +38,7 @@ class Token < ActiveRecord::Base
     Token.where(upcased_text: self.upcased_text)
   end
 
-  def number_docs(column=nil)
+  def compute_number_docs(column=nil)
     if column == :upcased_text
       Sentence.with_words(self.case_variants).pluck(:document_id).uniq.count
     else
@@ -46,7 +46,7 @@ class Token < ActiveRecord::Base
     end
   end
 
-  def total_freq(column=nil)
+  def compute_total_freq(column=nil)
     if column == :upcased_text
       Sentence.with_words(self.case_variants).count
     else
@@ -60,10 +60,10 @@ class Token < ActiveRecord::Base
     end
 
     values = {
-      number_docs:         number_docs,
-      corpus_freq:         total_freq,
-      upcased_corpus_freq: number_docs(:upcased_text),
-      upcased_number_docs: total_freq(:upcased_text)
+      number_docs:         compute_number_docs,
+      corpus_freq:         compute_total_freq,
+      upcased_corpus_freq: compute_number_docs(:upcased_text),
+      upcased_number_docs: compute_total_freq(:upcased_text)
     }
 
     values[:cfnd] = values[:number_docs]  * values[:corpus_freq] 
