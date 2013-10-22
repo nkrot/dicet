@@ -62,20 +62,107 @@ tokens_columns =          { headers: %w[ id text upcased_text             create
 documents_columns =       { headers: %w[ id title                         created_at updated_at ] }
 sentences_columns =       { headers: %w[ id document_id                   created_at updated_at ] }
 sentence_tokens_columns = { headers: %w[ id sentence_id token_id position created_at updated_at ] }
+statistics_columns =      { headers: %w[ id token_id
+                                            corpus_freq number_docs cfnd
+                                            upcased_corpus_freq upcased_number_docs upcased_cfnd ] }
+
 
 tokens          = CSV.open("tokens.csv",          "wb", options.merge(tokens_columns))
 documents       = CSV.open("documents.csv",       "wb", options.merge(documents_columns))
 sentences       = CSV.open("sentences.csv",       "wb", options.merge(sentences_columns))
 sentence_tokens = CSV.open("sentence_tokens.csv", "wb", options.merge(sentence_tokens_columns))
+@statistics     = CSV.open("statistics.csv",      "wb", options.merge(statistics_columns))
 
 document_id = 0
 token_id = 0
 sentence_id = 0
 sentence_token_id = 0
+#statistics_id = 0
 
 # all words that were seen are stored here
 # token_ids [word] = token_id
-token_ids = Hash.new
+@token_ids = Hash.new
+# map of upcased token to all its original case variants
+# [WATER] = [id_of("water"), id_of("Water"), ...]
+@upcased_token_ids = Hash.new {|h,k| h[k] = []} 
+@token_id2uc_word = [] # [id_of(word)] = UPCASEDWORD
+
+######################################################################
+# Methods to serve generation of Statistics table
+#
+# for Statistics table we need
+# statistics_id - can use token_id instead
+# token_id      -
+# corpus_freq   - number of all occurrences in all documents
+# number_docs   - number of documents the terms occurs in
+# cfnd          - this is just corpus_freq * number_docs
+# upcased_corpus_freq - number of all occurrences in all documents
+# upcased_number_docs - number of documents the terms occurs in
+# upcased_cfnd        - this is just upcased_corpus_freq * upcased_number_docs
+#
+
+# aux structures to hold data for the table Statistics
+@corpus_freqs = []
+@number_docs  = []
+
+# IDs of tokens seen in the current document
+@doc_token_ids = []
+
+def gather_statistics token_id
+  # keep track of all tokens seen in the document
+  @doc_token_ids << token_id
+
+  unless @corpus_freqs[token_id]
+    @corpus_freqs [token_id] = 0
+    @number_docs  [token_id] = 0
+  end
+
+  @corpus_freqs [token_id] += 1
+end
+
+
+def set_number_docs
+  @doc_token_ids.uniq.each do |token_id|
+    @number_docs[token_id] += 1
+  end
+
+  @doc_token_ids.clear
+end
+
+
+def write_statistics
+  puts @token_id2uc_word.inspect
+
+  @corpus_freqs.each_with_index do |cf, token_id|
+    next  if token_id == 0
+
+    cf = @corpus_freqs [token_id]
+    nd = @number_docs  [token_id]
+
+    uc_token_ids = all_case_variants(token_id)
+    uc_cf = sum_stats(uc_token_ids, @corpus_freqs)
+    uc_nd = sum_stats(uc_token_ids, @number_docs)
+
+    @statistics << [ token_id, token_id, cf, nd, cf*nd, uc_cf, uc_nd, uc_cf*uc_nd ]
+  end
+end
+
+# token_id -> [token_ids of all case variants]
+def all_case_variants token_id
+  puts "all case variants: #{@token_id2uc_word[token_id].inspect}"
+  puts @upcased_token_ids[@token_id2uc_word[token_id]]
+  @upcased_token_ids[@token_id2uc_word[token_id]]
+end
+
+def sum_stats(token_ids, stats)
+  if token_ids.length > 1
+    puts "case variants: #{token_ids.inspect}"
+  end
+
+  stats.values_at(*token_ids).inject(:+) || 0
+end
+
+######################################################################
 
 # TODO: use :headers to add column names in the first string
 while line = gets
@@ -88,8 +175,11 @@ while line = gets
   # TABLE: Documents
   if line =~ /DOC-SEPARATOR/
     document_id += 1
+    $stderr.print "Adding document ##{document_id}   \r"
     document_title = File.basename($FILENAME) + "::" + document_id.to_s
     documents << [document_id, document_title, created_at, updated_at]
+
+    set_number_docs
     next
   end
 
@@ -99,24 +189,42 @@ while line = gets
 
   words = line.split
   words.each_with_index do |word, pos|
-    if token_ids.key?(word)
-      token_id = token_ids[word]
+    if @token_ids.key?(word)
+      token_id = @token_ids[word]
     else
       # TABLE: Tokens
-      token_id = token_ids.length+1
-      token_ids[word] = token_id
-      tokens << [token_id, word, upcase_utf8(word), created_at, updated_at]
+      token_id = @token_ids.length+1
+
+      @token_ids [word] = token_id
+
+      upcased_word = upcase_utf8(word)
+      tokens << [token_id, word, upcased_word, created_at, updated_at]
+
+      @token_id2uc_word [token_id] = upcased_word
+
+      unless @upcased_token_ids[upcased_word].include?(token_id)
+        @upcased_token_ids[upcased_word] << token_id
+      end
     end
 
     # TABLE: Sentence_Tokens
     sentence_token_id += 1
     sentence_tokens << [sentence_token_id, sentence_id, token_id, pos, created_at, updated_at]
+
+    # TABLE: Statistics
+    gather_statistics(token_id)
   end
 end
 
+# finish up processing the most recent document
+set_number_docs
+
+write_statistics
 
 tokens.close
 documents.close
 sentences.close
 sentence_tokens.close
+@statistics.close
 
+$stderr.puts "\n"

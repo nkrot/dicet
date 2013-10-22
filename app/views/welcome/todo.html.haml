@@ -178,7 +178,7 @@
         %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
         %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
         %li (move to Paradigms todo) allow specifying that a spelling is a case variant of another spelling.
-        %li add a task_id column to Token to distinguish
+        %li add a task_id column to Token to distinguish free tokens and tokens taken into tasks
         %li access all task words via task/:id/words
 
   %h4.subtitle TODO for CONVERT feature  
@@ -194,7 +194,8 @@
         %li.done Let Inflector discover syn_ldb from the environment or as tcp server
         %li.todo Check encoding issues: web app expects UTF8 meanwhile prosao1 returns CP1252? test with FSE
         %li.todo Investigate whether syn_ldb from the environment is started only once
-        %li.todo In vew of the fact that the service will work for variaty of languages, how to start it for a specific language easily
+        %li.todo In vew of the fact that the service will work for variety of languages, how to start it for a specific language easily
+        %li.todo run syn_ldb
 
     %li.done
       Add possibility to convert words to paradigm#edit
@@ -408,6 +409,7 @@
       %ul
         %li.rejected add columns for holding statistics to the table Tokens. requires modifying CSV generation scripts. i would like to avoid it.
         %li.done keep stats in a separate table Statistics. This approach helps avoid modifying CSV generation procedure -- (fukc! will have to modify it though)
+        %li.todo cfnd and upcased_cfnd need not be float! they are integers
 
     %li
       Compute statistics
