@@ -154,7 +154,7 @@
         %li When clicking on a task there, the Current Task pane should switch to it.
         %li Use colors to distinguish task statuses.
 
-    %li      
+    %li
       Showing most recently modified tasks on user's task page. consider this scenario: the user added a paradigm to the last non-ready word, the task status was recomputes to 'ready' (dispite more pdgs can still be added) and the task has been hidden. The user may want to be able to review this task.
       %ul
         %li show the most recently modified (including completed) task on the user page? or all todays tasks? It can be done as a list of task IDs, clicking a list should open the task (paradigm.new for the first word in the task or the most recently edited paradigm): [ 10 | 18 | 90 | 122 | 3 ]
@@ -176,10 +176,10 @@
       Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks with less than required number of words.
       %ul
         %li.done add Tokens.unknown field to distinguish tokens that can be used in tasks
+        %li.done add a task_id column to Token to distinguish free tokens and tokens taken into tasks
         %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
         %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
         %li (move to Paradigms todo) allow specifying that a spelling is a case variant of another spelling.
-        %li add a task_id column to Token to distinguish free tokens and tokens taken into tasks
         %li access all task words via task/:id/words
 
   %h4.subtitle TODO for CONVERT feature  
@@ -413,7 +413,7 @@
       %ul
         %li.rejected keep stats in a separate table Statistics. -- I have changed my mind, let all stats be in Tokens table
         %li.done cfnd and upcased_cfnd need not be float! they are integers
-        %li.inprogress add columns for holding statistics to the table Tokens directly. update CSV generation scripts.
+        %li.done add columns for holding statistics to the table Tokens directly. update CSV generation scripts.
 
     %li
       Compute statistics
@@ -426,6 +426,16 @@
         %li how to update statistics on incremental upload of documents to the service? keep track of changed tokens and then run token.recompute_statistics. For a small amount of tokens it will complete in reasonable time.
         %li refactor to be token.statistic.recompute instead of token.recompute_statistics
 
+    %li.inprogress
+      Display token statistics
+      %ul
+        %li.done for all tokens -- at /tokens/
+        %li.done for unknown tokens -- at /tokens/unknown
+        %li.todo group words (equal upcased variant) with the same color
+        %li.todo add sorting by columns (click on the column name to sort)
+        %li.todo clicking on the word should Search it
+        %li.todo shift-clicking on the word should Search all case variants of the word
+      
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 
 %p &nbsp;

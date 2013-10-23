@@ -1,10 +1,22 @@
 class Token < ActiveRecord::Base
   has_many :sentence_tokens
   has_many :sentences, :through => :sentence_tokens
-  has_one  :statistic
+#  has_one  :statistic
 
   validates :text, presence: true, uniqueness: true
   validates :upcased_text, presence: true
+
+  def self.unknown
+    where(unknown: 'true')
+  end
+
+  def self.best_for_task(max=10)
+    where(unknown: 'true').order('upcased_cfnd DESC').limit(max)
+  end
+
+  def self.ranked
+    order('upcased_cfnd DESC')
+  end
 
   # options is a hash of any combination of the below keys
   #  { text:         [w1, w2, ...], 

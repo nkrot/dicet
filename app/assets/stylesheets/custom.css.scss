@@ -124,7 +124,8 @@ table.buttons {
   /* *:hover does not work */
   a:hover     + .balloon,
   input:hover + .balloon,  
-  label:hover + .balloon {
+  label:hover + .balloon,
+  th:hover    + .balloon {
     display: block;
     position: absolute;
     margin:5px 0px 0px 20px;
