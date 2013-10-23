@@ -14,12 +14,11 @@
 .echo ON
 
 -- Purge all data from the following tables
-.print "Purging databases"
+.print "Purging database tables"
 delete from sentences;
 delete from documents;
 delete from tokens;
 delete from sentence_tokens;
-delete from statistics;
 
 -- Prepare for importing new data.
 -- Tell that columns in source data files are separated by single tab char
@@ -46,10 +45,6 @@ select count(*) from tokens;
 -- .print "Importing sentence_tokens from sentence_tokens.csv. This will take a while!"
 .import sentence_tokens.csv sentence_tokens
 select count(*) from sentence_tokens;
-
--- .print "Importing statistics from statistics.csv"
-.import statistics.csv statistics
-select count(*) from statistics;
 
 .quit
 

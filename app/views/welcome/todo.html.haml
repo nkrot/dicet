@@ -175,6 +175,7 @@
     %li.todo
       Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks with less than required number of words.
       %ul
+        %li.done add Tokens.unknown field to distinguish tokens that can be used in tasks
         %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
         %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
         %li (move to Paradigms todo) allow specifying that a spelling is a case variant of another spelling.
@@ -204,7 +205,7 @@
         %li.done add button (<CONVERT>) for triggering conversion procedure
         %li.done use ajax to serve conversion procedure.
         %li.done double clicking on (<) button should trigger conversion procedure.
-        %li.todo double click does not prevent two single clicks from happening. it does not harm however
+        %li.todo double click does not prevent two single clicks from happening. As a result, it is impossible to run CONVERT form the given form w/o inserting the current word into the box.
         %li.done do not run CONVERT if all paradigm slots are filled or all are empty -- in JQuery
 
     %li.done BUG fixed: create a paradigm with NN and NNS. create an empty slot for NNS. press CONVERT. the 2nd slot for NNS is simply deleted. looks like ParadigmForm#sanitize overworks
@@ -301,12 +302,13 @@
         %li.done Sentence_tokens: sentence_id, word_id, position;; add index on word_id, sentence_id
         %li.done add index to sentences on document_id
 
-    %li.inprogress
+    %li.done
       Load sentences. Keep the text titles when possible.
       %ul
         %li.done uploading sentences via sentences#upload. -- This takes quite a long time and should not be used for populating the DB with initial data. However, this the right method of incrementally adding new documents to database
-        %li.todo get rid of sentences#upload in favour of documents#upload. Update docs 
+        %li.todo get rid of sentences#upload in favour of documents#upload. (remove from routes) Update docs.
         %li.done documents#upload that also populates Document model and sets Document.title
+        %li.todo documents#upload should assume fake document title if DOC-SEPARATOR is missing
         %li.done use utf-8 as internal encoding when loading sentences. Source data is expected to be in UTF-8
         %li.done add description of how to import data to the help page
         %li.maybe how to avoid adding duplicate sentences? for example, when the same text is loaded twice
@@ -315,6 +317,8 @@
         %li.maybe Ensure that created_at and updated_at fields carry time in the proper format in text2csv.rb. However, this is not important at all, since these columns are never used.
         %li.todo Are indices created when data is imported from CSV files?
         %li.done Why importing from import_csv.sql does not work at my home computer (SQLite 3.7.13) -- looks like C-style comment /* .. */ is not recognized. Use -- comment instead
+        %li.done allow loading data from tagged data. In particular it is needed to distinguish known and unknown words (tag NOTAG in text). Token.unknown field will be set
+        %li.todo Refactor bin/text2csv.rb. It is ugly and stores unnecessary data
 
     %li.done      
       Add a separate page for searching sentences by word(s). a-la corpus search
@@ -335,7 +339,7 @@
         %li.done Multiword queries are searched as OR-search
         %li.todo highlight each distinct word with its own color?
 
-    %li.inprogress
+    %li.done
       Add possibility to search sentences from the paradigm#new/edit pages.
       %ul
         %li.done search all words from the paradigm at once. add a button for this
@@ -407,15 +411,15 @@
     %li
       Store statistics on occurrences of Tokens in loaded data: corpus_freq (number of occurrences in all data), number_docs (number of documents containing the token) and the same for the uppercased variant of the token upcased_corpus_freq and upcased_number_docs, as well as cfnd (corpus_freq*number_docs).
       %ul
-        %li.rejected add columns for holding statistics to the table Tokens. requires modifying CSV generation scripts. i would like to avoid it.
-        %li.done keep stats in a separate table Statistics. This approach helps avoid modifying CSV generation procedure -- (fukc! will have to modify it though)
+        %li.rejected keep stats in a separate table Statistics. -- I have changed my mind, let all stats be in Tokens table
         %li.done cfnd and upcased_cfnd need not be float! they are integers
+        %li.inprogress add columns for holding statistics to the table Tokens directly. update CSV generation scripts.
 
     %li
       Compute statistics
       %ul
         %li.done add appropriate procedures to the models Statistic and Token
-        %li.done add action to the controller to generate statistics: statistics#recompute that is triggered from /statistics/recompute. Also accessible from the command line via curl http://server:3000/statistics/recompute -- turns out it runs very long for the whole data
+        %li.todo REFACTOR: add action to the controller to generate statistics: statistics#recompute that is triggered from /statistics/recompute. Also accessible from the command line via curl http://server:3000/statistics/recompute -- turns out it runs very long for the whole data
         %li what view is to be rendered once statistics#recompute completes?
         %li.rejected add button 'compute statistics' to /tasks/ page that triggers unconditional recomputing all statistics. This should always be done on initial data load. -- looks like a bad idea because this will run very very long
         %li.done instead of computing stats inside the application, generate and load Statistics from CSV file similarly to loading Documents/Sentences/Tokens? -- seems reasonable: works faster and is performed together with uploading all data. added to bin/text2csv.rb

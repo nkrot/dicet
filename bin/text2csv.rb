@@ -15,7 +15,7 @@ OptionParser.new do |opts|
   opts.banner = "
   This script generates CSV files for importing into corresponding tables.
 The following files will be generated (the file names are hardcoded):
-  documents.csv, sentences.csv, tokens.csv, sentence_tokens.csv, statistics.csv
+  documents.csv, sentences.csv, tokens.csv, sentence_tokens.csv
 Input data is expected to be in UTF-8 encoding.
 This script should be run for all necessary files at once in order to correctly
 compute primary keys for the table data.
@@ -41,7 +41,7 @@ end.parse!
 # TODO: probably need timestamp in rfc822, as produced by rails:
 # Time.now.to_s(:rfc822)
 def created_at
-  Time.now.utc
+  @right_now ||= Time.now.utc
 end
 
 def updated_at
@@ -56,28 +56,44 @@ end
 
 ######################################################################
 
+def short_token_data(token_id, word, upcased_word, tag)
+  [token_id,
+   word, upcased_word, 
+   tag == "NOTAG", # unknown
+   nil, nil, nil,  # corpus_freq number_docs cfnd
+   nil, nil, nil,  # upcased_corpus_freq upcased_number_docs upcased_cfnd
+   nil,            # task_id,
+   created_at, updated_at]
+end
+
+######################################################################
+
 options = { col_sep: "\t", write_headers: false }
 
-tokens_columns =          { headers: %w[ id text upcased_text             created_at updated_at ] }
+tokens_columns =          { headers: %w[ id text upcased_text
+                                            unknown
+                                            corpus_freq number_docs cfnd
+                                            upcased_corpus_freq upcased_number_docs upcased_cfnd
+                                            task_id created_at updated_at ] }
 documents_columns =       { headers: %w[ id title                         created_at updated_at ] }
 sentences_columns =       { headers: %w[ id document_id                   created_at updated_at ] }
 sentence_tokens_columns = { headers: %w[ id sentence_id token_id position created_at updated_at ] }
-statistics_columns =      { headers: %w[ id token_id
-                                            corpus_freq number_docs cfnd
-                                            upcased_corpus_freq upcased_number_docs upcased_cfnd ] }
+#statistics_columns =      { headers: %w[ id token_id
+#                                            corpus_freq number_docs cfnd
+#                                            upcased_corpus_freq upcased_number_docs upcased_cfnd ] }
 
 
+tmp_tokens      = CSV.open("tmp_tokens.csv",      "wb", options.merge(tokens_columns))
 tokens          = CSV.open("tokens.csv",          "wb", options.merge(tokens_columns))
 documents       = CSV.open("documents.csv",       "wb", options.merge(documents_columns))
 sentences       = CSV.open("sentences.csv",       "wb", options.merge(sentences_columns))
 sentence_tokens = CSV.open("sentence_tokens.csv", "wb", options.merge(sentence_tokens_columns))
-@statistics     = CSV.open("statistics.csv",      "wb", options.merge(statistics_columns))
+#@statistics     = CSV.open("statistics.csv",      "wb", options.merge(statistics_columns))
 
 document_id = 0
 token_id = 0
 sentence_id = 0
 sentence_token_id = 0
-#statistics_id = 0
 
 # all words that were seen are stored here
 # token_ids [word] = token_id
@@ -120,15 +136,12 @@ def gather_statistics token_id
   @corpus_freqs [token_id] += 1
 end
 
-
 def set_number_docs
   @doc_token_ids.uniq.each do |token_id|
     @number_docs[token_id] += 1
   end
-
   @doc_token_ids.clear
 end
-
 
 def write_statistics
   @corpus_freqs.each_with_index do |cf, token_id|
@@ -143,6 +156,33 @@ def write_statistics
 
     @statistics << [ token_id, token_id, cf, nd, cf*nd, uc_cf, uc_nd, uc_cf*uc_nd ]
   end
+end
+
+def add_statistics(fields)
+#  puts "BEFORE: #{fields.inspect}"
+  token_id = fields.first.to_i
+
+  # stats on original token
+  cf = @corpus_freqs [token_id]
+  nd = @number_docs  [token_id]
+  cfnd = cf*nd
+
+  # stats on uppercased token
+  uc_token_ids = all_case_variants(token_id)
+  uc_cf = sum_stats(uc_token_ids, @corpus_freqs)
+  uc_nd = sum_stats(uc_token_ids, @number_docs)
+  uc_cfnd = uc_cf * uc_nd
+
+  fields[4] = cf      # corpus_freq
+  fields[5] = nd      # number_docs
+  fields[6] = cfnd    # cfnd
+  fields[7] = uc_cf   # upcased_corpus_freq
+  fields[8] = uc_nd   # upcased_number_docs
+  fields[9] = uc_cfnd # upcased_cfnd
+
+#  puts "AFTER: #{fields.inspect}"
+
+  fields
 end
 
 # token_id -> [token_ids of all case variants]
@@ -180,7 +220,12 @@ while line = gets
   sentences << [sentence_id, document_id, created_at, updated_at]
 
   words = line.split
-  words.each_with_index do |word, pos|
+  words.each_with_index do |tw, pos|
+    # get word and tag
+    undrscr = tw.rindex('_') 
+    word = tw[0, undrscr]
+    tag  = tw[undrscr+1..-1]
+
     if @token_ids.key?(word)
       token_id = @token_ids[word]
     else
@@ -190,7 +235,7 @@ while line = gets
       @token_ids [word] = token_id
 
       upcased_word = upcase_utf8(word)
-      tokens << [token_id, word, upcased_word, created_at, updated_at]
+      tmp_tokens << short_token_data(token_id, word, upcased_word, tag)
 
       @token_id2uc_word [token_id] = upcased_word
 
@@ -211,16 +256,20 @@ end
 # finish up processing the most recent document
 set_number_docs
 
-#puts @token_ids.inspect
-#puts @token_id2uc_word.inspect
-#puts @upcased_token_ids.inspect
+#write_statistics
 
-write_statistics
-
-tokens.close
+tmp_tokens.close  # temporary file
 documents.close
 sentences.close
 sentence_tokens.close
-@statistics.close
+#@statistics.close
+
+# add statistics to each token
+CSV.foreach("tmp_tokens.csv", options) do |fields|
+  tokens << add_statistics(fields)
+end
+
+tokens.close
 
 $stderr.puts "\n"
+

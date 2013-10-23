@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021204237) do
+ActiveRecord::Schema.define(version: 20131021124622) do
 
   create_table "documents", force: true do |t|
     t.string   "title"
@@ -69,18 +69,6 @@ ActiveRecord::Schema.define(version: 20131021204237) do
 
   add_index "sentences", ["document_id"], name: "index_sentences_on_document_id"
 
-  create_table "statistics", force: true do |t|
-    t.integer "token_id"
-    t.integer "corpus_freq"
-    t.integer "number_docs"
-    t.integer "cfnd"
-    t.integer "upcased_corpus_freq"
-    t.integer "upcased_number_docs"
-    t.integer "upcased_cfnd"
-  end
-
-  add_index "statistics", ["token_id"], name: "index_statistics_on_token_id"
-
   create_table "tags", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -105,12 +93,19 @@ ActiveRecord::Schema.define(version: 20131021204237) do
   create_table "tokens", force: true do |t|
     t.string   "text"
     t.string   "upcased_text"
+    t.boolean  "unknown",             default: false
+    t.integer  "corpus_freq"
+    t.integer  "number_docs"
+    t.integer  "cfnd"
+    t.integer  "upcased_corpus_freq"
+    t.integer  "upcased_number_docs"
+    t.integer  "upcased_cfnd"
+    t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "tokens", ["text"], name: "index_tokens_on_text"
-  add_index "tokens", ["upcased_text"], name: "index_tokens_on_upcased_text"
+  add_index "tokens", ["task_id"], name: "index_tokens_on_task_id"
 
   create_table "users", force: true do |t|
     t.string   "login"
