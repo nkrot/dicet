@@ -1,13 +1,22 @@
 class CreateTokens < ActiveRecord::Migration
   def change
     create_table :tokens do |t|
-      t.string :text
-      t.string :upcased_text
+      t.string     :text,         index: true
+      t.string     :upcased_text, index: true
+
+      t.boolean    :unknown,      index: true, default: false
+
+      t.integer    :corpus_freq
+      t.integer    :number_docs
+      t.integer    :cfnd,         index: true
+
+      t.integer    :upcased_corpus_freq
+      t.integer    :upcased_number_docs
+      t.integer    :upcased_cfnd, index: true
+
+      t.references :task,         index: true
 
       t.timestamps
     end
-
-    add_index :tokens, :text
-    add_index :tokens, :upcased_text
   end
 end
