@@ -2,10 +2,10 @@
 
 = will_paginate @tokens
 
-%table#words
+%table#table_of_words
   %thead
     %tr
-      %th Word
+      %th.word Word
       %th.has_balloon
         =link_to "CF", "#"
         %span.balloon Corpus frequency of the word
@@ -16,18 +16,20 @@
         =link_to "CF*ND", "#"
         %span.balloon product of CF and ND
       %th.has_balloon
-        =link_to "Up-CF", "#"
+        =link_to "UpCF", "#"
         %span.balloon Corpus frequency of all case variants of the word
       %th.has_balloon
-        =link_to "Up-ND", "#"
+        =link_to "UpND", "#"
         %span.balloon Number of docs having all case variants of this word
       %th.has_balloon
-        =link_to "Up-CF*Up-ND", "#"
+        =link_to "UpCF*UpND", "#"
         %span.balloon Product of Up-CF and Up-ND
   %tbody
     - @tokens.each do |token|
       %tr
-        %td= token.text
+        %td.word.has_balloon
+          = link_to token.text, sentences_search_path(word: token.text)
+          %span.balloon Click to search or Shift+Click to search all case variants
         %td= token.corpus_freq
         %td= token.number_docs
         %td= token.cfnd

@@ -284,6 +284,18 @@ function do_on_document_ready() {
 			target.addClass('changed')
 		}
 	});
+
+	$("#table_of_words .word a").off('click').on('click', function (e) {
+		if (! $(this).attr("old-href")) {
+			$(this).attr("old-href", $(this).attr("href"))
+		}
+		$(this).attr('href', function () {
+			var cs = e.shiftKey ? "0" : "1"
+			window.open($(this).attr('href') + "&casesensitive=" + cs, '_blank');
+		});
+		e.preventDefault;
+		return false;
+	});
 };
 
 $(document).on('ready', function() {
