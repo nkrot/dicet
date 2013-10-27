@@ -172,7 +172,7 @@
         %li.todo allow specifying assignee?
         %li.todo when new words are added to the server, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
-    %li.todo
+    %li.inprogress
       Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks with less than required number of words.
       %ul
         %li.done add Tokens.unknown field to distinguish tokens that can be used in tasks
