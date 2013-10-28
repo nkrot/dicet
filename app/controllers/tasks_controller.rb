@@ -63,6 +63,13 @@ class TasksController < ApplicationController
     @show_stats_table = params[:page].to_i-1 < 1
   end
 
+  def generate
+    10.times do
+      task = Task.generate
+    end
+    redirect_to tasks_path
+  end
+
   private
 
   # all variables necessary to render user tasks

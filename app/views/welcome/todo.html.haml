@@ -172,15 +172,17 @@
         %li.todo allow specifying assignee?
         %li.todo when new words are added to the server, tasks may appear that contain a lower than necessary number of words. Should it be fixed somehow? Maybe, if such task(s) have not yet been taken or started, they can be complemented. Completed tasks should never be extended with new words: assume a scenario: old finished tasks had 10 words, newer tasks have been uploaded with a requested tasksize=20, old completed tasks should not be added 10 more words.
 
-    %li.todo
+    %li.inprogress
       Instead of preloading tasks, generate them from all tokens available in the DB, compute all weights/ranks on each update of sentence data and build tasks on request (when the user goes to All tasks page. how to evoid collisions when multiple users are accessing the same page at once?). This will solve the issue of tasks with less than required number of words.
       %ul
         %li.done add Tokens.unknown field to distinguish tokens that can be used in tasks
         %li.done add a task_id column to Token to distinguish free tokens and tokens taken into tasks
-        %li add generation of tasks. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: Has, has, HAs.
+        %li.done add generation of tasks to All Tasks page. 10 by default. Generated tasks are stored in Words. All case variants are added to the same task: USB, Usb, usb.
+        %li.bug the page tasks/ is not reloaded once generate has finished
         %li add Generate Tasks to All tasks page and to User Tasks. Need to keep track of which records from Tokens or Statistics have been included in tasks and which were not?
         %li (move to Paradigms todo) allow specifying that a spelling is a case variant of another spelling.
         %li access all task words via task/:id/words
+        %li deactivate the GENERATE button once it has been pressed. To avoid overgenerating tasks if the impatient user keeps pressing the button unintermittently
 
   %h4.subtitle TODO for CONVERT feature  
 

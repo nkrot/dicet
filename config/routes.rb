@@ -37,8 +37,9 @@ Dicet::Application.routes.draw do
       match :ready, via: :get
     end
   end
-  match '/tasks/drop/:id', to: 'tasks#drop', via: 'put'
-  match '/tasks/take/:id', to: 'tasks#take', via: 'put'
+  match '/tasks/drop/:id', to: 'tasks#drop',     via: 'put'
+  match '/tasks/take/:id', to: 'tasks#take',     via: 'put'
+  match '/tasks/generate', to: 'tasks#generate', via: 'get'
 
   match '/words/upload', to: 'words#upload', via: 'post'
   resources :words
@@ -69,7 +70,7 @@ Dicet::Application.routes.draw do
   match '/tokens/:unknown', to: 'tokens#index', via: 'get'
   resources :tokens, only: [:index]
 
-  match '/statistics/recompute', to: 'statistics#recompute', via: 'get'
+#  match '/statistics/recompute', to: 'statistics#recompute', via: 'get'
 
 #  namespace :api, defaults: { format: :text } do
 #    resources :paradigms, only: [:index]

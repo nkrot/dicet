@@ -2,6 +2,7 @@ class Task < ActiveRecord::Base
   belongs_to :user
   has_many :words
   has_many :paradigms
+  has_many :tokens
 
   scope :today,        -> { where "DATE(updated_at) = ?",  Date.today.to_s(:db) }
   scope :during_week,  -> { where "DATE(updated_at) >= DATE(?)", 1.week.ago }
@@ -29,6 +30,35 @@ class Task < ActiveRecord::Base
 
   def self.ready
     where(status: 'ready')
+  end
+
+  def self.generate(quantity=10)
+    puts "==== generating new tasks ===="
+    tokens = Token.best_for_task(quantity)
+
+    # ensure all case variants are present in the task
+    task_tokens = []
+    tokens.each {|token| task_tokens.concat token.case_variants }
+    task_tokens.uniq!
+
+#    # remove extra tokens if there are too many for a task
+#    if task_tokens.length > quantity*2
+#    end
+
+#    puts "Number of words for the new task: #{task_tokens.length}"
+#    puts task_tokens.inspect
+
+    if task_tokens.empty?
+      puts 'Oops. something went wrong, no tokens selected for the new task'
+      return false
+    end
+
+    task = Task.create(priority: PRIORITY)
+    puts "New task created: #{task.inspect}"
+
+    Word.add_and_assign_to_task(task_tokens, task)
+
+    task
   end
 
   def new?
