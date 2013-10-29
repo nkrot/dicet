@@ -33,30 +33,31 @@ class Task < ActiveRecord::Base
   end
 
   def self.generate(quantity=10)
-    puts "==== generating new tasks ===="
+#    puts "==== generating new tasks ===="
     tokens = Token.best_for_task(quantity)
 
     # ensure all case variants are present in the task
-    task_tokens = []
-    tokens.each {|token| task_tokens.concat token.case_variants }
-    task_tokens.uniq!
+    tokens.last.case_variants.each do |t|
+      unless tokens.include? t
+        tokens << t
+      end
+    end
 
 #    # remove extra tokens if there are too many for a task
-#    if task_tokens.length > quantity*2
+#    if tokens.length > quantity*2
 #    end
 
-#    puts "Number of words for the new task: #{task_tokens.length}"
-#    puts task_tokens.inspect
+#    puts "Number of words for the new task: #{tokens.length}"
+#    puts tokens.inspect
 
-    if task_tokens.empty?
+    if tokens.empty?
       puts 'Oops. something went wrong, no tokens selected for the new task'
       return false
     end
 
     task = Task.create(priority: PRIORITY)
-    puts "New task created: #{task.inspect}"
 
-    Word.add_and_assign_to_task(task_tokens, task)
+    Word.add_and_assign_to_task(tokens, task)
 
     task
   end
