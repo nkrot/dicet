@@ -24,6 +24,9 @@
       %th.has_balloon
         =link_to "UpCF*UpND", "#"
         %span.balloon Product of Up-CF and Up-ND
+      %th.has_balloon
+        =link_to "Task #", "#"
+        %span.balloon Task id, if assigned, or 0 otherwise
   %tbody
     - @tokens.each do |token|
       %tr
@@ -36,5 +39,6 @@
         %td= token.upcased_corpus_freq
         %td= token.upcased_number_docs
         %td= token.upcased_cfnd
+        %td= token.task_id
 
 = will_paginate @tokens
