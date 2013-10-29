@@ -69,6 +69,12 @@ function do_on_document_ready() {
 		}
 	});
 
+	$(".btn_generate_tasks").off('click').on('click', function () {
+		$(this).addClass('disabled');
+		$(this).text('Wait...')
+		return true;
+	});
+
 	$(".btn_dismiss").off('click').on("click", function () {
 		var section = $(this).attr("data-page-section-id");
 		$("#" + section).remove();
