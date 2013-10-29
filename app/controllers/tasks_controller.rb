@@ -64,10 +64,21 @@ class TasksController < ApplicationController
   end
 
   def generate
-    10.times do
+    user = nil
+    user = User.find(params[:user_id])  if params[:user_id]
+
+    5.times do
       task = Task.generate
+      if user
+        task.user = user
+        task.save
+      end
     end
-    redirect_to tasks_path
+
+    redirect_opts = { action: 'index' }
+    redirect_opts[:user_id] = user.id  if user
+
+    redirect_to redirect_opts
   end
 
   private
