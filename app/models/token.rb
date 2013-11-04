@@ -16,8 +16,12 @@ class Token < ActiveRecord::Base
       .order('upcased_cfnd DESC').limit(max)
   end
 
-  def self.ranked
-    order('upcased_cfnd DESC, upcased_text, cfnd DESC')
+  def self.ranked(col=nil)
+    if !col || col.to_s.downcase == "upcased_cfnd"
+      order('upcased_cfnd DESC, upcased_text, cfnd DESC')
+    else
+      order("#{col} DESC, upcased_text")
+    end
   end
 
   # options is a hash of any combination of the below keys
