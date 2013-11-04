@@ -179,4 +179,15 @@ class Word < ActiveRecord::Base
     infos
   end
 
+  def self.add_and_assign_to_task(tokens, task)
+    tokens.each do |token|
+      token.task = task
+      token.save
+      puts "Token task updated: #{token.task.inspect}"
+
+      unless Word.exists?(text: token.text)
+        Word.create(text: token.text, task: task)
+      end
+    end
+  end
 end
