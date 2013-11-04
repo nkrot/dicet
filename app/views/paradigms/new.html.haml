@@ -25,6 +25,7 @@
       - if @current_word
         New word: 
         %span#current_word= @current_word.text
+        = render partial: 'tokens/table_of_words', locals: {tokens: @current_words}
 
       %div.paradigms
         - @paradigms.each_with_index do |pdg, idx|

@@ -1,0 +1,39 @@
+
+%table#table_of_words
+  %thead
+    %tr
+      %th.word Word
+      %th.has_balloon
+        =link_to "CF", "?orderby=corpus_freq"
+        %span.balloon Corpus frequency of the word
+      %th.has_balloon
+        =link_to "ND", "?orderby=number_docs"
+        %span.balloon Number of docs having the word
+      %th.has_balloon
+        =link_to "CF*ND", "?orderby=cfnd"
+        %span.balloon product of CF and ND
+      %th.has_balloon
+        =link_to "UpCF", "?orderby=upcased_corpus_freq"
+        %span.balloon Corpus frequency of all case variants of the word
+      %th.has_balloon
+        =link_to "UpND", "?orderby=upcased_number_docs"
+        %span.balloon Number of docs having all case variants of this word
+      %th.has_balloon
+        =link_to "UpCF*UpND", "?orderby=upcased_cfnd"
+        %span.balloon Product of Up-CF and Up-ND
+      %th.has_balloon
+        =link_to "Task #", "?orderby=task_id"
+        %span.balloon Task id, if assigned, or 0 otherwise
+  %tbody
+    - tokens.each do |token|
+      %tr
+        %td.word.has_balloon
+          = link_to token.text, sentences_search_path(word: token.text)
+          %span.balloon Click to search or Shift+Click to search all case variants
+        %td= token.corpus_freq
+        %td= token.number_docs
+        %td= token.cfnd
+        %td= token.upcased_corpus_freq
+        %td= token.upcased_number_docs
+        %td= token.upcased_cfnd
+        %td= token.task_id

@@ -30,6 +30,7 @@ class ParadigmsController < ApplicationController
     @paradigms = []
     if params[:word_id]
       @current_word = Word.find(params[:word_id])
+      @current_words = Token.case_variants(@current_word.text)
       @current_task = @current_word.task
       @paradigms = Word.where(text: @current_word.text).map(&:paradigm).uniq.compact # => Array
       @paradigms.map! {|pdg| ParadigmForm.new(pdg) }
@@ -55,6 +56,7 @@ class ParadigmsController < ApplicationController
     @idx = params[:pdg].keys.first # params = {..., 'pdg'=> {'1' => {...}}}
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
 
     render action: 'new_paradigm_of_type'
@@ -68,6 +70,7 @@ class ParadigmsController < ApplicationController
     @idx = 1
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
 
     @paradigm = Paradigm.new(paradigm_type_id: params[:id]) #, task: @current_task)
@@ -77,6 +80,7 @@ class ParadigmsController < ApplicationController
   def edit
     @title = "Edit paradigm"
     @current_word = Word.find(params[:word_id])
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
     @paradigm = ParadigmForm.new(Paradigm.find(params[:id]))
     @idx = 1
@@ -95,6 +99,7 @@ class ParadigmsController < ApplicationController
     # TODO: same as in #edit
     @title = "Edit paradigm"
     @current_word = Word.find(params[:word_id]) # TODO: what if it has been deleted in update_paradigm?
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
     @idx = 1
     @page_section_id = params[:page_section_id]
@@ -106,6 +111,7 @@ class ParadigmsController < ApplicationController
 
     @page_section_id = params[:page_section_id]
     @current_word = Word.find(params[:word_id])
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
   end
 
@@ -131,6 +137,7 @@ class ParadigmsController < ApplicationController
     puts "add_conversions: #{params.inspect}"  if debug
 
     @current_word = Word.find(params[:word_id])
+    @current_words = Token.case_variants(@current_word.text)
     @current_task = @current_word.task
     @idx = 1
     @page_section_id = params[:page_section_id]

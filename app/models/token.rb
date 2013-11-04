@@ -56,6 +56,11 @@ class Token < ActiveRecord::Base
     Token.where(upcased_text: self.upcased_text)
   end
 
+  def self.case_variants(text)
+    token = Token.where(text: text).first
+    token ? token.case_variants : []
+  end
+
   def compute_number_docs(column=nil)
     if column == :upcased_text
       Sentence.with_words(self.case_variants).pluck(:document_id).uniq.count
