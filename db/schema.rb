@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021124622) do
+ActiveRecord::Schema.define(version: 20131105110037) do
 
   create_table "documents", force: true do |t|
     t.string   "title"
@@ -103,6 +103,9 @@ ActiveRecord::Schema.define(version: 20131021124622) do
     t.integer  "task_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "casetype"
+    t.integer  "hrmmean"
+    t.integer  "upcased_hrmmean"
   end
 
   add_index "tokens", ["task_id"], name: "index_tokens_on_task_id"

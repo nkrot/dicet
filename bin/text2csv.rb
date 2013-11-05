@@ -56,14 +56,17 @@ end
 
 ######################################################################
 
-def short_token_data(token_id, word, upcased_word, tag)
+def short_token_data(token_id, word, upcased_word, tag, casetype)
   [token_id,
    word, upcased_word, 
    tag == "NOTAG", # unknown
    nil, nil, nil,  # corpus_freq number_docs cfnd
    nil, nil, nil,  # upcased_corpus_freq upcased_number_docs upcased_cfnd
    nil,            # task_id,
-   created_at, updated_at]
+   created_at, updated_at,
+   casetype, 
+   nil, nil        # hrmmean, upcased_hrmmean
+   ] 
 end
 
 ######################################################################
@@ -74,7 +77,8 @@ tokens_columns =          { headers: %w[ id text upcased_text
                                             unknown
                                             corpus_freq number_docs cfnd
                                             upcased_corpus_freq upcased_number_docs upcased_cfnd
-                                            task_id created_at updated_at ] }
+                                            task_id created_at updated_at
+                                            casetype hrmmean upcased_hrmmean ] }
 documents_columns =       { headers: %w[ id title                         created_at updated_at ] }
 sentences_columns =       { headers: %w[ id document_id                   created_at updated_at ] }
 sentence_tokens_columns = { headers: %w[ id sentence_id token_id position created_at updated_at ] }
@@ -165,13 +169,15 @@ def add_statistics(fields)
   # stats on original token
   cf = @corpus_freqs [token_id]
   nd = @number_docs  [token_id]
-  cfnd = cf*nd
+  cfnd = cf * nd
+  hrmmean = 2 * cf * nd / (cf+nd)
 
   # stats on uppercased token
   uc_token_ids = all_case_variants(token_id)
-  uc_cf = sum_stats(uc_token_ids, @corpus_freqs)
-  uc_nd = sum_stats(uc_token_ids, @number_docs)
-  uc_cfnd = uc_cf * uc_nd
+  uc_cf        = sum_stats(uc_token_ids, @corpus_freqs)
+  uc_nd        = sum_stats(uc_token_ids, @number_docs)
+  uc_cfnd      = uc_cf * uc_nd
+  uc_hrmmean   = 2 * uc_cf * uc_nd / (uc_cf + uc_nd)
 
   fields[4] = cf      # corpus_freq
   fields[5] = nd      # number_docs
@@ -179,6 +185,12 @@ def add_statistics(fields)
   fields[7] = uc_cf   # upcased_corpus_freq
   fields[8] = uc_nd   # upcased_number_docs
   fields[9] = uc_cfnd # upcased_cfnd
+#  fields[10]         # task_id
+#  fields[11]         # created_at
+#  fields[12]         # updated_at
+#  fields[13]         # casetype
+  fields[14] = hrmmean
+  fields[15] = uc_hrmmean
 
 #  puts "AFTER: #{fields.inspect}"
 
@@ -192,6 +204,19 @@ end
 
 def sum_stats(token_ids, stats)
   stats.values_at(*token_ids).inject(:+) || 0
+end
+
+######################################################################
+
+def casetype_of(word)
+  case word
+  when /^[-'[:lower:]]+$/
+    'al' # all lower
+  when /^[-'[:upper:]]+$/
+    'au' # all upper
+  else
+    'other'
+  end
 end
 
 ######################################################################
@@ -235,7 +260,7 @@ while line = gets
       @token_ids [word] = token_id
 
       upcased_word = upcase_utf8(word)
-      tmp_tokens << short_token_data(token_id, word, upcased_word, tag)
+      tmp_tokens << short_token_data(token_id, word, upcased_word, tag, casetype_of(word))
 
       @token_id2uc_word [token_id] = upcased_word
 
