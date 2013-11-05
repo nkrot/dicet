@@ -1,5 +1,12 @@
 %h3= @title
 
+= form_for "token_filters", method: 'get' do |f|
+  = label_tag "Include tokens already in tasks:"
+  = check_box_tag :assigned, 1, filter_checked?(:assigned), class: 'chb'
+  = label_tag "Entirely lowercase:"
+  = check_box_tag :al,       1, filter_checked?(:al),       class: 'chb'
+  = f.submit "Filter"
+
 = will_paginate @tokens
 
 = render partial: 'tokens/table_of_words', locals: {tokens: @tokens}

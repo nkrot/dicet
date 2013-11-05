@@ -7,8 +7,29 @@ class Token < ActiveRecord::Base
   validates :text, presence: true, uniqueness: true
   validates :upcased_text, presence: true
 
-  def self.unknown
-    where(unknown: 'true')
+  def self.unknown(filters={})
+    subqueries = ["tokens.unknown = 'true'"]
+
+    # casetypes
+    casetypes = []
+    ['al', 'other'].each do |ct|
+      casetypes << ct  if filters.key?(ct)
+    end
+    
+    unless casetypes.empty?
+      vals = casetypes.map{|s| "\'#{s}\'"}.join(',')
+      subqueries << "tokens.casetype in (#{vals})"
+    end
+
+    # by default, we dont want to see assigned tasks
+#    unless filters.key?('assigned')
+#      subqueries << "tokens.task_id = 0" # TODO: does not work
+#    end
+
+    sql_query = subqueries.join(' AND ')
+    puts sql_query.inspect
+
+    where(sql_query)
   end
 
   def self.best_for_task(max=10)
@@ -18,8 +39,10 @@ class Token < ActiveRecord::Base
 
   def self.ranked(col=nil)
     if !col || col.to_s.downcase == "upcased_cfnd"
+      # default ranking
       order('upcased_cfnd DESC, upcased_text, cfnd DESC')
     else
+      # explicit rankings
       order("#{col} DESC, upcased_text")
     end
   end
