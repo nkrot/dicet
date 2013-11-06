@@ -312,6 +312,12 @@ function do_on_document_ready() {
 			if ( $("#al").is(':checked') ) {
 				newhref += "&al=1"
 			}
+			if ( $("#au").is(':checked') ) {
+				newhref += "&au=1"
+			}
+			if ( $("#tc").is(':checked') ) {
+				newhref += "&tc=1"
+			}
 //			console.log(newhref);
 			return newhref;
 		});

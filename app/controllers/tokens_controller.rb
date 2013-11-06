@@ -2,7 +2,7 @@ class TokensController < ApplicationController
 
   def index
 #    puts "params: #{params.inspect}"
-    @order_by_column = params[:orderby] || 'upcased_cfnd'
+    @order_by_column = order_by
 
     if params[:unknown]
       @title = "Ranked list of corpus words that are unknown to FSE"
@@ -19,7 +19,17 @@ class TokensController < ApplicationController
   private
 
   def filters
-    params.permit(:al, :assigned, :orderby)
+    params.permit(:al, :au, :tc, :other, :assigned)
+  end
+
+  def order_by
+    if params[:orderby]
+      params[:orderby]
+    elsif params[:al]
+      'cfnd'
+    else
+      'upcased_cfnd'
+    end
   end
 end
 

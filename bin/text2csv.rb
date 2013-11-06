@@ -214,6 +214,8 @@ def casetype_of(word)
     'al' # all lower
   when /^[-'[:upper:]]+$/
     'au' # all upper
+  when /^([[:upper:]][-'[:lower:]]+)(-[[:upper:]][-'[:lower:]]+)*$/
+    'tc' # titlecase
   else
     'other'
   end

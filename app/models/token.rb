@@ -7,12 +7,16 @@ class Token < ActiveRecord::Base
   validates :text, presence: true, uniqueness: true
   validates :upcased_text, presence: true
 
+  def self.valid_casetypes
+    ['al', 'au', 'tc', 'other']
+  end
+
   def self.unknown(filters={})
     subqueries = ["tokens.unknown = 'true'"]
 
     # casetypes
     casetypes = []
-    ['al', 'other'].each do |ct|
+    Token.valid_casetypes.each do |ct|
       casetypes << ct  if filters.key?(ct)
     end
     
