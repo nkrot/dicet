@@ -3,33 +3,43 @@
   %thead
     %tr
       %th.word Word
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('corpus_freq')}
         =link_to "CF", "?orderby=corpus_freq"
         %span.balloon Corpus frequency of the word
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('number_docs')}
         =link_to "ND", "?orderby=number_docs"
         %span.balloon Number of docs having the word
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('cfnd')}
         =link_to "CF*ND", "?orderby=cfnd"
         %span.balloon product of CF and ND
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('hrmmean')}
         =link_to "HrmMean", "?orderby=hrmmean"
         %span.balloon Harmonic mean of CF and ND
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('upcased_corpus_freq')}
         =link_to "UpCF", "?orderby=upcased_corpus_freq"
         %span.balloon Corpus frequency of all case variants of the word
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('upcased_number_docs')}
         =link_to "UpND", "?orderby=upcased_number_docs"
         %span.balloon Number of docs having all case variants of this word
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('upcased_cfnd')}
         =link_to "UpCF*UpND", "?orderby=upcased_cfnd"
         %span.balloon Product of Up-CF and Up-ND
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('upcased_hrmmean')}
         =link_to "UpHrmMean", "?orderby=upcased_hrmmean"
         %span.balloon Harmonic mean of Up-CF and Up-ND
-      %th.has_balloon
+
+      %th.has_balloon{class: hi_if_ordered_by('task_id')}
         =link_to "Task #", "?orderby=task_id"
         %span.balloon Task id, if assigned, or 0 otherwise
+
   %tbody
     - tokens.each do |token|
       %tr
