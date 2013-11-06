@@ -1,0 +1,21 @@
+
+= form_for "token_filters", method: 'get', html: {id: 'filters_form'} do |f|
+  = hidden_field_tag 'orderby', @order_by_column
+
+  %table#filters_form_table
+    %tr
+      %td= label_tag "Include tokens already in tasks:"
+      %td.has_chb= check_box_tag :assigned, 1, filter_checked?(:assigned), class: 'chb'
+      %td{rowspan:2}= f.submit "Filter", id: 'btn_filter'
+
+    %tr
+      %td= label_tag "Entirely lowercase:"
+      %td.has_chb= check_box_tag :al,       1, filter_checked?(:al),       class: 'chb'
+
+    %tr
+      %td= label_tag "Entirely uppercase:"
+      %td.has_chb= check_box_tag :au,       1, filter_checked?(:au),       class: 'chb'
+
+    %tr
+      %td= label_tag "In Titlecase:"
+      %td.has_chb= check_box_tag :tc,       1, filter_checked?(:tc),       class: 'chb'
