@@ -302,6 +302,25 @@ function do_on_document_ready() {
 		e.preventDefault;
 		return false;
 	});
+
+	$("#table_of_words th a").off('click').on('click', function (e) {
+		$(this).attr('href', function () {
+			var newhref = $(this).attr('href');
+			if ( $("#assigned").is(':checked') ) {
+				newhref += "&assigned=1"
+			}
+			if ( $("#al").is(':checked') ) {
+				newhref += "&al=1"
+			}
+//			console.log(newhref);
+			return newhref;
+		});
+	});
+
+/*	$("#filters_form").on('submit', function () {
+		console.log('submitting')
+	}); */
+
 };
 
 $(document).on('ready', function() {
