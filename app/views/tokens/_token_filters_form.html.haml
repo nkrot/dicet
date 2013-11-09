@@ -4,18 +4,27 @@
 
   %table#filters_form_table
     %tr
-      %td= label_tag "Include tokens already in tasks:"
+      %td.has_lbl= label_tag "Include tokens already in tasks:"
       %td.has_chb= check_box_tag :assigned, 1, filter_checked?(:assigned), class: 'chb'
-      %td{rowspan:2}= f.submit "Filter", id: 'btn_filter'
+      %td &nbsp;
+      %td.empty &nbsp;
+      %td &nbsp;
 
     %tr
-      %td= label_tag "Entirely lowercase:"
+      %td.has_lbl= label_tag "Entirely lowercase:"
       %td.has_chb= check_box_tag :al,       1, filter_checked?(:al),       class: 'chb'
+      %td &nbsp;
+      %td.empty &nbsp;
+      %td &nbsp;
 
     %tr
-      %td= label_tag "Entirely uppercase:"
+      %td.has_lbl= label_tag "Entirely uppercase:"
       %td.has_chb= check_box_tag :au,       1, filter_checked?(:au),       class: 'chb'
+      %td.has_btn{rowspan:2}= f.submit "Filter", id: 'btn_filter', class: 'btn'
+      %td.empty &nbsp;
+      %td.has_btn{rowspan:2}=link_to "Generate 5 tasks", "#", method: 'get', class: 'btn btn_generate_tasks'
 
     %tr
-      %td= label_tag "In Titlecase:"
+      %td.has_lbl= label_tag "In Titlecase:"
       %td.has_chb= check_box_tag :tc,       1, filter_checked?(:tc),       class: 'chb'
+      %td.empty &nbsp;

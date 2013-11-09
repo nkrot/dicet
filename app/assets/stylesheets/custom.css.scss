@@ -716,6 +716,41 @@ table.radioset {
 }
 
 /********************************************************************\
+ * table holding the filters controls
+\********************************************************************/
+
+#filters_form_table {
+//  border: 1px solid green;
+
+  .has_lbl {
+    padding-left: 10px;
+    padding-right: 10px;    
+  }
+
+  .has_chb {
+    width: 30px;
+    text-align: center;
+    vertical-align: middle;    
+  }
+
+  .has_btn {
+    vertical-align: bottom;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    width: 80px;
+    text-align: right;
+   }
+
+   .empty {
+     width: 130px;
+   }
+
+   .btn_generate_tasks {
+     width: 110px;
+   }
+}
+
+/********************************************************************\
  * Secret TODO page at /todo
 \********************************************************************/
 
