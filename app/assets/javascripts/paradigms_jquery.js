@@ -323,10 +323,16 @@ function do_on_document_ready() {
 		});
 	});
 
-/*	$("#filters_form").on('submit', function () {
-		console.log('submitting')
-	}); */
-
+	$("#chb_autoassign").off('change').on('change', function () {
+		var btn = $('#btn_generate_tasks');
+		if ($(this).is(":checked")) {
+			/* TODO: update the link to include user id */
+			var trg = "Take"
+		} else {
+			var trg = "Generate"
+		}
+		btn.text(btn.text().replace(/^\S+/, trg))
+	})
 };
 
 $(document).on('ready', function() {

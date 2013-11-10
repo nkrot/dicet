@@ -745,8 +745,12 @@ table.radioset {
      width: 130px;
    }
 
-   .btn_generate_tasks {
+   #btn_generate_tasks {
      width: 110px;
+   }
+
+   .has_chb.autoassign {
+     width: 20px;
    }
 }
 

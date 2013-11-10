@@ -9,6 +9,7 @@
       %td &nbsp;
       %td.empty &nbsp;
       %td &nbsp;
+      %td &nbsp;
 
     %tr
       %td.has_lbl= label_tag "Entirely lowercase:"
@@ -16,13 +17,15 @@
       %td &nbsp;
       %td.empty &nbsp;
       %td &nbsp;
+      %td &nbsp;
 
     %tr
       %td.has_lbl= label_tag "Entirely uppercase:"
       %td.has_chb= check_box_tag :au,       1, filter_checked?(:au),       class: 'chb'
       %td.has_btn{rowspan:2}= f.submit "Filter", id: 'btn_filter', class: 'btn'
       %td.empty &nbsp;
-      %td.has_btn{rowspan:2}=link_to "Generate 5 tasks", "#", method: 'get', class: 'btn btn_generate_tasks'
+      %td.has_btn{rowspan:2}= link_to "Generate 5 tasks", "#", method: 'get', class: 'btn', id: 'btn_generate_tasks'
+      %td.has_chb.autoassign{rowspan:2}= check_box_tag :autoassign, 1, filter_checked?(:autoassign), class: 'chb', id: 'chb_autoassign'
 
     %tr
       %td.has_lbl= label_tag "In Titlecase:"
