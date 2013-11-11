@@ -331,7 +331,8 @@ function do_on_document_ready() {
 		} else {
 			var trg = "Generate"
 		}
-		btn.text(btn.text().replace(/^\S+/, trg))
+//		btn.text(btn.text().replace(/^\S+/, trg)) // if <a>
+		btn.attr('value', btn.attr('value').replace(/^\S+/, trg))
 	})
 };
 

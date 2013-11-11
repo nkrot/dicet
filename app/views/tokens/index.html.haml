@@ -2,8 +2,12 @@
 
 = render partial: 'tokens/token_filters_form'
 
-= will_paginate @tokens
+-# reset to Filter when paginating after pressing <Generate Tasks>
+- will_paginate_params = {params: {commit: 'Filter'}}
+
+= will_paginate @tokens, will_paginate_params
 
 = render partial: 'tokens/table_of_words', locals: {tokens: @tokens}
 
-= will_paginate @tokens
+= will_paginate @tokens, will_paginate_params
+
