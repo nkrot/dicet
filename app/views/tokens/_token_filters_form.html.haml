@@ -1,7 +1,7 @@
 
 -# text displayed on the buttons. must not be changed!
 - btn_filter_value = "Filter"
-- btn_generate_tasks_value = "Generate 5 tasks"
+- btn_generate_tasks_value = filter_checked?(:autoassign) ? "Take 5 tasks" : "Generate 5 tasks"
 
 = form_for "token_filters", method: 'get', html: {id: 'filters_form'} do |f|
   = hidden_field_tag 'orderby', @order_by_column

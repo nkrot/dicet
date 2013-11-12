@@ -69,9 +69,10 @@ function do_on_document_ready() {
 		}
 	});
 
-	$(".btn_generate_tasks").off('click').on('click', function () {
+	$("#btn_generate_tasks").off('click').on('click', function () {
 		$(this).addClass('disabled');
-		$(this).text('Wait...')
+//		$(this).text('Wait...');
+//		$(this).attr('value', 'Wait...'); // TODO: dangerous, the tokens_controller uses this value
 		return true;
 	});
 

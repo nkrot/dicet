@@ -32,24 +32,19 @@ class TokensController < ApplicationController
 
   def generate_tasks
     num_tasks = 1
-    tokens_per_task = 2
+    tokens_per_task = 3
 
     puts "**** Generating tasks ****"
     puts "PARAMS: #{params}"
 
-    user = nil
-    if params[:autoassign]
-      puts "Will be assigned to: #{current_user.inspect}"
-      user = current_user.id
-    end
+    user = params[:autoassign] ? current_user : nil
 
     num_tasks.times do
       # get tokens filtered in the same way as the user sees them on the page
-      tokens = unknown_tokens_for_show.limit(tokens_per_task)
-      puts "Number of tokens for the new task: #{tokens.length}"
-      puts tokens.inspect
-      # make a task with these tokens
-#      task = Task.
+      # TODO: have to convert to array to be able to take specific quantity of records
+      # from the relation.
+      tokens = unknown_tokens_for_show.to_a.take(tokens_per_task)
+      task = Task.create_with_tokens(tokens, user)
     end
   end
 

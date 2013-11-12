@@ -26,9 +26,9 @@ class Token < ActiveRecord::Base
     end
 
     # by default, we dont want to see assigned tasks
-#    unless filters.key?('assigned')
-#      subqueries << "tokens.task_id = 0" # TODO: does not work
-#    end
+    unless filters.key?('assigned')
+      subqueries << "tokens.task_id in (0, '')"
+    end
 
     sql_query = subqueries.join(' AND ')
     puts sql_query.inspect

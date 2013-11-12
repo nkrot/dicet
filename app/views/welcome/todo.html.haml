@@ -432,7 +432,7 @@
         %li what view is to be rendered once statistics#recompute completes?
         %li.rejected add button 'compute statistics' to /tasks/ page that triggers unconditional recomputing all statistics. This should always be done on initial data load. -- looks like a bad idea because this will run very very long
         %li.done instead of computing stats inside the application, generate and load Statistics from CSV file similarly to loading Documents/Sentences/Tokens? -- seems reasonable: works faster and is performed together with uploading all data. added to bin/text2csv.rb
-        %li how to update statistics on incremental upload of documents to the service? keep track of changed tokens and then run token.recompute_statistics. For a small amount of tokens it will complete in reasonable time.
+        %li.todo how to update statistics on incremental upload of documents to the service? keep track of changed tokens and then run token.recompute_statistics. For a small amount of tokens it will complete in reasonable time.
         %li refactor to be token.statistic.recompute instead of token.recompute_statistics
 
     %li.done
@@ -446,6 +446,7 @@
         %li.done clicking on the word should Search it
         %li.done shift-clicking on the word should Search all case variants of the word
         %li.inprogress show current token stats on paradigm#new/#edit page -- ok, but still looks ugly
+        %li.todo in the table on paradigm#new/#edit allow sorting
 
     %li.inprogress
       Filter what is shown in the table
@@ -461,6 +462,10 @@
         %li.todo restyle the filter form
         %li.todo highlight FILTER button if controls were modified
         %li.todo when sorting by columns, respect the page number we are on
+
+    %li.todo [MOVE ELSEWHERE] Words added by the user through Paradigms should be marked in Tokens as known to avoid they are taken to the tasks again
+
+    %li.todo Use 0 instead of '' for tokens not linked to a task. reason: 0 is a better integer than ''
 
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 
