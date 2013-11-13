@@ -22,6 +22,14 @@ class TokensController < ApplicationController
     end
   end
 
+  def take
+    puts "Token.take PARAMS: #{params.inspect}"
+    token = Token.find(params[:id])
+    @task = Task.create_with_tokens([token], current_user)
+    puts @task.inspect
+    puts @task.tokens.inspect
+  end
+
   private
 
   def unknown_tokens_for_show(max=50)

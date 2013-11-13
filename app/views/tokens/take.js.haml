@@ -1,0 +1,7 @@
+
+-#$(".task_id").html("#{@task.id}");
+
+- @task.tokens.each do |token|
+  $("#token-id-#{token.id} .task_id").html("#{@task.id}")
+
+

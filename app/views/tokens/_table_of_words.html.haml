@@ -4,6 +4,10 @@
     %tr
       %th.word Word
 
+      %th.action.has_balloon
+        =link_to "Action", "#"
+        %span.balloon Take the word to a task or reject to process this word
+      
       %th.has_balloon{class: hi_if_ordered_by('corpus_freq')}
         =link_to "CF", "?orderby=corpus_freq"
         %span.balloon Corpus frequency of the word
@@ -19,7 +23,6 @@
       %th.has_balloon{class: hi_if_ordered_by('hrmmean')}
         =link_to "HrmMean", "?orderby=hrmmean"
         %span.balloon Harmonic mean of CF and ND
-
       %th.has_balloon{class: hi_if_ordered_by('upcased_corpus_freq')}
         =link_to "UpCF", "?orderby=upcased_corpus_freq"
         %span.balloon Corpus frequency of all case variants of the word
@@ -42,10 +45,13 @@
 
   %tbody
     - tokens.each do |token|
-      %tr
+      %tr{id: "token-id-#{token.id}"}
         %td.word.has_balloon
           = link_to token.text, sentences_search_path(word: token.text)
           %span.balloon Click to search or Shift+Click to search all case variants
+        %td.action
+          = link_to "T", url_for(action: 'take', id: token.id), remote: true, method: 'get'
+          = link_to "D", "#"
         %td= token.corpus_freq
         %td= token.number_docs
         %td= token.cfnd
@@ -54,4 +60,4 @@
         %td= token.upcased_number_docs
         %td= token.upcased_cfnd
         %td= token.upcased_hrmmean
-        %td= token.task_id
+        %td.task_id= token.task_id
