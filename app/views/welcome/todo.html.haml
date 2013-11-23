@@ -469,6 +469,12 @@
         %li.todo highlight FILTER button if controls were modified
         %li.todo when sorting by columns, respect the page number we are on
 
+    %li.inprogress
+      Synchronize DB with prosao words
+      %ul
+        %li.inprogress Mark as known those tokens in Tokens that are known in prosao available in environment -- bin/sync_with_prosao, DONE-NOT-TESTED
+        %li.todo ??? Mark as unknown words that are not in prosao? What happens to tokens that were taken to tasks, probably processed, but not dumped yet?
+
     %li.todo [MOVE ELSEWHERE] Words added by the user through Paradigms should be marked in Tokens as known to avoid they are taken to the tasks again
 
     %li.todo Use 0 instead of '' for tokens not linked to a task. reason: 0 is a better integer than ''

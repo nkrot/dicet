@@ -1,0 +1,130 @@
+#!/bin/sh
+
+# # #
+# USAGE: ThisScript --db=path/to/database
+#
+# DB will be synchronized with prosao available in the environment.
+# more precisely, words that are available in prosao will me marked
+# in DB as known.
+#
+
+show_help() {
+	cat <<EOF
+
+  Use prosao from environment to mark words in DB that are known to prosao1
+USAGE: `basename $0` --db path/to/dbfile
+OPTIONS:
+    --db[=]FILE    path to sqlite3 database
+
+EOF
+}
+
+dbfile=
+
+while [ $# -ne 0 ]; do
+	case $1 in
+	--help)
+		show_help
+		exit 0
+		;;
+	--db=*)
+		dbfile=`echo $1 | cut -d= -f2-`
+		;;
+	--db)
+		shift
+		dbfile=$1
+		;;
+	--*)
+		echo "ERROR: Invalid option $1"
+		exit 1
+		;;
+	*)
+		break
+		;;
+	esac
+	shift
+done
+
+if [ -z "$dbfile" ]; then
+	echo "ERROR: database not specified. Use --db option or read --help" >&2
+	exit 2
+elif [ ! -f "$dbfile" ]; then
+	echo "ERROR: file not found ${dbfile}" >&2
+	exit 3
+fi
+
+if [ ! `which syn_ldb` ]; then
+	echo "ERROR: ProSAO1 utility syn_ldb not found in the environment"
+	exit 4
+fi
+
+######################################################################
+
+TAB='	'
+
+myname=`basename $0`
+
+tmpfile1=`mktemp /tmp/${myname}.1.unknown_tokens.XXXXXX`
+tmpfile2=`mktemp /tmp/${myname}.2.sql_update.XXXXXX`
+
+trap "rm -f $tmpfile1 $tmpfile2" EXIT
+
+######################################################################
+
+show_fortune() {
+	if [ `which fortune` ]; then
+		echo "In the meanhile, take a moment to think about the following:"
+		fortune -s -n200
+		echo ""
+	fi
+}
+
+######################################################################
+# step 1: dump unknown words
+
+sql_select_unknown="select tokens.text from tokens where tokens.unknown = 'true'"
+
+echo "Dumping unknown words from Tokens table to file $tmpfile1"
+echo "This may take a while..."
+show_fortune
+
+sqlite3 -list -separator "$TAB" "$dbfile" "$sql_select_unknown" >$tmpfile1 || exit 1
+
+count=`cat $tmpfile1 | wc -l`
+echo "Done. $count records were dumped a list of words"
+
+#cp $tmpfile1 shilo.sync.unknown
+
+######################################################################
+# step 2: pick words that are known to prosao
+
+select_known_words() {
+	cat $@ | awk '{print "tags-fs "$0}' | syn_ldb --output-data |
+	awk 'BEGIN {FS="\t"} $2'
+}
+
+convert_to_sql_update() {
+	cat $@ |
+	awk 'NF {printf "update tokens set unknown=\"false\" where text = \"%s\";\n", $0}'
+}
+
+# fake
+cat $tmpfile1 | shuf -n10 | convert_to_sql_update >$tmpfile2
+# real
+#cat $tmpfile1 | select_known_words | convert_to_sql_upate
+
+count=`cat $tmpfile2 | wc -l`
+echo "Done. ${count} words are already known to prosao"
+
+#cp $tmpfile2 shilo.sync.sql_update
+
+######################################################################
+# step 3: import info on known words to DB
+
+if [ $count -eq 0 ]; then
+	echo "Nothing to update in DB"
+else
+	echo "Updating the database..."
+	cat $tmpfile2 | sqlite3 "$dbfile"
+fi
+
