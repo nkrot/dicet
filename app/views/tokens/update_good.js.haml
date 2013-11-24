@@ -1,0 +1,7 @@
+
+- @tokens.each do |token|
+  - rowid = "token-id-#{token.id}"
+  $("##{rowid} .col_good").html("#{token.good}")
+  $("##{rowid} .setbad").removeClass('none').addClass("#{show_setbad(token)}")
+  $("##{rowid} .setgood").removeClass('none').addClass("#{show_setgood(token)}")
+

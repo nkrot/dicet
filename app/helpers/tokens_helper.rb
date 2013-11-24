@@ -11,4 +11,21 @@ module TokensHelper
       ''
     end
   end
+
+  def show_take token
+    token.taken? ? 'none' : ''
+  end
+
+  def show_drop token
+    token.taken? ? '' : 'none'
+  end
+
+  def show_setbad token
+    token.good? ? '' : 'none'
+  end
+
+  def show_setgood token
+    token.good? ? 'none' : ''
+  end
+
 end

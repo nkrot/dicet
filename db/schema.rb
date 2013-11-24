@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131105110037) do
+ActiveRecord::Schema.define(version: 20131124160446) do
 
   create_table "documents", force: true do |t|
     t.string   "title"
@@ -106,8 +106,10 @@ ActiveRecord::Schema.define(version: 20131105110037) do
     t.string   "casetype"
     t.integer  "hrmmean"
     t.integer  "upcased_hrmmean"
+    t.boolean  "good",                default: true
   end
 
+  add_index "tokens", ["good"], name: "index_tokens_on_good"
   add_index "tokens", ["task_id"], name: "index_tokens_on_task_id"
 
   create_table "users", force: true do |t|

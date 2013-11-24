@@ -1,7 +1,8 @@
 
--#$(".task_id").html("#{@task.id}");
-
-- @task.tokens.each do |token|
-  $("#token-id-#{token.id} .task_id").html("#{@task.id}")
+- @tokens.each do |token|
+  - rowid = "token-id-#{token.id}"
+  $("##{rowid} .task_id").html("#{token.task_id}")
+  $("##{rowid} .take").removeClass('none').addClass("#{show_take(token)}")
+  $("##{rowid} .drop").removeClass('none').addClass("#{show_drop(token)}")
 
 

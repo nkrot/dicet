@@ -6,7 +6,12 @@
 
       %th.action.has_balloon
         =link_to "Action", "#"
-        %span.balloon Take the word to a task or reject to process this word
+        %span.balloon
+          Take the word (with all its case variants) to a task or reject to process this word
+          %br
+          T/D - take to a task/drop from the task
+          %br
+          G/B - mark as Good/Bad
       
       %th.has_balloon{class: hi_if_ordered_by('corpus_freq')}
         =link_to "CF", "?orderby=corpus_freq"
@@ -43,15 +48,31 @@
         =link_to "Task #", "?orderby=task_id"
         %span.balloon Task id, if assigned, or 0 otherwise
 
+      %th.has_balloon{class: hi_if_ordered_by('good')}
+        =link_to "Good?", "#"
+        %span.balloon 
+          Whether the word is worth considering or can be dismissed
+
   %tbody
     - tokens.each do |token|
       %tr{id: "token-id-#{token.id}"}
         %td.word.has_balloon
           = link_to token.text, sentences_search_path(word: token.text)
           %span.balloon Click to search or Shift+Click to search all case variants
+
         %td.action
-          = link_to "T", url_for(action: 'take', id: token.id), remote: true, method: 'get'
-          = link_to "D", "#"
+          -# Take/Drop
+          = link_to "T", url_for(controller: 'tokens', action: 'take', id: token.id), remote: true, |
+            method: 'get', class: ['take', show_take(token)]
+          = link_to "D", url_for(controller: 'tokens', action: 'drop', id: token.id), remote: true, |
+            method: 'get', class: ['drop', show_drop(token)]
+
+          -# Set as Bad/Set as Good
+          = link_to "B", url_for(controller: 'tokens', action: 'setbad', id: token.id), remote: true, |
+            method: 'get', class: ['setbad', show_setbad(token)]
+          = link_to "G", url_for(controller: 'tokens', action: 'setgood', id: token.id), remote: true, |
+            method: 'get', class: ['setgood', show_setgood(token)]
+
         %td= token.corpus_freq
         %td= token.number_docs
         %td= token.cfnd
@@ -61,3 +82,4 @@
         %td= token.upcased_cfnd
         %td= token.upcased_hrmmean
         %td.task_id= token.task_id
+        %td.col_good= token.good

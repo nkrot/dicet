@@ -188,15 +188,26 @@
         %li.done add Generate Tasks to User Tasks page.
         %li.done deactivate the GENERATE button once it has been pressed. To avoid overgenerating tasks if the impatient user keeps pressing the button unintermittently
         %li.todo Style the GENERATE button: keep its size constant, think where to place it.
+        %li.todo GENERATE functionality is not necessary. Get rid of it in the controllers and models: consider removing Task.create_with_tokens and all methods used in it
 
     %li access all task words via task/:id/words
 
     %li.inprogress
       Allow taking individual words (form tokens/unknown) to the tasks.
       %ul
-        %li.inprogress Taking and untaking (untake does not mean Drop)
-        %li.todo Dropping or Dismissing (word is crappy and should not be addressed) 
+        %li.inprogress Taking to a task and dropping (untaking) from the task. Dropping is unconditional -- think over tking/dropping logic, read TODO notes inthe code
+        %li.todo Is it ok, that dropping a word that is in a task is unconditional and happens regardless of the task status?
+        %li.done add legend to balloon in Action column name
 
+    %li.inprogress
+      Allow marking words as Bad
+        %li.done Add a boolean column to Tokens to hold info on whether the word is good or bad -- done, default is good
+        %li.done An action to mark the word (actually, all its case variabte) as bad or good
+        %li.todo Add this new column to bin/text2cvs.rb
+        %li.todo add legend to balloon in Action column name
+    
+    %li.todo Make the task # clickable and jump to editing current word
+    
   %h4.subtitle TODO for CONVERT feature  
 
   %ol
@@ -468,6 +479,7 @@
         %li.todo restyle the filter form
         %li.todo highlight FILTER button if controls were modified
         %li.todo when sorting by columns, respect the page number we are on
+        %li.todo allow showing only users words or words belonging to a specific user
 
     %li.inprogress
       Synchronize DB with prosao words

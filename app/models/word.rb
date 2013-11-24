@@ -53,7 +53,7 @@ class Word < ActiveRecord::Base
     puts "<<< in #{self.class}#suicide >>> " if debug
     if self.task_id
       # find an added word and make it replace the original word
-      # that we intent to delete.
+      # that we intend to delete.
       # Scenario that shows the situation:
       #  1) add paradigm word_NN => original word will be added NN and pdg_id=1
       #  2) add paradigm word_VB => added will be word_VB and pdg_id=2
@@ -181,13 +181,32 @@ class Word < ActiveRecord::Base
 
   def self.add_and_assign_to_task(tokens, task)
     tokens.each do |token|
+      # TODO: updating Token should not be done here!!
       token.task = task
       token.save
-      puts "Token task updated: #{token.task.inspect}"
+#      puts "Token task updated: #{token.task.inspect}"
 
+      # TODO: what if such word already exists? it may have or not have task_id
       unless Word.exists?(text: token.text)
+        puts "Word having text=#{token.text} does not exist"
         Word.create(text: token.text, task: task)
       end
     end
   end
+
+  def self.unlink_from_task(case_variant_tokens)
+    none_is_done = case_variant_tokens.all? do |token|
+      words = Word.where(text: token.text)
+      words.all? {|word| word.tag.blank?}
+    end
+
+    if none_is_done
+      case_variant_tokens.each do |token|
+        Word.where(text: token.text).each do |word|
+          word.destroy
+        end
+      end
+    end
+  end
+
 end

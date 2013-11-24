@@ -1,7 +1,7 @@
 
 -# text displayed on the buttons. must not be changed!
 - btn_filter_value = "Filter"
-- btn_generate_tasks_value = filter_checked?(:autoassign) ? "Take 5 tasks" : "Generate 5 tasks"
+-# btn_generate_tasks_value = filter_checked?(:autoassign) ? "Take 5 tasks" : "Generate 5 tasks"
 
 = form_for "token_filters", method: 'get', html: {id: 'filters_form'} do |f|
   = hidden_field_tag 'orderby', @order_by_column
@@ -12,27 +12,27 @@
       %td.has_lbl= label_tag "Include tokens already in tasks:"
       %td.has_chb= check_box_tag :assigned, 1, filter_checked?(:assigned), class: 'chb'
       %td &nbsp;
-      %td.empty &nbsp;
-      %td &nbsp;
-      %td &nbsp;
+      -#%td.empty &nbsp;
+      -#%td &nbsp;
+      -#%td &nbsp;
 
     %tr
       %td.has_lbl= label_tag "Entirely lowercase:"
       %td.has_chb= check_box_tag :al,       1, filter_checked?(:al),       class: 'chb'
       %td &nbsp;
-      %td.empty &nbsp;
-      %td &nbsp;
-      %td &nbsp;
+      -#%td.empty &nbsp;
+      -#%td &nbsp;
+      -#%td &nbsp;
 
     %tr
       %td.has_lbl= label_tag "Entirely uppercase:"
       %td.has_chb= check_box_tag :au,       1, filter_checked?(:au),       class: 'chb'
       %td.has_btn{rowspan:2}= f.submit "#{btn_filter_value}", id: 'btn_filter', class: 'btn'
-      %td.empty &nbsp;
-      %td.has_btn{rowspan:2}= f.submit "#{btn_generate_tasks_value}", id: 'btn_generate_tasks', class: 'btn'
-      %td.has_chb.autoassign{rowspan:2}= check_box_tag :autoassign, 1, filter_checked?(:autoassign), class: 'chb', id: 'chb_autoassign'
+      -#%td.empty &nbsp;
+      -#%td.has_btn{rowspan:2}= f.submit "#{btn_generate_tasks_value}", id: 'btn_generate_tasks', class: 'btn'
+      -#%td.has_chb.autoassign{rowspan:2}= check_box_tag :autoassign, 1, filter_checked?(:autoassign), class: 'chb', id: 'chb_autoassign'
 
     %tr
       %td.has_lbl= label_tag "In Titlecase:"
       %td.has_chb= check_box_tag :tc,       1, filter_checked?(:tc),       class: 'chb'
-      %td.empty &nbsp;
+      -#%td.empty &nbsp;

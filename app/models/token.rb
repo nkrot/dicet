@@ -88,6 +88,26 @@ class Token < ActiveRecord::Base
     token ? token.case_variants : []
   end
 
+  def dropped?
+    ! taken?
+  end
+
+  def taken?
+    task_id.to_i > 0
+  end
+
+  def set_bad
+    tokens = case_variants
+    tokens.update_all(good: false)
+    tokens
+  end
+
+  def set_good
+    tokens = case_variants
+    tokens.update_all(good: true)
+    tokens
+  end
+
   def compute_number_docs(column=nil)
     if column == :upcased_text
       Sentence.with_words(self.case_variants).pluck(:document_id).uniq.count

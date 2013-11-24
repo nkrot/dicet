@@ -77,6 +77,14 @@ input {
   background-color: #ddd
 }
 
+.none {
+  display: none;
+}
+
+.inline {
+  display: inline;
+}
+
 table.buttons {
   margin-top: 1em;
   width: 615px;
@@ -725,6 +733,9 @@ table.radioset {
         padding-right: 5px; 
         background: $grayMediumLight;
       }
+	  a.disabled {
+	    background: fff;
+	  }
     }
   }
 }

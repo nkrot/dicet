@@ -64,6 +64,7 @@ function do_on_document_ready() {
 
 	$("a").on('click', function (ev) {
 		if ( $(this).attr('disabled') == 'disabled' ) {
+			console.log('disabled clicked')
 			ev.preventDefault();
 			return false;
 		}

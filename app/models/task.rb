@@ -72,14 +72,50 @@ class Task < ActiveRecord::Base
 
     task = Task.create(priority: PRIORITY)
 
-    if user
-      task.user = user
-      task.save
-    end
+    task.update(user: user)  if user
 
+    # TODO: what if no word in Words has been linked to this task?
+    # should the task from already existing word be back propagated to Tokens?
     Word.add_and_assign_to_task(all_tokens, task)
 
     task
+  end
+
+  def self.deassociate token
+    puts "DEASSOCIATE token and its task"
+
+    # remove the current token and its related words from the task
+    # if task becomes empty, delete the task as well
+    # what to do with words that were copied to Words table?
+
+    task = token.task
+#    puts "<<< Before"
+#    puts task.inspect
+#    puts "TOKENS in the task: #{task.tokens.inspect}"
+#    puts "WORDS in the task: #{task.words.inspect}"
+ 
+    all_tokens = token.case_variants
+
+    Word.unlink_from_task(all_tokens)
+
+    # unlink tokens and the task
+    all_tokens.each { |tok| tok.update(task_id: 0) }
+
+    # reget the task to see updates in tokens and words
+    _task = Task.find(task.id)
+
+#    # unlink Words from the task 
+#    puts ">>> After"
+#    puts _task.inspect
+#    puts "TOKENS in the task: #{_task.tokens.inspect}"
+#    puts "WORDS in the task: #{_task.words.inspect}"
+
+    if _task.words.empty?
+      puts "The task has become empty and will be destroyed"
+      _task.destroy
+    end
+
+    all_tokens
   end
 
   def new?

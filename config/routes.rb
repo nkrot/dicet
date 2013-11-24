@@ -69,6 +69,9 @@ Dicet::Application.routes.draw do
 
   match '/tokens/:unknown', to: 'tokens#index', via: 'get'
   match '/tokens/take/:id', to: 'tokens#take',  via: 'get'
+  match '/tokens/drop/:id', to: 'tokens#drop',  via: 'get'
+  match '/tokens/setbad/:id',  to: 'tokens#setbad',  via: 'get'
+  match '/tokens/setgood/:id', to: 'tokens#setgood', via: 'get'
   resources :tokens, only: [:index]
 
 #  match '/statistics/recompute', to: 'statistics#recompute', via: 'get'
