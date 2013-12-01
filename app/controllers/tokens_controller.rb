@@ -87,7 +87,7 @@ class TokensController < ApplicationController
 #  end
 
   def filters
-    params.permit(:al, :au, :tc, :other, :assigned)
+    params.permit(:al, :au, :tc, :other, :assigned, :good, :bad)
   end
 
   def order_by

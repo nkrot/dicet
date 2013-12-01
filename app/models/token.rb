@@ -13,6 +13,8 @@ class Token < ActiveRecord::Base
   end
 
   def self.unknown(filters={})
+#    puts "Filtering uknown words using filters: #{filters.inspect}"
+
     subqueries = ["tokens.unknown = 'true'"]
 
     # casetypes
@@ -31,8 +33,17 @@ class Token < ActiveRecord::Base
       subqueries << "tokens.task_id in (0, '')"
     end
 
+    # good/bad filters
+    if filters.key?('good') && filters.key?('bad')
+      # no sql needed
+    elsif filters.key?('good')
+      subqueries << "tokens.good = 't'"
+    elsif filters.key?('bad')
+      subqueries << "tokens.good = 'f'"
+    end
+
     sql_query = subqueries.join(' AND ')
-    puts sql_query.inspect
+#    puts sql_query.inspect
 
     where(sql_query)
   end

@@ -11,6 +11,10 @@
     %tr
       %td.has_lbl= label_tag "Include tokens already in tasks:"
       %td.has_chb= check_box_tag :assigned, 1, filter_checked?(:assigned), class: 'chb'
+      %td.has_lbl= label_tag "Include good"
+      %td.has_chb= check_box_tag :good, 1, filter_checked?(:good), class: 'chb'
+      %td.has_lbl= label_tag "bad"
+      %td.has_chb= check_box_tag :bad,  1, filter_checked?(:bad), class: 'chb'
       %td &nbsp;
       -#%td.empty &nbsp;
       -#%td &nbsp;
@@ -20,6 +24,9 @@
       %td.has_lbl= label_tag "Entirely lowercase:"
       %td.has_chb= check_box_tag :al,       1, filter_checked?(:al),       class: 'chb'
       %td &nbsp;
+      %td &nbsp;
+      %td &nbsp;
+      %td &nbsp;
       -#%td.empty &nbsp;
       -#%td &nbsp;
       -#%td &nbsp;
@@ -27,6 +34,10 @@
     %tr
       %td.has_lbl= label_tag "Entirely uppercase:"
       %td.has_chb= check_box_tag :au,       1, filter_checked?(:au),       class: 'chb'
+      %td &nbsp;
+      %td &nbsp;
+      %td &nbsp;
+      %td &nbsp;
       %td.has_btn{rowspan:2}= f.submit "#{btn_filter_value}", id: 'btn_filter', class: 'btn'
       -#%td.empty &nbsp;
       -#%td.has_btn{rowspan:2}= f.submit "#{btn_generate_tasks_value}", id: 'btn_generate_tasks', class: 'btn'
@@ -35,4 +46,6 @@
     %tr
       %td.has_lbl= label_tag "In Titlecase:"
       %td.has_chb= check_box_tag :tc,       1, filter_checked?(:tc),       class: 'chb'
+      %td &nbsp;
+      %td &nbsp;
       -#%td.empty &nbsp;

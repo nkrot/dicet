@@ -1,7 +1,12 @@
 module TokensHelper
 
   def filter_checked?(name)
-    params[name] == '1'
+    if name == :good && ! filter_checked?(:bad)
+      # if neither :good and :bad is checked, check :good
+      true
+    else
+      params[name] == '1'
+    end
   end
 
   def hi_if_ordered_by(colname)
