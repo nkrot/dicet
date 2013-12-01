@@ -56,16 +56,24 @@ end
 
 ######################################################################
 
+def to_b b
+  # boolean values in sqlite are represented by t and f
+  b ? 1 : 0
+end
+
+######################################################################
+
 def short_token_data(token_id, word, upcased_word, tag, casetype)
   [token_id,
    word, upcased_word, 
-   tag == "NOTAG", # unknown
-   nil, nil, nil,  # corpus_freq number_docs cfnd
-   nil, nil, nil,  # upcased_corpus_freq upcased_number_docs upcased_cfnd
-   nil,            # task_id,
+   to_b(tag == "NOTAG"), # unknown
+   nil, nil, nil,        # corpus_freq number_docs cfnd
+   nil, nil, nil,        # upcased_corpus_freq upcased_number_docs upcased_cfnd
+   nil,                  # task_id,
    created_at, updated_at,
    casetype, 
-   nil, nil        # hrmmean, upcased_hrmmean
+   nil, nil,             # hrmmean, upcased_hrmmean
+   to_b(true)            # good?
    ] 
 end
 
@@ -191,6 +199,7 @@ def add_statistics(fields)
 #  fields[13]         # casetype
   fields[14] = hrmmean
   fields[15] = uc_hrmmean
+#  fields[16]         # good
 
 #  puts "AFTER: #{fields.inspect}"
 

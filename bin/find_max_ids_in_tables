@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# # #
+#
+#
+
+tables="documents sentences tokens sentence_tokens"
+
+show_help() {
+	cat <<EOF
+
+  Find max values of ID column of the tables $tables
+in the specified database
+USAGE: `basename $0` --db path/to/dbfile
+OPTIONS:
+    --db[=]FILE    path to sqlite3 database
+
+EOF
+}
+
+dbfile=
+
+while [ $# -ne 0 ]; do
+	case $1 in
+	--help)
+		show_help
+		exit 0
+		;;
+	--db=*)
+		dbfile=`echo $1 | cut -d= -f2-`
+		;;
+	--db)
+		shift
+		dbfile=$1
+		;;
+	--*)
+		echo "ERROR: Invalid option $1"
+		exit 1
+		;;
+	*)
+		break
+		;;
+	esac
+	shift
+done
+
+if [ -z "$dbfile" ]; then
+	echo "ERROR: database not specified. Use --db option or read --help" >&2
+	exit 2
+elif [ ! -f "$dbfile" ]; then
+	echo "ERROR: file not found ${dbfile}" >&2
+	exit 3
+fi
+
+for table in $tables; do
+	id=`sqlite3 $dbfile "select max(id) from ${table}"`
+	echo "$table $id"
+done
+

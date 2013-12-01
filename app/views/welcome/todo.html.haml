@@ -485,7 +485,7 @@
         %li.done Add a boolean column to Tokens to hold info on whether the word is good or bad -- done, default is good
         %li.done An action to mark the word (actually, all its case variable) as bad or good
         %li.todo Should marking as Bad make the token assigned (assign it to the task?) ? -- probably yes, it will unify the workflow
-        %li.todo Add this new column to bin/text2cvs.rb, use 't' for 'true'
+        %li.inprogress Add this new column to bin/text2cvs.rb, use 't' for 'true' -- NOT-TESTED
         %li.todo Add legend to balloon in Action column name
         %li.bug If the word is marked as Bad, can it be taken to a task? Now it can not, but the button 'T' still should be disabled (now it is clickable and creates an empty task)
         %li.todo When dumping ready paradigms include info on whether the word was marked as Bad.
@@ -500,12 +500,15 @@
     %li.todo
       Refactor Token.unknown. it should use 't' for true instead of 'true' and 'f' for false instead of 'false'
       %ul
-        %li.todo in bin/text2csv, in token.rb
+        %li.inprogress in bin/text2csv (NOT-TESTED), in token.rb
         %li.todo in schema (fix migration), default should be true
 
     %li.todo [MOVE ELSEWHERE] Words added by the user through Paradigms should be marked in Tokens as known to avoid they are taken to the tasks again
 
     %li.todo Use 0 instead of '' for tokens not linked to a task. reason: 0 is a better integer than ''
+
+
+    %li.todo Words added to paradigms should mark words in Tokens
 
 %p You read the warning but chose to ignore it. Now you will die. Good bye.
 

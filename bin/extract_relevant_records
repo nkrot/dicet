@@ -1,0 +1,107 @@
+#!/bin/sh
+
+# # #
+#
+#
+
+show_help() {
+	cat <<EOF
+
+  Extract records from Tokens table that contain words from given text files
+Input data is supposed to be in utf-8
+USAGE: `basename $0` --tagged --db path/to/dbfile text_file(s)
+OPTIONS:
+    --db[=]FILE    path to sqlite3 database
+    --tagged       tells that input is tagged
+
+EOF
+}
+
+dbfile=
+cmd_untag=cat
+
+while [ $# -ne 0 ]; do
+	case $1 in
+	--help)
+		show_help
+		exit 0
+		;;
+	--tagged)
+		cmd_untag=`untag`
+		;;
+	--db=*)
+		dbfile=`echo $1 | cut -d= -f2-`
+		;;
+	--db)
+		shift
+		dbfile=$1
+		;;
+	--*)
+		echo "ERROR: Invalid option $1"
+		exit 1
+		;;
+	*)
+		break
+		;;
+	esac
+	shift
+done
+
+if [ -z "$dbfile" ]; then
+	echo "ERROR: database not specified. Use --db option or read --help" >&2
+	exit 2
+elif [ ! -f "$dbfile" ]; then
+	echo "ERROR: file not found ${dbfile}" >&2
+	exit 3
+fi
+
+myname=`basename $0`
+
+tokens_file=`mktemp /tmp/$myname.1.records.XXXXXX`
+
+trap "rm -f $tokens_file" EXIT
+
+######################################################################
+
+get_nodict_words() {
+	awk '
+	NF && !/DOC-SEPARATOR/ {
+		for (i=1; i <= NF; i++) {
+			print toupper($i)
+		}
+	}'
+}
+
+
+######################################################################
+
+list2sql() {
+	awk '
+	function escape(str) {
+		gsub("\x27", "\x27\x27", str)
+		return str
+	}
+	NF {str = str ",\x27" escape($0) "\x27"}
+	END {
+		if (str) {
+			str = substr(str, 2)
+			print "select * from tokens where tokens.upcased_text in (" str ")"
+		}
+	}
+	'
+}
+
+######################################################################
+
+echo "Extracting all words and building a SQL query with them" >&2
+sql_query=`cat $@ | get_nodict_words | $cmd_untag | sort | uniq -u | list2sql`
+#echo "$sql_query" >&2
+
+echo "Running SQL query to extract relevant records (this may take a while)" >&2
+sqlite3 -separator $'\t' $dbfile "$sql_query" >$tokens_file
+
+num=`cat $tokens_file | wc -l`
+echo "${num} records extracted" >&2
+
+cat $tokens_file
+
