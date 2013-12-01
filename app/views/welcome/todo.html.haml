@@ -199,15 +199,7 @@
         %li.todo Is it ok, that dropping a word that is in a task is unconditional and happens regardless of the task status?
         %li.done add legend to balloon in Action column name
 
-    %li.inprogress
-      Allow marking words as Bad
-        %li.done Add a boolean column to Tokens to hold info on whether the word is good or bad -- done, default is good
-        %li.done An action to mark the word (actually, all its case variabte) as bad or good
-        %li.todo Add this new column to bin/text2cvs.rb
-        %li.todo add legend to balloon in Action column name
-    
-    %li.todo Make the task # clickable and jump to editing current word
-    
+  
   %h4.subtitle TODO for CONVERT feature  
 
   %ol
@@ -486,6 +478,22 @@
       %ul
         %li.inprogress Mark as known those tokens in Tokens that are known in prosao available in environment -- bin/sync_with_prosao, DONE-NOT-TESTED
         %li.todo ??? Mark as unknown words that are not in prosao? What happens to tokens that were taken to tasks, probably processed, but not dumped yet?
+
+    %li.inprogress
+      Allow marking words as Bad and managing them
+      %ul
+        %li.done Add a boolean column to Tokens to hold info on whether the word is good or bad -- done, default is good
+        %li.done An action to mark the word (actually, all its case variable) as bad or good
+        %li.todo Add this new column to bin/text2cvs.rb
+        %li.todo Add legend to balloon in Action column name
+        %li.bug If the word is marked as Bad, can it be taken to a task? Now it can not, but the button 'T' still should be disabled (now it is clickabl and creates an empty task)
+        %li.todo When dumping ready paradigms include info on whether the word was marked as Bad.
+        %li.todo Dumping words that were marked as Bad. What if the word has never been taken to a paradigm? Now it will not be dumped. Maybe marking as Bad should also produce a paradigm and mark it as Done?
+    
+    %li.done
+      Make the task # clickable and jump to editing current word
+      %ul
+        %li.todo Additionally, show the task status with a colored bullet
 
     %li.todo [MOVE ELSEWHERE] Words added by the user through Paradigms should be marked in Tokens as known to avoid they are taken to the tasks again
 

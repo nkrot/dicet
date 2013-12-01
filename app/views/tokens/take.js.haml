@@ -1,7 +1,7 @@
 
 - @tokens.each do |token|
   - rowid = "token-id-#{token.id}"
-  $("##{rowid} .task_id").html("#{token.task_id}")
+  $("##{rowid} .task_id").html("#{link_to_task(token)}")
   $("##{rowid} .take").removeClass('none').addClass("#{show_take(token)}")
   $("##{rowid} .drop").removeClass('none').addClass("#{show_drop(token)}")
 

@@ -2,6 +2,7 @@ class Word < ActiveRecord::Base
   belongs_to :paradigm
   belongs_to :task
   belongs_to :tag
+#  belongs_to :token
 
   validates :text, presence: true, length: { maximum: 400 }
   # uniqueness: true -- word can legally repeat several times if

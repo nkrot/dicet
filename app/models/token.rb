@@ -1,6 +1,7 @@
 class Token < ActiveRecord::Base
   has_many :sentence_tokens
   has_many :sentences, :through => :sentence_tokens
+#  has_many :words
   belongs_to :task
 #  has_one  :statistic
 
@@ -106,6 +107,14 @@ class Token < ActiveRecord::Base
     tokens = case_variants
     tokens.update_all(good: true)
     tokens
+  end
+
+  def words
+    if taken? && task # TODO: it happens (why?) that task is nil
+      self.task.words
+    else
+      nil
+    end
   end
 
   def compute_number_docs(column=nil)

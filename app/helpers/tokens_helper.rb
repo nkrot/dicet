@@ -28,4 +28,13 @@ module TokensHelper
     token.good? ? 'none' : ''
   end
 
+  def link_to_task token
+    words = token.words
+    if words
+      url = new_paradigm_path(word_id: words.first)
+      link_to token.task_id, url
+    else
+      token.task_id
+    end
+  end
 end
