@@ -2,6 +2,8 @@
 %div.header
   = link_to "Home", root_path
   |
+  = link_to "Unknown words", tokens_path + '/unknown'
+  |
   = link_to "My page", user_path(current_user)
   |
   = link_to "My tasks", user_tasks_path(current_user)

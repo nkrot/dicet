@@ -67,7 +67,7 @@ Dicet::Application.routes.draw do
 
   resources :documents, only: [:index, :show]
 
-  match '/tokens/:unknown', to: 'tokens#index', via: 'get'
+  match '/tokens/:unknown', to: 'tokens#index', via: 'get' # TODO: as: :unknown_tokens is not enough, requires writing unknown_tokens_path(:unknown), while I want just 'unknown_tokens_path'
   match '/tokens/take/:id', to: 'tokens#take',  via: 'get'
   match '/tokens/drop/:id', to: 'tokens#drop',  via: 'get'
   match '/tokens/setbad/:id',  to: 'tokens#setbad',  via: 'get'
