@@ -5,10 +5,7 @@ class TokensController < ApplicationController
     @order_by_column = order_by
     @page = params[:page] || 1
 
-    # this functionality is not necessary
-#    if params[:commit] =~ /(Generate|Take).+tasks/i
-#      generate_tasks
-#    end
+    @users_for_select = User.as_options_for_select
 
     if params[:unknown]
       @title = "Ranked list of corpus words that are unknown to PoS dictionary"
@@ -87,7 +84,7 @@ class TokensController < ApplicationController
 #  end
 
   def filters
-    params.permit(:al, :au, :tc, :other, :assigned, :good, :bad)
+    params.permit(:al, :au, :tc, :other, :assigned, :good, :bad, :user)
   end
 
   def order_by

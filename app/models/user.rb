@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 #  before_save { self.email = email.downcase } #
   before_create :create_remember_token
 
-  validates :password, presence: true
+  validates :password, presence: true;
 
   def User.encrypt token
     Digest::SHA1.hexdigest token.to_s
@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
 
   def User.new_remember_token
     SecureRandom.urlsafe_base64
+  end
+
+  def self.as_options_for_select
+    User.all.map {|u| [u.login, u.id]}
   end
 
   def authenticate password

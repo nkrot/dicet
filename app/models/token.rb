@@ -15,6 +15,9 @@ class Token < ActiveRecord::Base
   def self.unknown(filters={})
 #    puts "Filtering uknown words using filters: #{filters.inspect}"
 
+    # TODO: filter by
+    # "user"=>{"id"=>"2"}
+
     subqueries = ["tokens.unknown = 'true'"]
 
     # casetypes

@@ -7,6 +7,9 @@
   = hidden_field_tag 'orderby', @order_by_column
   = hidden_field_tag 'page', @page
 
+  -#= select_tag :user_id, options_for_select(@users_for_select), include_blank: true
+  -#= collection_select(:user, :id, @users, :id, :login, include_blank: true)
+
   %table#filters_form_table
     %tr
       %td.has_lbl= label_tag "Include tokens already in tasks:"
@@ -38,14 +41,17 @@
       %td &nbsp;
       %td &nbsp;
       %td &nbsp;
-      %td.has_btn{rowspan:2}= f.submit "#{btn_filter_value}", id: 'btn_filter', class: 'btn'
-      -#%td.empty &nbsp;
-      -#%td.has_btn{rowspan:2}= f.submit "#{btn_generate_tasks_value}", id: 'btn_generate_tasks', class: 'btn'
-      -#%td.has_chb.autoassign{rowspan:2}= check_box_tag :autoassign, 1, filter_checked?(:autoassign), class: 'chb', id: 'chb_autoassign'
+      %td &nbsp;
 
     %tr
       %td.has_lbl= label_tag "In Titlecase:"
       %td.has_chb= check_box_tag :tc,       1, filter_checked?(:tc),       class: 'chb'
       %td &nbsp;
       %td &nbsp;
-      -#%td.empty &nbsp;
+      %td &nbsp;
+      %td &nbsp;
+      %td.has_btn{rowspan:2}= f.submit "#{btn_filter_value}", id: 'btn_filter', class: 'btn'
+
+    %tr
+      %td.has_lbl= label_tag "Where user is:" 
+      %td{colspan:4}= select_tag :user_id, options_for_select(@users_for_select), include_blank: true

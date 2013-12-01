@@ -760,7 +760,7 @@ table.radioset {
 
   .has_btn {
     vertical-align: bottom;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     padding-right: 5px;
     width: 80px;
     text-align: right;
@@ -770,13 +770,10 @@ table.radioset {
      width: 130px;
    }
 
-   #btn_generate_tasks {
-     width: 120px;
-   }
-
-   .has_chb.autoassign {
-     width: 20px;
-   }
+  #user_id {
+    width: 200px;
+    padding: 0;
+  }
 }
 
 /********************************************************************\
