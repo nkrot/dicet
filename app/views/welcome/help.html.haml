@@ -56,24 +56,24 @@
   %code db/seeds/users.txt
   can be seeded as described above.
 
-%h3 How to add new words
+-#%h3 How to add new words
 
-%p Use curl to upload a plain text file:
+-#%p Use curl to upload a plain text file:
 
-%code curl -F "words[file]=@/path/to/file" #{words_upload_url}
+-#%code curl -F "words[file]=@/path/to/file" #{words_upload_url}
 -# http://server:3000/words/upload
 
-%p
+-#%p
 
-%p Note @ before the path! The path can be either absolute or relative.
+-#%p Note @ before the path! The path can be either absolute or relative.
 
-%h4 Format of the file to upload
+-#%h4 Format of the file to upload
 
-%p each line has 1+ tab separated fields, the 1st mandatory field is assumed to be the word itself, the 2nd optional field is the priority (1..10)
+-#%p each line has 1+ tab separated fields, the 1st mandatory field is assumed to be the word itself, the 2nd optional field is the priority (1..10)
 
-%p special lines: tasksize=NUM and priority=NUM
+-#%p special lines: tasksize=NUM and priority=NUM
 
-%pre
+-#%pre
   
   \# word \tab priority
   tasksize=2
@@ -96,7 +96,7 @@
   model	2
   controller
 
-%p
+-#%p
   You can download this file
   = link_to "here", "newwords.txt"
 
@@ -107,7 +107,10 @@
 %ol
   %li Tokenize text files using prosao tools. Keep ==DOC-SEPARATOR== markers. And preferably keep the original file names (they will be also added to the DB).
   %li Convert data to utf-8
-  %li Use bin/text2csv.rb script to convert data to tab-separated CSV files. This script should be run for all CSV files at once.
+  %li
+    Use bin/text2csv.rb script to convert data to tab-separated CSV files. This script should be run for all CSV files at once. It will generate in the current directory a number of CSV files that will be imported (described later)
+    %p
+      %code text2cvs.rb rss_*.utf8
   %li
     Prepare the database. You may have already done it if you had run
     %code rake db:migrate
