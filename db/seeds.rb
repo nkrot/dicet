@@ -5,6 +5,27 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+#
+
+######################################################################
+# USAGE: IMC_PROSAO_LANGNAME=English rake db:seed
+# USAGE: IMC_PROSAO_LANGNAME=French rake db:seed
+# or without explicitly specifying the language, when prosao is available
+# in the environment. Prosao language will be assumed.
+
+lang = 'eng'
+case ENV['IMC_PROSAO_LANGNAME']
+when 'English'
+  lang = 'eng'
+when 'French'
+  lang = 'fr'
+when 'German', 'Chinese', 'Japanese'
+  raise "ERROR: German, Japanese and Chinese not supported yet"
+else
+  $stderr.puts "ProSAO not available in the environment! assuming language is: #{lang}"
+end
+
+######################################################################
 
 users_file = "db/seeds/users.txt"
 
@@ -15,7 +36,7 @@ end
 
 ######################################################################
 
-tagset_file = "db/seeds/tagset_eng.txt"
+tagset_file = "db/seeds/tagset_#{lang}.txt"
 
 File.open(Rails.root.join(tagset_file)) do |f|
   puts " -- loading tagset from #{tagset_file}"
@@ -24,7 +45,7 @@ end
 
 ######################################################################
 
-pdg_types_file = "db/seeds/pdg_types_eng.txt"
+pdg_types_file = "db/seeds/pdg_types_#{lang}.txt"
 
 File.open(Rails.root.join(pdg_types_file)) do |f|
   puts " -- loading paradigm types from #{pdg_types_file}"
@@ -36,51 +57,51 @@ end
 # 0 at the beginning means this task will not be assigned to a user
 # initially.
 
-tasks = \
-[
- ["word", "lamps", "running", "runing", "tasc"],
- ["lamp", "run", "computer", "computers"],
- ["runs", "rain", "wording"],
- ["apple", "Apple", "brutto"],
- [0, "wind", "wander", "wandering", "worded"],
- ["task", "assignee", "doer"],
- ["apples", "raining", "rains"],
- [0, "windy", "winds", "wall", "notes"],
- [0, "chair", "cherry", "advancedly", "advantageously", "omg"],
- [0, "success", "successful", "successfully", "order"],
- [0, "net", "networks", "netto", "dwells"],
- [0, "coin", "coins", "koen", "mosquitoes"],
- [0, "dwarf", "dwell", "dweller", "double", "keys"],
- [0, "enhance", "enhancement", "envisage", "enormous", "enormously", "eloquent"],
- [0, "five", "fake", "fool", "foment", "foster", "fluffy", "lorries"],
- [0, "giant", "grotesque", "gothic", "goblin", "loosing"],
- [0, "kernel", "kompressor", "Kirk", "key", "keyboard"],
- [0, "lousy", "looser", "loose", "lorry"],
- [0, "masterpiece", "moisture", "mosquito"],
- [0, "noise", "niece", "noisy", "nicely"],
- [0, "ordered", "orange", "Orinoco", "onomatopeya"],
-]
+# tasks = \
+# [
+#  ["word", "lamps", "running", "runing", "tasc"],
+#  ["lamp", "run", "computer", "computers"],
+#  ["runs", "rain", "wording"],
+#  ["apple", "Apple", "brutto"],
+#  [0, "wind", "wander", "wandering", "worded"],
+#  ["task", "assignee", "doer"],
+#  ["apples", "raining", "rains"],
+#  [0, "windy", "winds", "wall", "notes"],
+#  [0, "chair", "cherry", "advancedly", "advantageously", "omg"],
+#  [0, "success", "successful", "successfully", "order"],
+#  [0, "net", "networks", "netto", "dwells"],
+#  [0, "coin", "coins", "koen", "mosquitoes"],
+#  [0, "dwarf", "dwell", "dweller", "double", "keys"],
+#  [0, "enhance", "enhancement", "envisage", "enormous", "enormously", "eloquent"],
+#  [0, "five", "fake", "fool", "foment", "foster", "fluffy", "lorries"],
+#  [0, "giant", "grotesque", "gothic", "goblin", "loosing"],
+#  [0, "kernel", "kompressor", "Kirk", "key", "keyboard"],
+#  [0, "lousy", "looser", "loose", "lorry"],
+#  [0, "masterpiece", "moisture", "mosquito"],
+#  [0, "noise", "niece", "noisy", "nicely"],
+#  [0, "ordered", "orange", "Orinoco", "onomatopeya"],
+# ]
 
-tasks.each_with_index do |words, idx|
-  user_id = nil
-  if words.first == 0
-    user_id = words.shift
-  end
+# tasks.each_with_index do |words, idx|
+#   user_id = nil
+#   if words.first == 0
+#     user_id = words.shift
+#   end
 
-  priority = [10,9,8].sample
-  task = Task.new(priority: priority)
-  task.words = words.map {|w| Word.new(text: w)}
+#   priority = [10,9,8].sample
+#   task = Task.new(priority: priority)
+#   task.words = words.map {|w| Word.new(text: w)}
 
-  unless user_id
-    # assign a user
-#    i = idx - (idx/users.length) * users.length
-#    user_name = users[i].first
-#    user = User.find_by(login: user_name)
-    i = 1 + idx - (idx/User.count) * User.count
-    task.user = User.find(i)
-  end
+#   unless user_id
+#     # assign a user
+# #    i = idx - (idx/users.length) * users.length
+# #    user_name = users[i].first
+# #    user = User.find_by(login: user_name)
+#     i = 1 + idx - (idx/User.count) * User.count
+#     task.user = User.find(i)
+#   end
 
-  unless task.save
-    puts task.errors.full_messages
-  end
-end
+#   unless task.save
+#     puts task.errors.full_messages
+#   end
+# end

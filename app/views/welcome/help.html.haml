@@ -21,24 +21,28 @@
 
 %p
   Tagset is available in the file:
-  %code db/seeds/tagset_eng.txt
+  %code db/seeds/tagset_{eng,fr}.txt
 
 %p
   Paradigm types are listed in:
-  %code db/seeds/paradigm_types_eng.txt
+  %code db/seeds/paradigm_types_{eng,fr}.txt
 
 %p The simplest way of loading the data (that includes users, tagset, paradigm types) in DB is by running the following rake command:
 
+%code IMC_PROSAO_LANGNAME=English rake db:seed
+%p or
+%code IMC_PROSAO_LANGNAME=French rake db:seed
+%p or if a prosao is available in the environment and its language is suitable
 %code rake db:seed
 
-%p Uploading tagset through the command line is also possible by executing the following command:
+%p Alternatively, uploading tagset through the command line is possible by executing the following command:
 
 %code curl -F "tags[file]=@db/seeds/tagset_eng.txt" #{tags_upload_url}
 -# http://server:3000/tags/upload
 
 %p
 
-%p Paradigm types can similarly be either seeded as described above or uploaded via command line:
+%p Paradigm types can similarly be either seeded as described above or uploaded via command line by running:
 
 %code curl -F "paradigm_types[file]=@db/seeds/pdg_types_eng.txt" #{paradigm_types_upload_url}
 -# http://server:3000/paradigm_types/upload
