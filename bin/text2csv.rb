@@ -58,7 +58,7 @@ end
 
 def to_b b
   # boolean values in sqlite are represented by t and f
-  b ? 1 : 0
+  b ? 't' : 'f'
 end
 
 ######################################################################

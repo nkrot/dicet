@@ -18,7 +18,7 @@ class Token < ActiveRecord::Base
     # TODO: filter by
     # "user"=>{"id"=>"2"}
 
-    subqueries = ["tokens.unknown = 'true'"]
+    subqueries = ["tokens.unknown = 't'"]
 
     # casetypes
     casetypes = []
@@ -46,7 +46,7 @@ class Token < ActiveRecord::Base
     end
 
     sql_query = subqueries.join(' AND ')
-#    puts sql_query.inspect
+    puts sql_query.inspect
 
     where(sql_query)
   end
